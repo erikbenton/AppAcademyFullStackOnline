@@ -36,7 +36,7 @@ def coprime?(num1, num2)
 		return num1 == 1
 	end
 	min = num1 < num2 ? num1 : num2
-	(2...min).each do |div|
+	(2..min).each do |div|
 		if num1 % div == 0 && num2 % div == 0 && div != 1
 			return false
 		end
