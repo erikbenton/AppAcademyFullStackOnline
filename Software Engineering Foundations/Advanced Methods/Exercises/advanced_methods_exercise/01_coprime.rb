@@ -11,7 +11,7 @@ def get_factors(number)
 	return res
 end
 
-def coprime?(num1, num2)
+def coprime_me?(num1, num2)
 	# Get the factors for both the numbers
 	factors1 = get_factors(num1)
 	factors2 = get_factors(num2)
@@ -25,6 +25,22 @@ def coprime?(num1, num2)
 		end
 	end
 	# No common factors found
+	return true
+end
+
+def coprime?(num1, num2)
+	if num1 == 0 || num2 == 0
+		return false
+	end
+	if num1 == num2
+		return num1 == 1
+	end
+	min = num1 < num2 ? num1 : num2
+	(2...min).each do |div|
+		if num1 % div == 0 && num2 % div == 0 && div != 1
+			return false
+		end
+	end
 	return true
 end
 
