@@ -29,19 +29,11 @@ def coprime_me?(num1, num2)
 end
 
 def coprime?(num1, num2)
-	if num1 == 0 || num2 == 0
-		return false
-	end
 	if num1 == num2
 		return num1 == 1
 	end
 	min = num1 < num2 ? num1 : num2
-	(2..min).each do |div|
-		if num1 % div == 0 && num2 % div == 0 && div != 1
-			return false
-		end
-	end
-	return true
+	return (2..min).none? { |div| num1 % div == 0 && num2 % div == 0 }
 end
 
 p coprime?(25, 12)    # => true
