@@ -11,12 +11,12 @@ def scalar_multiple!(array, multiplier)
   array
 end
 
-def scalar_mutiple!(arr, mult)
+def scalar_multiple!(arr, mult)
   array.map { |ele| ele *= mult}
 end
 
-def scalar_mutiple!(arr, mult)
-  array.map! { |ele| ele * mult}
+def scalar_multiple!(arr, mult)
+  arr.map! { |ele| ele * mult}
 end
 
 array_1 = [7, 0, 4]
