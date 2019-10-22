@@ -11,6 +11,11 @@ def is_sorted(arr)
   return true
 end
 
+# Better version
+def is_sorted(arr)
+  (0...arr.length - 1).all? { |idx| arr[idx] <= arr[idx + 1] }
+end
+
 p is_sorted([1, 4, 10, 13, 15])       # => true
 p is_sorted([1, 4, 10, 10, 13, 15])   # => true
 p is_sorted([1, 2, 5, 3, 4 ])         # => false
