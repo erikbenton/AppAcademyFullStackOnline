@@ -27,9 +27,8 @@ end
 
 def power_of_two?(num)
   power = 1
-  while power <= num
-    return true if power == num
+  while power < num
     power *= 2
   end
-  false
+  power == num
 end

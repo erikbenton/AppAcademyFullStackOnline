@@ -7,7 +7,7 @@ def palindrome?(str)
   true
 end
 
-def substrings(str)
+def substrings_me(str)
   res = []
   str.each_char.with_index do |char, idx1|
     idx2 = idx1
@@ -19,7 +19,16 @@ def substrings(str)
   res
 end
 
+def substrings(str)
+  res = []
+  (0...str.length).each do |idx1|
+    (idx1...str.length).each do |idx2|
+      res << str[idx1..idx2]
+    end
+  end
+  res
+end
+
 def palindrome_substrings(str)
-  substrings = substrings(str)
-  substrings.select { |sub_str| palindrome?(sub_str) && sub_str.length > 1 }
+  substrings(str).select { |sub_str| palindrome?(sub_str) && sub_str.length > 1 }
 end
