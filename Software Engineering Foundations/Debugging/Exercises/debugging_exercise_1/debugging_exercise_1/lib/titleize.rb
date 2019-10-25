@@ -6,12 +6,15 @@
 
 require "byebug"
 
-little_words = [ "and", "the", "over", "a", "on", "of" ]
+# Had to move little_words inside method
+# switch around the parameters for the map loop
+#   |i, word| => |word, i|
 
 def titleize(title)
+  little_words = [ "and", "the", "over", "a", "on", "of" ]
   words = title.split(" ")
-
-  titleized_words = words.map.with_index do |i, word|
+  # debugger
+  titleized_words = words.map.with_index do |word, i|
     if i == 0 || !little_words.include?(word)
       word.capitalize
     else
