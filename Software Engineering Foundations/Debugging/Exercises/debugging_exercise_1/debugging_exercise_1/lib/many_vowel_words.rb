@@ -5,6 +5,7 @@
 
 require "byebug"
 
+# Had to change includes? -> include?
 # Had to make sure sentence was split on " " not ""
 
 def many_vowel_words(sentence)
