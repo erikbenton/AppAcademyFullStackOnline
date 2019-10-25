@@ -5,10 +5,13 @@
 
 require "byebug"
 
+# Had to initialize count to 0, not nil
+# Had make sure to put everything in same case (downcase)
+
 def letter_count(string, char)
-    count = nil
+    count = 0
     string.each_char do |c| 
-        count += 1 if c = char 
+        count += 1 if c.downcase == char.downcase 
     end
     count
 end
