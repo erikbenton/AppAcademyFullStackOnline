@@ -6,6 +6,7 @@
 require "byebug"
 
 # Had to initialize count to 0, not nil
+# Had to actually compare c == char, not c = char
 # Had make sure to put everything in same case (downcase)
 
 def letter_count(string, char)
