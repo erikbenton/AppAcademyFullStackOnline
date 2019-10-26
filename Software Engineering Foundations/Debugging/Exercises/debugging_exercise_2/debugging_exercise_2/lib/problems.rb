@@ -4,7 +4,7 @@
 
 require "byebug"
 
-def prime?(num)
+def prime_me?(num)
   return false if num < 2
 
   (2...num).each do |factor|
@@ -15,7 +15,11 @@ def prime?(num)
   true
 end
 
-def largest_prime_factor(number)
+def prime?(num)
+  (2...num).none? { |div| num % div == 0}
+end
+
+def largest_prime_factor_me(number)
   (1..number).reverse_each do |num|
     # debugger
     if number % num == 0
@@ -25,16 +29,18 @@ def largest_prime_factor(number)
   1
 end
 
+def largest_prime_factor(num)
+  num.downto(2) { |div| return div if num % div == 0 && prime?(div) }
+end
+
 def unique_chars?(str)
   char_count = Hash.new { |hash, key| hash[key] = 0 }
   str.each_char { |char| char_count[char] += 1 }
-  char_count.each do |key, val|
-    return false if val > 1
-  end
+  char_count.each { |key, val| return false if val > 1 }
   true
 end
 
-def dupe_indices(arr)
+def dupe_indices_me(arr)
   dupes = Hash.new { |hash, key| hash[key] = [0, []] }
   arr.each_with_index do |ele, idx| 
     dupes[ele][0] += 1
@@ -50,11 +56,15 @@ def dupe_indices(arr)
   dupes
 end
 
+def dupe_indices(arr)
+  indices = Hash.new { |h, k| h[k] = [] }
+  arr.each_with_index { |e, i| indices[e] << i }
+  indices.select { |e, i| indices[e].length > 1 }
+end
+
 def ele_count(arr)
   ele_count = Hash.new { |hash, key| hash[key] = 0 }
-  arr.each do |ele| 
-    ele_count[ele] += 1
-  end
+  arr.each { |ele| ele_count[ele] += 1 }
   ele_count
 end
 
