@@ -33,3 +33,19 @@ def unique_chars?(str)
   end
   true
 end
+
+def dupe_indices(arr)
+  dupes = Hash.new { |hash, key| hash[key] = [0, []] }
+  arr.each_with_index do |ele, idx| 
+    dupes[ele][0] += 1
+    dupes[ele][1].push(idx)
+  end
+  dupes.each do |key, val|
+    if val[0] < 2
+      dupes.delete(key)
+    else
+      dupes[key] = val[1]
+    end
+  end
+  dupes
+end
