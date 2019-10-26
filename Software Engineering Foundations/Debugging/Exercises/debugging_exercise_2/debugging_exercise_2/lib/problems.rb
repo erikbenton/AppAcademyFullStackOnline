@@ -49,3 +49,15 @@ def dupe_indices(arr)
   end
   dupes
 end
+
+def ele_count(arr)
+  ele_count = Hash.new { |hash, key| hash[key] = 0 }
+  arr.each do |ele| 
+    ele_count[ele] += 1
+  end
+  ele_count
+end
+
+def ana_array(arr_1, arr_2)
+  ele_count(arr_1) == ele_count(arr_2)
+end
