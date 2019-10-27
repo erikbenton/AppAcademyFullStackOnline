@@ -8,9 +8,7 @@ end
 
 def count_positive_subarrays(arr)
   arr.count do |sub_arr|
-    sum = 0
-    sub_arr.each { |ele| sum += ele }
-    sum > 0
+    sub_arr.sum > 0
   end
 end
 
