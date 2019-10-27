@@ -12,24 +12,8 @@ class Bootcamp
     @name
   end
 
-  def name=(new_name)
-    @name = new_name
-  end
-
   def slogan
     @slogan
-  end
-
-  def slogan=(new_slogan)
-    @slogan = new_slogan
-  end
-
-  def student_capacity
-    @student_capacity
-  end
-
-  def student_capacity=(new_capacity)
-    @student_capacity = new_capacity
   end
 
   def teachers
@@ -40,45 +24,42 @@ class Bootcamp
     @students
   end
 
-  def grades
-    @grades
-  end
-
   def hire(teacher)
-    teachers << teacher
+    @teachers << teacher
   end
 
   def enroll(student)
-    if students.length < student_capacity
-      students << student
+    if students.length < @student_capacity
+      @students << student
       return true
+    else
+      return false
     end
-    false
   end
 
   def enrolled?(student)
-    students.include?(student)
+    @students.include?(student)
   end
 
   def student_to_teacher_ratio
-    students.length / teachers.length
+    @students.length / @teachers.length
   end
 
   def add_grade(student, grade)
-    if enrolled?(student)
-      grades[student] << grade
+    if self.enrolled?(student)
+      @grades[student] << grade
       return true
+    else
+      return false
     end
-    false
   end
 
   def num_grades(student)
-    grades[student].length
+    @grades[student].length
   end
 
   def average_grade(student)
-    return nil if !enrolled?(student) || num_grades(student) == 0
-    grades[student].sum / num_grades(student)
+    return nil if !self.enrolled?(student) || num_grades(student).zero?
+    @grades[student].sum / self.num_grades(student)
   end
-
 end
