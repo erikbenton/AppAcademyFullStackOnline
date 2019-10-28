@@ -19,10 +19,11 @@ class Array
   def median
     return nil if self.empty?
     sorted = self.sort
-    if sorted.length % 2 == 1
-      return sorted[sorted.length/2] 
+    mid_index = sorted.length / 2
+    if sorted.length.odd?
+      return sorted[mid_index] 
     end
-    average_elements(sorted[sorted.length/2 - 1], sorted[sorted.length/2]) 
+    average_elements(sorted[mid_index - 1], sorted[mid_index]) 
   end
 
   def counts
@@ -43,17 +44,31 @@ class Array
   end
 
   def my_uniq
-    uniqs = []
-    self.each { |ele| uniqs << ele if !uniqs.include?(ele) }
-    uniqs
+    uniqs = Hash.new(true)
+    self.each { |ele| uniqs[ele] = true }
+    uniqs.keys
   end
 
   def my_transpose
-    (0...self.length).each do |idx1|
-      (idx1...self.length).each do |idx2|
-        self[idx1][idx2], self[idx2][idx1] = self[idx2][idx1], self[idx1][idx2]
+    new_arr = self
+    (0...self.length).each do |row|
+      (row...self.length).each do |col|
+        new_arr[row][col], new_arr[col][row] = self[col][row], self[row][col]
       end
     end
-    self
+    new_arr
+  end
+
+  def my_transpose_2
+    new_arr = []
+    (0...self.length).each do |row|
+      new_row = []
+      (0...self.length).each do |col|
+        row << self[col][row]
+        # new_arr[row][col], new_arr[col][row] = self[col][row], self[row][col]
+      end
+      new_arr << new_row
+    end
+    new_arr
   end
 end
