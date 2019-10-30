@@ -4,12 +4,11 @@ class Hotel
   def initialize(name, rooms)
     @name = name
     @rooms = rooms
-    @rooms.each { |k, v| @rooms[k] = Room.new(v) }
+    @rooms.each { |room_name, cap| @rooms[room_name] = Room.new(cap) }
   end
 
   def name
-    res = @name.split.map { |name| name.capitalize }
-    res.join(" ")
+    @name.split.map(&:capitalize).join(" ")
   end
 
   def rooms
@@ -31,12 +30,12 @@ class Hotel
   end
 
   def has_vacancy?
-    !@rooms.all? { |k, v| @rooms[k].full? }
+    @rooms.any? { |k, v| !@rooms[k].full? }
   end
 
   def list_rooms
     @rooms.each do |k, v|
-      puts "#{k}  #{@rooms[k].available_space}"
+      puts "#{k}: #{@rooms[k].available_space}"
     end
   end
 end
