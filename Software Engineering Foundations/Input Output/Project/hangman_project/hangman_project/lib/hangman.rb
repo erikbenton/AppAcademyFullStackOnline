@@ -2,7 +2,16 @@ require "byebug"
 
 class Hangman
 
-  DICTIONARY = ["cat", "dog", "bootcamp", "pizza"]
+  DICTIONARY = ["cat",
+    "dog",
+    "bootcamp",
+    "pizza",
+    "oranges",
+    "doorbell",
+    "witch",
+    "secret",
+    "connect",
+  ]
 
   def self.random_word
     DICTIONARY.sample
@@ -33,7 +42,7 @@ class Hangman
   end
 
   def already_attempted?(char)
-    @attempted_chars.any? { |guess| guess == char }
+    @attempted_chars.include?(char)
   end
 
   def get_matching_indices(char)
@@ -60,8 +69,7 @@ class Hangman
 
   def ask_user_for_guess
     puts "Enter a char"
-    user_char = gets.chomp
-    self.try_guess(user_char)
+    self.try_guess(gets.chomp)
   end
 
   def win?

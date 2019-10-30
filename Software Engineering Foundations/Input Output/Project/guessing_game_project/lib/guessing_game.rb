@@ -2,8 +2,6 @@ require "byebug"
 
 class GuessingGame
   def initialize(min, max)
-    @min = min
-    @max = max
     @secret_num = rand(min...max)
     @num_attempts = 0
     @game_over = false
@@ -26,8 +24,7 @@ class GuessingGame
     self.game_over = (num == @secret_num)
     if game_over?
       puts "you win"
-    end
-    if num > @secret_num
+    elsif num > @secret_num
       puts "too big"
     else
       puts "too small"
@@ -40,6 +37,3 @@ class GuessingGame
     check_num(num)
   end
 end
-
-guess_game = GuessingGame.new(0, 10)
-guess_game.check_num(5)
