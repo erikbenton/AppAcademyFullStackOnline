@@ -50,4 +50,16 @@ class Startup
     sum_salaries = @employees.inject(0) { |acc, employee| acc += @salaries[employee.title]}
     sum_salaries / @employees.length
   end
+
+  def close
+    @employees = []
+    @funding = 0
+  end
+
+  def acquire(other_startup)
+    @funding += other_startup.funding
+    other_startup.salaries.each { |k, v| @salaries[k] = v if !@salaries.has_key?(k) }
+    other_startup.employees.each { |employee| @employees << employee }
+    other_startup.close
+  end
 end
