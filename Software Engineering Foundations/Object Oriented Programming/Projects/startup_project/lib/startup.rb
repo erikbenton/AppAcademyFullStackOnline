@@ -20,11 +20,8 @@ class Startup
   end
 
   def hire(name, title)
-    if self.valid_title?(title)
-      @employees << Employee.new(name, title)
-      return
-    end
-    raise "Not a valid title"
+    raise "not a valid title" if !self.valid_title?(title)
+    @employees << Employee.new(name, title)
   end
 
   def size
@@ -32,14 +29,11 @@ class Startup
   end
 
   def pay_employee(employee)
-    if self.valid_title?(employee.title)
-      if @salaries[employee.title] <= @funding
-        employee.pay(@salaries[employee.title])
-        @funding -= @salaries[employee.title]
-      else
-        raise "Not enough funding"
-      end
-    end
+    return if !self.valid_title?(employee.title)
+    money = @salaries[employee.title]
+    raise "not enough funding" if money > @funding
+    employee.pay(money)
+    @funding -= money
   end
 
   def payday
@@ -47,7 +41,9 @@ class Startup
   end
 
   def average_salary
-    sum_salaries = @employees.inject(0) { |acc, employee| acc += @salaries[employee.title]}
+    sum_salaries = @employees.inject(0) do |acc, employee|
+      acc += @salaries[employee.title]
+    end
     sum_salaries / @employees.length
   end
 
@@ -58,8 +54,10 @@ class Startup
 
   def acquire(other_startup)
     @funding += other_startup.funding
-    other_startup.salaries.each { |k, v| @salaries[k] = v if !@salaries.has_key?(k) }
-    other_startup.employees.each { |employee| @employees << employee }
+    other_startup.salaries.each do |k, v|
+      @salaries[k] = v if !@salaries.has_key?(k)
+    end
+    @employees += other_startup.employees
     other_startup.close
   end
 end
