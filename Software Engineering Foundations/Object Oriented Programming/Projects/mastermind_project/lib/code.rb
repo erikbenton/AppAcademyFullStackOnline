@@ -1,5 +1,3 @@
-require "byebug"
-
 class Code
   POSSIBLE_PEGS = {
     "R" => :red,
