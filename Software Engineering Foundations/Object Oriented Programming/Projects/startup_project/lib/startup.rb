@@ -47,7 +47,7 @@ class Startup
   end
 
   def average_salary
-    sum = @employees.inject { |acc, employee| acc += @salaries[employee.title]}
-    sum / @employees.length
+    sum_salaries = @employees.inject(0) { |acc, employee| acc += @salaries[employee.title]}
+    sum_salaries / @employees.length
   end
 end
