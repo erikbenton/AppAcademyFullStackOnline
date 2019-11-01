@@ -1,3 +1,5 @@
+require "byebug"
+
 class Code
   POSSIBLE_PEGS = {
     "R" => :red,
@@ -36,6 +38,30 @@ class Code
 
   def length
     @pegs.length
+  end
+
+  def num_exact_matches(code)
+    count = 0
+    idx = 0
+    while idx < code.length
+      count += 1 if code[idx] == self[idx]
+      idx += 1
+    end
+    count
+  end
+
+  def num_near_matches(code)
+    count = 0
+    idx = 0
+    while idx < code.length
+      count += 1 if @pegs.include?(code[idx].upcase)
+      idx += 1
+    end
+    count - self.num_exact_matches(code)
+  end
+
+  def ==(code)
+    @pegs == code.pegs
   end
 
 end
