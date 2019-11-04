@@ -1,0 +1,3 @@
+How to add debugger to VSCode
+https://stackoverflow.com/questions/51539711/how-to-debug-ruby-code-on-visual-studio-code
+
