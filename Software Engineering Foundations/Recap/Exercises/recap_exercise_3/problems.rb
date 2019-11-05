@@ -227,9 +227,19 @@ puts
 # You must solve this recursively (no loops!)
 # You must not use the multiplication (*) operator
 def multiply(num_1, num_2)
-  return num_1 if num_2 <= 1
-  num_1 + multiply(num_1, num_2 - 1)
+  return 0 if num_1 == 0 or num_2 == 0
+  if (num_1 < 0) == (num_2 < 0)
+    num_1 + multiply(num_1, num_2 - 1)
+  else
+    -num_1 + multiply(num_1, num_2 - 1)
+  end
 end
+
+# Above is clearly wrong but easy to start seeing new solution
+# End case is still return 0
+# But 2 cases to consider for num_1 and num_2
+# When the sum has to stay positive sgn(num_1) == sgn(num_2)
+# Or the sum has to stay negative sgn(num_1) == sgn(num_2)
 
 # Examples
 puts "multiply"
