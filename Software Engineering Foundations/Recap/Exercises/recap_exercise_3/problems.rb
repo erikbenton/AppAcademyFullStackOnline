@@ -261,3 +261,27 @@ p lucas_sequence(3)   # => [2, 1, 3]
 p lucas_sequence(6)   # => [2, 1, 3, 4, 7, 11]
 p lucas_sequence(8)   # => [2, 1, 3, 4, 7, 11, 18, 29]
 puts
+
+# Write a method prime_factorization(num) that accepts a number and returns an array
+# representing the prime factorization of the given number. This means that the array
+# should contain only prime numbers that multiply together to the given num. The array
+# returned should contain numbers in ascending order. Do this recursively.
+def prime_factorization(num)
+  return [num] if prime?(num)
+  (2...num).each do |div|
+    if num % div == 0 and prime?(div)
+      return [div] + prime_factorization(num/div)
+    end
+  end
+end
+
+# Examples
+puts "prime_factorization"
+p prime_factorization(12)     # => [2, 2, 3]
+p prime_factorization(24)     # => [2, 2, 2, 3]
+p prime_factorization(25)     # => [5, 5]
+p prime_factorization(60)     # => [2, 2, 3, 5]
+p prime_factorization(7)      # => [7]
+p prime_factorization(11)     # => [11]
+p prime_factorization(2017)   # => [2017]
+puts
