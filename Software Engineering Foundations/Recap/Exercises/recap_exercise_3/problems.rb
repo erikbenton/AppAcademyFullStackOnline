@@ -1,12 +1,18 @@
 # GENERAL PROBLEMS
 # Write a method no_dupes?(arr) that accepts an array as an arg and returns an
 # new array containing the elements that were not repeated in the array.
+# def no_dupes?(arr)
+#   res = []
+#   counter = Hash.new { |h, k| h[k] = 0 }
+#   arr.each { |ele| counter[ele] += 1 }
+#   counter.each { |k, v| res << k if v == 1 }
+#   res
+# end
+
 def no_dupes?(arr)
-  res = []
   counter = Hash.new { |h, k| h[k] = 0 }
   arr.each { |ele| counter[ele] += 1 }
-  counter.each { |k, v| res << k if v == 1 }
-  res
+  counter.keys.select { |el| counter[el] == 1 }
 end
 
 # Examples
@@ -56,22 +62,36 @@ puts
 # Write a method longest_streak(str) that accepts a string as an arg. The
 # method should return the longest streak of consecutive characters in the
 # string. If there are any ties, return the streak that occurs later in the string.
+# def longest_streak(str)
+#   streaks = []
+#   longest = ""
+#   current = ""
+#   str.each_char do |char|
+#     if char == current[-1]
+#       current += char
+#     else
+#       if current.length >= longest.length
+#         longest = current
+#       end
+#       current = char
+#     end
+#   end
+#   if current.length >= longest.length
+#     longest = current
+#   end
+#   longest
+# end
+
 def longest_streak(str)
-  streaks = []
   longest = ""
   current = ""
-  str.each_char do |char|
-    if char == current[-1]
-      current += char
+  (0...str.length).each do |i|
+    if str[i] == str[i - 1] or i == 0
+      current += str[i]
     else
-      if current.length >= longest.length
-        longest = current
-      end
-      current = char
+      current = str[i]
     end
-  end
-  if current.length >= longest.length
-    longest = current
+    longest = current if current.length >= longest.length
   end
   longest
 end
@@ -99,6 +119,7 @@ def bi_prime?(num)
 end
 
 def prime?(num)
+  return false if num < 2
   (2...num).none? { |div| num % div == 0 }
 end
 
@@ -174,9 +195,9 @@ class String
   # in your solution.
   def select(&prc)
     return "" if !prc
-    res = []
-    self.each_char { |char| res << char if prc.call(char) }
-    res.join("")
+    new_str = ""
+    self.each_char { |char| new_str += char if prc.call(char) }
+    new_str
   end
 
   # Extend the string class by defining a String#map! method that accepts a
@@ -227,19 +248,13 @@ puts
 # You must solve this recursively (no loops!)
 # You must not use the multiplication (*) operator
 def multiply(num_1, num_2)
-  return 0 if num_1 == 0 or num_2 == 0
-  if (num_1 < 0) == (num_2 < 0)
-    num_1 + multiply(num_1, num_2 - 1)
+  return 0 if num_2 == 0 or num_1 == 0
+  if num_2 < 0
+    return -num_1 + multiply(num_1, num_2 + 1)
   else
-    -num_1 + multiply(num_1, num_2 - 1)
+    return num_1 + multiply(num_1, num_2 - 1)
   end
 end
-
-# Above is clearly wrong but easy to start seeing new solution
-# End case is still return 0
-# But 2 cases to consider for num_1 and num_2
-# When the sum has to stay positive sgn(num_1) == sgn(num_2)
-# Or the sum has to stay negative sgn(num_1) == sgn(num_2)
 
 # Examples
 puts "multiply"
