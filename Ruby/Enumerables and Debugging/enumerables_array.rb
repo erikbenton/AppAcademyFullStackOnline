@@ -16,6 +16,28 @@ class Array
     end
     res
   end
+
+  def my_reject(&prc)
+    res = []
+    self.my_each do |ele|
+      res << ele if !prc.call(ele)
+    end
+    res
+  end
+
+  def my_any?(&prc)
+    self.my_each do |ele|
+      return true if prc.call(ele)
+    end
+    false
+  end
+
+  def my_all?(&prc)
+    self.my_each do |ele|
+      return false if !prc.call(ele)
+    end
+    true
+  end
 end
 
 puts
@@ -39,3 +61,28 @@ puts "my_select"
 a = [1, 2, 3]
 p a.my_select { |num| num > 1 } # => [2, 3]
 p a.my_select { |num| num == 4 } # => []
+
+puts
+puts "###############################"
+puts
+
+puts "my_reject"
+a = [1, 2, 3]
+p a.my_reject { |num| num < 6 } # => [1]
+p a.my_reject { |num| num % 2  == 0 } # => [1, 2, 3]
+
+puts
+puts "###############################"
+puts
+
+puts "my_any?"
+p a.my_any? { |num| num > 1 } # => true
+p a.my_any? { |num| num == 4 } # => false
+
+puts
+puts "###############################"
+puts
+
+puts "my_all?"
+p a.my_all? { |num| num > 1 } # => false
+p a.my_all? { |num| num < 4 } # => true
