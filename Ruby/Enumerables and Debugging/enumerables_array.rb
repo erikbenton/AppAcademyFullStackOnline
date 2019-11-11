@@ -1,3 +1,4 @@
+require "byebug"
 class Array
   def my_each(&prc)
     return nil if !prc
@@ -37,6 +38,18 @@ class Array
       return false if !prc.call(ele)
     end
     true
+  end
+
+  def my_flatten
+    res = []
+    self.my_each do |ele|
+      if ele.is_a?(Array)
+        res += ele.my_flatten
+      else
+        res << ele
+      end
+    end
+    res
   end
 end
 
@@ -86,3 +99,21 @@ puts
 puts "my_all?"
 p a.my_all? { |num| num > 1 } # => false
 p a.my_all? { |num| num < 4 } # => true
+
+puts
+puts "###############################"
+puts
+
+puts "my_flatten"
+a = [1]
+p "#{a} =?> #{[1]}"
+p a.my_flatten
+a = [1, 2] #=> [1, 2]
+p "#{a} =?> #{[1, 2]}"
+p a.my_flatten
+a = [1, [2, 3]] #=> [1, 2, 3]
+p "#{a} =?> #{[1, 2, 3]}"
+p a.my_flatten
+a = [1, 2, 3, [4, [5, 6]], [[[7]], 8]]
+p "#{a} =?> #{[1, 2, 3, 4, 5, 6, 7, 8]}"
+p a.my_flatten # => [1, 2, 3, 4, 5, 6, 7, 8]
