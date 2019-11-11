@@ -145,140 +145,161 @@ def factors(num)
   res
 end
 
-puts
-puts "###############################"
-puts
-
-puts "my_each"
-return_value = [1, 2, 3].my_each do |num|
-  puts num
-end.my_each do |num|
-  puts num
+def substrings(word)
+  res = []
+  (0...word.length).to_a.my_each do |start|
+    (start...word.length).to_a.my_each do |stop|
+      res << word[start..stop]
+    end
+  end
+  res
 end
 
-p return_value  # => [1, 2, 3]
+def subwords(word, dictionary)
+  res = []
+  (0...word.length).to_a.my_each do |start|
+    (start...word.length).to_a.my_each do |stop|
+      str = word[start..stop]
+      res << str if dictionary.include?(str)
+    end
+  end
+  res
+end
 
-puts
-puts "###############################"
-puts
+# puts
+# puts "###############################"
+# puts
 
-puts "my_select"
-a = [1, 2, 3]
-p a.my_select { |num| num > 1 } # => [2, 3]
-p a.my_select { |num| num == 4 } # => []
+# puts "my_each"
+# return_value = [1, 2, 3].my_each do |num|
+#   puts num
+# end.my_each do |num|
+#   puts num
+# end
 
-puts
-puts "###############################"
-puts
+# p return_value  # => [1, 2, 3]
 
-puts "my_reject"
-a = [1, 2, 3]
-p a.my_reject { |num| num < 6 } # => [1]
-p a.my_reject { |num| num % 2  == 0 } # => [1, 2, 3]
+# puts
+# puts "###############################"
+# puts
 
-puts
-puts "###############################"
-puts
+# puts "my_select"
+# a = [1, 2, 3]
+# p a.my_select { |num| num > 1 } # => [2, 3]
+# p a.my_select { |num| num == 4 } # => []
 
-puts "my_any?"
-p a.my_any? { |num| num > 1 } # => true
-p a.my_any? { |num| num == 4 } # => false
+# puts
+# puts "###############################"
+# puts
 
-puts
-puts "###############################"
-puts
+# puts "my_reject"
+# a = [1, 2, 3]
+# p a.my_reject { |num| num < 6 } # => [1]
+# p a.my_reject { |num| num % 2  == 0 } # => [1, 2, 3]
 
-puts "my_all?"
-p a.my_all? { |num| num > 1 } # => false
-p a.my_all? { |num| num < 4 } # => true
+# puts
+# puts "###############################"
+# puts
 
-puts
-puts "###############################"
-puts
+# puts "my_any?"
+# p a.my_any? { |num| num > 1 } # => true
+# p a.my_any? { |num| num == 4 } # => false
 
-puts "my_flatten"
-a = [1]
-p "#{a} =?> #{[1]}"
-p a.my_flatten
-a = [1, 2] #=> [1, 2]
-p "#{a} =?> #{[1, 2]}"
-p a.my_flatten
-a = [1, [2, 3]] #=> [1, 2, 3]
-p "#{a} =?> #{[1, 2, 3]}"
-p a.my_flatten
-a = [1, 2, 3, [4, [5, 6]], [[[7]], 8]]
-p "#{a} =?> #{[1, 2, 3, 4, 5, 6, 7, 8]}"
-p a.my_flatten # => [1, 2, 3, 4, 5, 6, 7, 8]
+# puts
+# puts "###############################"
+# puts
 
-puts
-puts "###############################"
-puts
+# puts "my_all?"
+# p a.my_all? { |num| num > 1 } # => false
+# p a.my_all? { |num| num < 4 } # => true
 
-puts "my_zip"
+# puts
+# puts "###############################"
+# puts
+
+# puts "my_flatten"
 # a = [1]
-# b = 
 # p "#{a} =?> #{[1]}"
 # p a.my_flatten
+# a = [1, 2] #=> [1, 2]
+# p "#{a} =?> #{[1, 2]}"
+# p a.my_flatten
+# a = [1, [2, 3]] #=> [1, 2, 3]
+# p "#{a} =?> #{[1, 2, 3]}"
+# p a.my_flatten
+# a = [1, 2, 3, [4, [5, 6]], [[[7]], 8]]
+# p "#{a} =?> #{[1, 2, 3, 4, 5, 6, 7, 8]}"
+# p a.my_flatten # => [1, 2, 3, 4, 5, 6, 7, 8]
 
-a = [ 4, 5, 6 ]
-b = [ 7, 8, 9 ]
-p [1, 2, 3].my_zip(a, b) # => [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
-p a.my_zip([1,2], [8])   # => [[4, 1, 8], [5, 2, nil], [6, nil, nil]]
-p [1, 2].my_zip(a, b)    # => [[1, 4, 7], [2, 5, 8]]
+# puts
+# puts "###############################"
+# puts
 
-p c = [10, 11, 12]
-p d = [13, 14, 15]
-p [1, 2].my_zip(a, b, c, d)    # => [[1, 4, 7, 10, 13], [2, 5, 8, 11, 14]]
+# puts "my_zip"
+# # a = [1]
+# # b = 
+# # p "#{a} =?> #{[1]}"
+# # p a.my_flatten
 
-puts
-puts "###############################"
-puts
+# a = [ 4, 5, 6 ]
+# b = [ 7, 8, 9 ]
+# p [1, 2, 3].my_zip(a, b) # => [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+# p a.my_zip([1,2], [8])   # => [[4, 1, 8], [5, 2, nil], [6, nil, nil]]
+# p [1, 2].my_zip(a, b)    # => [[1, 4, 7], [2, 5, 8]]
 
-puts "my_rotate"
+# p c = [10, 11, 12]
+# p d = [13, 14, 15]
+# p [1, 2].my_zip(a, b, c, d)    # => [[1, 4, 7, 10, 13], [2, 5, 8, 11, 14]]
 
-a = [ "a", "b", "c", "d" ]
-p a.my_rotate         #=> ["b", "c", "d", "a"]
-p a.my_rotate(2)      #=> ["c", "d", "a", "b"]
-p a.my_rotate(-3)     #=> ["b", "c", "d", "a"]
-p a.my_rotate(15)     #=> ["d", "a", "b", "c"]
+# puts
+# puts "###############################"
+# puts
 
-puts
-puts "###############################"
-puts
+# puts "my_rotate"
 
-puts "my_join"
-a = [ "a", "b", "c", "d" ]
-p a.my_join         # => "abcd"
-p a.my_join("$")    # => "a$b$c$d"
+# a = [ "a", "b", "c", "d" ]
+# p a.my_rotate         #=> ["b", "c", "d", "a"]
+# p a.my_rotate(2)      #=> ["c", "d", "a", "b"]
+# p a.my_rotate(-3)     #=> ["b", "c", "d", "a"]
+# p a.my_rotate(15)     #=> ["d", "a", "b", "c"]
 
-puts
-puts "###############################"
-puts
+# puts
+# puts "###############################"
+# puts
 
-puts "my_reverse"
-p [ "a", "b", "c" ].my_reverse   #=> ["c", "b", "a"]
-p [ 1 ].my_reverse               #=> [1]
+# puts "my_join"
+# a = [ "a", "b", "c", "d" ]
+# p a.my_join         # => "abcd"
+# p a.my_join("$")    # => "a$b$c$d"
 
-puts
-puts "###############################"
-puts
+# puts
+# puts "###############################"
+# puts
 
-puts "factors"
-p factors(0)
-p factors(1)
-p factors(12)
-p factors(7)
-p factors(9)
-p factors(-1)
-p factors(-12)
-p factors(-7)
-p factors(-9)
+# puts "my_reverse"
+# p [ "a", "b", "c" ].my_reverse   #=> ["c", "b", "a"]
+# p [ 1 ].my_reverse               #=> [1]
 
-puts
-puts "###############################"
-puts
+# puts
+# puts "###############################"
+# puts
 
-puts "bubble_sort"
-p [1, 2, 3].bubble_sort
-p [3, 2, 1].bubble_sort
-p [3, 6, 2, 7, 3, 5, 3, 5, -10].bubble_sort
+# puts "factors"
+# p factors(0)
+# p factors(1)
+# p factors(12)
+# p factors(7)
+# p factors(9)
+# p factors(-1)
+# p factors(-12)
+# p factors(-7)
+# p factors(-9)
+
+# puts
+# puts "###############################"
+# puts
+
+# puts "bubble_sort"
+# p [1, 2, 3].bubble_sort
+# p [3, 2, 1].bubble_sort
+# p [3, 6, 2, 7, 3, 5, 3, 5, -10].bubble_sort
