@@ -101,6 +101,48 @@ class Array
     end
     res
   end
+
+  def bubble_sort!(&prc)
+    prc ||= Proc.new { |a, b| a <=> b }
+    is_sorted = false
+    while !is_sorted
+      idx = 0
+      is_sorted = true
+      (0...self.length - 1).to_a.my_each do |idx|
+        if prc.call(self[idx], self[idx + 1]) == 1
+          self[idx], self[idx + 1] = self[idx + 1], self[idx]
+          is_sorted = false
+        end
+      end
+    end
+  end
+
+  def bubble_sort(&prc)
+    prc ||= Proc.new { |a, b| a <=> b }
+    res = self
+    res.bubble_sort!(&prc)
+    return res
+  end
+
+end
+
+def factors(num)
+  return nil if num == 0
+  res = []
+  res << [num, num] if num == 1
+  res.push([-num, num], [num, -num]) if num == -1
+  if num < 0
+    pos_num = -num
+  else
+    pos_num = num
+  end
+  (1..pos_num/2).each do |fact|
+    if pos_num  % fact == 0 and fact <= pos_num /fact
+      res << [fact, num/fact]
+      res << [-fact, -num/fact]
+    end
+  end
+  res
 end
 
 puts
@@ -216,3 +258,27 @@ puts
 puts "my_reverse"
 p [ "a", "b", "c" ].my_reverse   #=> ["c", "b", "a"]
 p [ 1 ].my_reverse               #=> [1]
+
+puts
+puts "###############################"
+puts
+
+puts "factors"
+p factors(0)
+p factors(1)
+p factors(12)
+p factors(7)
+p factors(9)
+p factors(-1)
+p factors(-12)
+p factors(-7)
+p factors(-9)
+
+puts
+puts "###############################"
+puts
+
+puts "bubble_sort"
+p [1, 2, 3].bubble_sort
+p [3, 2, 1].bubble_sort
+p [3, 6, 2, 7, 3, 5, 3, 5, -10].bubble_sort
