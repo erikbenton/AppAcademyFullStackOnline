@@ -23,13 +23,42 @@ class Ghost
   end
 
   def play_round
-    self.next_player! if take_turn(@current_player)
+    is_round_over = false
+    until is_round_over
+      take_turn(@current_player)
+      is_round_over = self.round_over?
+      if !is_round_over
+        self.next_player! 
+        self.print_fragment
+      end
+    end
+    puts "Round Over!"
+    self.print_fragment
+    @current_player.losses += 1
+    self.print_score
+    self.reset_game
+  end
+
+  def print_score
+    puts "#{@player_1.name}'s score: #{@player_1.score}"
+    puts "#{@player_2.name}'s score: #{@player_2.score}"
+  end
+
+  def reset_game
+    @player_1.reset_chances
+    @player_2.reset_chances
+    self.reset_fragment
+    self.next_player!
+  end
+
+  def reset_fragment
+    @fragment = ""
   end
 
   def take_turn(player)
     guess = player.get_guess
     while !self.valid_play?(guess)
-      return false if @current_player.chances < 0
+      return false if @current_player.chances <= 0
       self.alert_invalid_guess
       @current_player.chances -= 1
       guess = player.get_guess
@@ -44,7 +73,7 @@ class Ghost
   end
 
   def alert_invalid_guess
-    message = "#{@current_player.name}! That was invalid, "
+    message = "\n#{@current_player.name}! That was invalid, "
     message += "you have #{@current_player.chances} left"
     puts message
   end
@@ -58,8 +87,16 @@ class Ghost
     false
   end
 
+  def round_over?
+    if self.dictionary.key?(self.fragment) or @current_player.chances <= 1
+      true
+    else
+      false
+    end
+  end
+
   def game_over?
-    return true if self.dictionary.key?(self.fragment)
+    return true if @player_1.losses >= 5 or @player_2.losses >= 5
     false
   end
 

@@ -10,5 +10,4 @@ ghost = Ghost.new(player_1, player_2)
 until ghost.game_over? or ghost.current_player.out_of_chances? do
   puts "-------------------------"
   ghost.play_round
-  ghost.print_fragment
 end
