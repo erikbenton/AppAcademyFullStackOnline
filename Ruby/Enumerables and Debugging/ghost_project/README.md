@@ -5,7 +5,7 @@
 - Be able to write classes in different files and use `require_relative` to connect them
 - Know how to test methods in pry
 - Know how to read lines from a text file
-- Understand how `\_\_FILE\_\_ == $PROGRAM_NAME` works
+- Understand how `__FILE__ == $PROGRAM_NAME` works
 
 ## Phase 1: Playing a Single Round
 Let's start by writing the logic to play a single round of Ghost (that is, playing until one player spells a word). Write your game for two players only, and don't worry about keeping track of wins/losses (we can get to this later). The basic logic will look something like this:
@@ -16,18 +16,18 @@ Let's start by writing the logic to play a single round of Ghost (that is, playi
 
 ### Game
 
-`\#initialize`
+`#initialize`
 Assign instance variables for the `players`, `fragment`, and `dictionary`. Since we'll be checking the `fragment` for inclusion in the `dictionary`, we'll want to use a data structure with fast lookup: a Hash or [Set](https://ruby-doc.org/stdlib-2.4.2/libdoc/set/rdoc/Set.html) would be ideal. You can use [this file](https://assets.aaonline.io/fullstack/ruby/projects/ghost/dictionary.txt) to populate your dictionary; it contains only words three letters or longer (otherwise we wouldn't have a very interesting game).
 
 💡 **__NOTE:__** Using a Hash or a Set instead of an Array to store our dictionary allows us to very quickly check if the fragment is included in the dictionary. In fact, the amount of time it would take to see if the fragment was included would be independent of how long the dictionary is because these data structures don't require you to examine every element when you are checking for inclusion. If we stored the dictionary just as an array of strings, using the `Array#include?` method would take longer as our array of got longer. Keep in mind that when you are then checking to see if there are any words in the dictionary that can be created by adding another letter to the fragment in your `valid_play?` method, you are potentially looking at every word in the dictionary. Therefore, this operation will not be speed-boosted by our use of a Set or Hash.
 
-`\#play_round`
+`#play_round`
 The core game logic lives here. I wrote a number of helper methods to keep things clean:
 
-- `\#current_player`
-- `\#previous_player`
-- `\#next_player!`: updates the `current_player` and `previous_player`
-- `\#take_turn(player)`: gets a string from the player until a valid play is made; then updates the fragment and checks against the dictionary. You may also want to alert the player if they attempt to make an invalid move (or, if you're feeling mean, you might cause them to lose outright).
+- `#current_player`
+- `#previous_player`
+- `#next_player!`: updates the `current_player` and `previous_player`
+- `#take_turn(player)`: gets a string from the player until a valid play is made; then updates the fragment and checks against the dictionary. You may also want to alert the player if they attempt to make an invalid move (or, if you're feeling mean, you might cause them to lose outright).
 - `#valid_play?(string)`: Checks that `string` is a letter of the alphabet and that there are words we can spell after adding it to the `fragment`
 
 ### Player
@@ -37,13 +37,13 @@ I wrote `initialize`, `guess`, and `alert_invalid_guess` methods. You'll probabl
 ## Phase 2: Playing a Full Game
 Now that we have the logic to play a single round of Ghost, we'll have to add another layer.
 
-`Game\#losses` **and** `Game\#record`
+`Game#losses` **and** `Game#record`
 In a game of Ghost, a player "earns" a letter each time they lose a round. Thus, if Eric beats Ryan 3 times and loses once, then Eric has a "G" and Ryan has a "GHO". If a player spells the word "GHOST", they are eliminated from play (and in the case of two players, the other player wins).
 
-I added a `losses` hash to my Game class. The keys to the hash are `Player`s, and the values are the number of games that player has lost. Update this at the end of `\#play_round`. For flavor, I also wrote a helper method, `\#record(player)`, that translates a player's losses into a substring of "GHOST".
+I added a `losses` hash to my Game class. The keys to the hash are `Player`s, and the values are the number of games that player has lost. Update this at the end of `#play_round`. For flavor, I also wrote a helper method, `#record(player)`, that translates a player's losses into a substring of "GHOST".
 
-`Game\#run`
-This method should call `\#play_round` until one of the players reaches 5 losses ("GHOST"). I wrote a helper method, `\#display_standings`, to show the scoreboard at the beginning of each round. Remember to reset the fragment at the beginning of each round, as well!
+`Game#run`
+This method should call `#play_round` until one of the players reaches 5 losses ("GHOST"). I wrote a helper method, `#display_standings`, to show the scoreboard at the beginning of each round. Remember to reset the fragment at the beginning of each round, as well!
 
 ## Phase 3: Multiplayer!
 Refactor your game to work with more than just two players. Instead of ending the game when one of the players reaches five losses, simply exclude that player from further rounds. End the game when only one player is left standing. **Hint**: You won't be able to use an instance variable for each player anymore. What data structure might we use as an alternative?
