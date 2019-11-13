@@ -2,7 +2,7 @@ require_relative "player"
 require "byebug"
 class Ghost
 
-  attr_reader :dictionary, :fragment, :current_player, :previous_player
+  attr_reader :dictionary, :fragment, :current_player
 
   def self.read_in_dictionary
     file = File.open("dictionary.txt")
@@ -13,11 +13,9 @@ class Ghost
     file_hash
   end
 
-  def initialize(name_1, name_2)
-    @player_1 = Player.new(name_1)
-    @player_2 = Player.new(name_2)
-    @current_player = @player_1
-    @previous_player = @player_2
+  def initialize(names)
+    @players = names.map { |name| Player.new(name) }
+    @current_player = @players[0]
     @fragment = ""
     @dictionary = Ghost.read_in_dictionary
   end
@@ -35,18 +33,21 @@ class Ghost
     puts "Round Over!"
     self.print_fragment
     @current_player.losses += 1
+    if @current_player.losses >= 5
+      @players.shift
+    end
     self.print_score
     self.reset_game
   end
 
   def print_score
-    puts "#{@player_1.name}'s score: #{@player_1.score}"
-    puts "#{@player_2.name}'s score: #{@player_2.score}"
+    @players.each do |player|
+      puts "#{player.name}'s score: #{player.score}"
+    end
   end
 
   def reset_game
-    @player_1.reset_chances
-    @player_2.reset_chances
+    @players.each { |player| player.reset_chances }
     self.reset_fragment
     self.next_player!
   end
@@ -69,7 +70,8 @@ class Ghost
   end
 
   def next_player!
-    @current_player, @previous_player = @previous_player, @current_player
+    @players.rotate!
+    @current_player = @players[0]
   end
 
   def alert_invalid_guess
@@ -96,8 +98,15 @@ class Ghost
   end
 
   def game_over?
-    return true if @player_1.losses >= 5 or @player_2.losses >= 5
+    return true if @players.length == 1
     false
+  end
+
+  def eliminate_players
+    @players = @players.map do |player|
+      player if player.losses < 5
+    end
+    # debugger
   end
 
   def print_fragment
