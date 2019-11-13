@@ -30,12 +30,14 @@ class Ghost
         self.print_fragment
       end
     end
+    self.wrap_up_round
+  end
+
+  def wrap_up_round
     puts "Round Over!"
     self.print_fragment
     @current_player.losses += 1
-    if @current_player.losses >= 5
-      @players.shift
-    end
+    self.eliminate_player
     self.print_score
     self.reset_game
   end
@@ -103,10 +105,10 @@ class Ghost
   end
 
   def eliminate_players
-    @players = @players.map do |player|
-      player if player.losses < 5
+    if @current_player.losses >= 5
+      eliminated = @players.shift
     end
-    # debugger
+    puts "#{eliminated.name} has been eliminated from the game =("
   end
 
   def print_fragment
