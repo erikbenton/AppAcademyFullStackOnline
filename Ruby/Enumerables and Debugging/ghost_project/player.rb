@@ -10,9 +10,15 @@ class Player
   end
 
   def get_guess
+    alpha = ("a".."z").to_a
     puts "#{@name}'s turn"
     puts "Enter a letter to add to the end of the current fragment"
-    guess = gets.chomp[0].downcase
+    guess = gets.chomp
+    while guess.empty? or !alpha.include?(guess[0].downcase)
+      puts "Invalid entry, try again"
+      guess = gets.chomp
+    end
+    guess.downcase
   end
 
   def reset_chances
