@@ -94,11 +94,6 @@ def first_satisfy(arr, val, prc)
 end
 
 def silly_syllables(sentence)
-  vowels = "aeiou"
-  num_vowels = sentence.split("").count { |ele| vowels.include?(ele) }
-  if num_vowels < 2
-    return sentence
-  end
   words = sentence.split.map { |word| silly_words(word) }
   words.join(" ")
 end
