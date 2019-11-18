@@ -1,4 +1,7 @@
+require "byebug"
 class Card
+
+  attr_reader :value
 
   def initialize(val)
     @value = val
@@ -21,7 +24,7 @@ class Card
     @value.to_s
   end
 
-  def ==()
-    
+  def ==(other_card)
+    @value.to_s == other_card.to_s
   end
 end
