@@ -29,7 +29,6 @@ class ComputerPlayer < Player
   end
 
   def get_guess
-    # debugger
     if !@next_guess.empty?
       guess = @next_guess
       @next_guess = []
