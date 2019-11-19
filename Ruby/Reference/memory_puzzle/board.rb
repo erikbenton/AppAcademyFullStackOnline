@@ -2,21 +2,12 @@ require_relative "card"
 require "byebug"
 class Board
 
-  def self.count_digits(num)
-    count = 0
-    while num > 0
-      count += 1
-      num /= 10
-    end
-    count
-  end
-
   def initialize(length)
     @length = length
     @grid = Array.new(@length) { [] }
     self.populate
     max = @grid.flatten.max { |a, b| a <=> b }
-    @cell_width = Board.count_digits(max.value)
+    @cell_width = max.to_s.length
   end
 
   def get_deck
@@ -38,21 +29,32 @@ class Board
   end
 
   def render
+    self.render_board_top
+    self.render_rows
+  end
+
+  def render_board_top
     current_row = [" "]
     current_row += (0...@length).to_a.map! { |num| num.to_s.rjust(@cell_width) }
     puts current_row.join(" ")
+  end
+
+  def render_rows
     (0...@length).each do |row|
-      current_row = []
-      current_row << row
+      current_row = [row]
       (0...@length).each do |col|
         current_card = @grid[row][col]
-        if !current_card.facing_down?
-          current_row << " "
-        else
-          current_row << current_card.to_s.rjust(@cell_width)
-        end
+        current_row << get_card_value(current_card).rjust(@cell_width)
       end
       puts current_row.join(" ")
+    end
+  end
+
+  def get_card_value(card)
+    if card.facing_down?
+      return "?"
+    else
+      return card.to_s
     end
   end
 
