@@ -1,6 +1,8 @@
 require_relative "card"
 class Board
 
+  @@cell_width = 3
+
   def self.count_digits(num)
     count = 0
     while num > 0
@@ -14,8 +16,6 @@ class Board
     @length = length
     @grid = Array.new(@length) { [] }
     self.populate
-    max = @grid.flatten.max { |a, b| a.to_s <=> b.to_s }
-    @cell_width = Board.count_digits(max)
   end
 
   def get_deck
@@ -38,8 +38,7 @@ class Board
 
   def render
     current_row = [" "]
-    current_row += (0...@length).to_a
-    current_row.map! { |num| num.to_s.rjust(@cell_width) }
+    current_row += (0...@length).to_a.map! { |num| num.to_s.rjust(@@cell_width) }
     puts current_row.join(" ")
     (0...@length).each do |row|
       current_row = []
@@ -49,7 +48,7 @@ class Board
         if !current_card.facing_down?
           current_row << " "
         else
-          current_row << current_card.to_s.rjust(@cell_width)
+          current_row << current_card.to_s.rjust(@@cell_width)
         end
       end
       puts current_row.join(" ")
