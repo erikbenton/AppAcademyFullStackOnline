@@ -25,6 +25,26 @@ class Card
   end
 
   def ==(other_card)
-    self.to_s == other_card.to_s
+    @value == other_card.value
+  end
+
+  def >(other_card)
+    @value > other_card.value
+  end
+
+  def >=(other_card)
+    @value >= other_card.value
+  end
+
+  def <(other_card)
+    @value < other_card.value
+  end
+
+  def <=(other_card)
+    @value <= other_card.value
+  end
+
+  def <=>(other_card)
+    @value <=> other_card.value
   end
 end
