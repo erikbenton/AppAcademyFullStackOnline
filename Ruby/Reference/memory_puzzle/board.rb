@@ -2,6 +2,8 @@ require_relative "card"
 require "byebug"
 class Board
 
+  attr_reader :length
+
   def initialize(length)
     @length = length
     @grid = Array.new(@length) { [] }

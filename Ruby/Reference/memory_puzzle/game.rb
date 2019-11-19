@@ -1,7 +1,7 @@
 require_relative "board"
 require_relative "card"
 require_relative "players"
-
+require "byebug"
 class Game
 
   def self.get_game_parameters
@@ -27,36 +27,61 @@ class Game
     self.play
   end
 
-  def reset_guessed_cards
+  def hide_guessed_cards
     @first_card.hide
     @second_card.hide
   end
 
+  def reset_guessed_cards
+    @first_card = nil
+    @second_card = nil
+  end
+
   def play
-    while true
-      guess = @player.get_guess
-      if @board[guess].facing_down?
-        @first_card = @board[guess]
-        @first_card.reveal
-      end
-      @board.render
-      guess = @player.get_guess
-      if @board[guess].facing_down?
-        @second_card = @board[guess]
-        @second_card.reveal
-      end
-      @board.render
+    game_over = false
+    until game_over
+      cards = [@first_card, @second_card]
+      self.flip_cards
       self.check_guessed_cards
-      if self.end_of_game?
-        puts "Congrats!"
-        break
-      end
+      self.reset_guessed_cards
+      game_over = self.end_of_game?
     end
   end
 
   def check_guessed_cards
     if self.different_cards
-      self.reset_guessed_cards
+      self.hide_guessed_cards
+    end
+    self.reset_guessed_cards
+  end
+
+  def valid_guess?(guess)
+    return false if !guess.all? { |num| num.between?(0, @board.length - 1) }
+    return @board[guess].facing_down?
+  end
+
+  def get_guess
+    guess = @player.get_guess
+    until self.valid_guess?(guess)
+      puts "That card is already revealed or off the board, try again"
+      guess = @player.get_guess
+    end
+    guess
+  end
+
+  def flip_cards
+    guesses = []
+    until guesses.length == 2
+      guess = self.get_guess
+      guesses << guess
+      if guesses.length == 1
+        @first_card = @board[guess]
+        @first_card.reveal
+      else
+        @second_card = @board[guess]
+        @second_card.reveal
+      end
+      @board.render
     end
   end
 
@@ -66,19 +91,17 @@ class Game
 
   def end_of_game?
     if @board.won?
+      puts "Congrats!"
       return true
     else
       puts "Next round? (y = yes)"
       prompt = gets.chomp
       if prompt != "y"
+        puts "=("
         return true
       end
     end
     false
-  end
-
-  def get_guessed_card(guess)
-    
   end
 end
 
