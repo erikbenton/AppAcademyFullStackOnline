@@ -6,7 +6,7 @@ class Game
 
   def self.get_game_parameters
     puts "Welcome to a game of memory!"
-    puts "First, what is your name?"
+    puts "First, what is your name (enter 'ai' for AI)?"
     name = gets.chomp
     puts "Second, how big of a board do you want to play on? (even numbers >= 2 only)"
     size = gets.chomp.to_i
@@ -19,10 +19,16 @@ class Game
   end
 
   def initialize(board_length, player_name)
-    @player = Player.new(player_name)
+    if player_name.downcase == "ai"
+      @player = ComputerPlayer.new(player_name, board_length)
+      # debugger
+    else
+      @player = Player.new(player_name)
+    end
     @board = Board.new(board_length)
     @first_card = nil
     @second_card = nil
+    @guesses = []
     @board.render
     self.play
   end
@@ -30,6 +36,10 @@ class Game
   def hide_guessed_cards
     @first_card.hide
     @second_card.hide
+    if @player.is_a?(ComputerPlayer)
+      @player.receive_unmatched_card(@guesses[0], @first_card)
+      @player.receive_unmatched_card(@guesses[1], @second_card)
+    end
   end
 
   def reset_guessed_cards
@@ -41,8 +51,8 @@ class Game
     game_over = false
     until game_over
       @board.render
-      cards = [@first_card, @second_card]
       self.flip_cards
+      # debugger
       self.check_guessed_cards
       self.reset_guessed_cards
       game_over = self.end_of_game?
@@ -52,6 +62,8 @@ class Game
   def check_guessed_cards
     if self.different_cards
       self.hide_guessed_cards
+    elsif @player.is_a?(ComputerPlayer)
+      @player.receive_matched_cards(@guesses, @first_card)
     end
     self.reset_guessed_cards
   end
@@ -71,11 +83,11 @@ class Game
   end
 
   def flip_cards
-    guesses = []
-    until guesses.length == 2
+    @guesses = []
+    until @guesses.length == 2
       guess = self.get_guess
-      guesses << guess
-      if guesses.length == 1
+      @guesses << guess
+      if @guesses.length == 1
         @first_card = @board[guess]
         @first_card.reveal
       else
@@ -90,14 +102,20 @@ class Game
     @first_card != @second_card
   end
 
+  def reset_game_round
+    if !@player.is_a?(ComputerPlayer)
+      puts "Memorize! You got 3 seconds!"
+      sleep(3)
+      system("clear")
+    end
+  end
+
   def end_of_game?
     if @board.won?
       puts "Congrats!"
       return true
     else
-      puts "Memorize! You got 3 seconds!"
-      sleep(3)
-      system("clear")
+      self.reset_game_round
     end
     false
   end
