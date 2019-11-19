@@ -60,7 +60,9 @@ class Board
     flattened_grid = @grid.flatten
     flattened_grid.none? { |card| card.facing_down? }
   end
-end
 
-board = Board.new(6)
-board.render
+  def [](pos)
+    row, col = pos
+    @grid[row][col]
+  end
+end
