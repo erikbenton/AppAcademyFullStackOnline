@@ -31,6 +31,7 @@ class Board
   end
 
   def render
+    system("clear")
     self.render_board_top
     self.render_rows
   end

@@ -40,6 +40,7 @@ class Game
   def play
     game_over = false
     until game_over
+      @board.render
       cards = [@first_card, @second_card]
       self.flip_cards
       self.check_guessed_cards
@@ -94,12 +95,9 @@ class Game
       puts "Congrats!"
       return true
     else
-      puts "Next round? (y = yes)"
-      prompt = gets.chomp
-      if prompt != "y"
-        puts "=("
-        return true
-      end
+      puts "Memorize! You got 3 seconds!"
+      sleep(3)
+      system("clear")
     end
     false
   end
