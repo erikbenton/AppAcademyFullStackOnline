@@ -11,9 +11,17 @@ class Tile
 
   def to_s
     if @given
-      return @value.to_s
+      return @value.to_s.green
     else
-      return "X"
+      if @value < 1
+        return "X".red
+      else
+        return @value.to_s
+      end
     end
+  end
+
+  def to_i
+    @value
   end
 end
