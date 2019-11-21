@@ -5,15 +5,26 @@ class Board
 
   attr_reader :grid
 
-  def initialize(puzzle_lines)
-    @grid = []
+  def self.get_file_data(file_name)
+    file_data = File.open(file_name).readlines.join("").split("\n")
+    file_data
+  end
+
+  def self.create_grid(puzzle_name)
+    grid = []
+    puzzle_lines = Board.get_file_data(puzzle_name)
     puzzle_lines.each_with_index do |line|
       tiles = []
       line.split("").each do |num|
         tiles << Tile.new(num.to_i)
       end
-      @grid << tiles
+      grid << tiles
     end
+    grid
+  end
+
+  def initialize(puzzle_name)
+    @grid = Board.create_grid(puzzle_name)
   end
 
   def render
@@ -99,7 +110,7 @@ class Board
 end
 
 if __FILE__ == $PROGRAM_NAME
-  board = Board.new(File.open("./puzzles/sudoku1.txt").readlines.join("").split("\n"))
+  board = Board.new("./puzzles/sudoku1.txt")
   board.render
   p board.valid_value?(4, 4, 7)
   p board.valid_value?(4, 4, 4)
