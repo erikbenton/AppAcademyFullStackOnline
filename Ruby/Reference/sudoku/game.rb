@@ -1,10 +1,10 @@
 require_relative "board"
 require_relative "player"
-class Sudoku
+class Game
 
   def self.get_game_parameters
     acceptable_nums = ("1".."3").to_a
-    puzzle_num = Sudoku.prompt
+    puzzle_num = Game.prompt
     until acceptable_nums.include?(puzzle_num)
       puts "Please enter a puzzle number 1, 2, or 3"
       puzzle_num = gets.chomp
@@ -21,7 +21,7 @@ class Sudoku
   end
 
   def initialize
-    puzzle_location = Sudoku.get_game_parameters
+    puzzle_location = Game.get_game_parameters
     @player = Player.new("Erik")
     @board = Board.new(puzzle_location)
   end
@@ -36,6 +36,8 @@ class Sudoku
       end
       @board[guess[0..1]] = guess[2]
     end
+    @board.render
+    puts "Congratulations!"
   end
 
   def over?
@@ -44,7 +46,7 @@ class Sudoku
 end
 
 if __FILE__ == $PROGRAM_NAME
-  game = Sudoku.new
+  game = Game.new
   game.play
 end
 

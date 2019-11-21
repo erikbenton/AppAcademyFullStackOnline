@@ -1,12 +1,9 @@
 require "colorize"
 class Tile
-  def initialize(value)
+  attr_reader :given
+  def initialize(value, given)
     @value = value
-    if value == 0
-      @given = false
-    else
-      @given = true
-    end
+    @given = given
   end
 
   def to_s
@@ -23,5 +20,9 @@ class Tile
 
   def to_i
     @value
+  end
+
+  def given?
+    @given
   end
 end

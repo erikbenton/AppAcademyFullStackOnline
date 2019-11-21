@@ -16,7 +16,9 @@ class Board
     puzzle_lines.each_with_index do |line|
       tiles = []
       line.split("").each do |num|
-        tiles << Tile.new(num.to_i)
+        num = num.to_i
+        given = num != 0
+        tiles << Tile.new(num, given)
       end
       grid << tiles
     end
@@ -87,7 +89,7 @@ class Board
     row_idx = guess[0]
     col_idx = guess[1]
     val = guess[2].to_i
-    return false if @grid[row_idx][col_idx].to_s != "X".red
+    return false if @grid[row_idx][col_idx].given?
     horizontal_checks = self.get_relevant_horizontal_tiles(row_idx)
     vertical_checks = self.get_relevant_vertical_tiles(row_idx, col_idx)
     square_checks = self.get_relevant_square_tiles(row_idx, col_idx)
@@ -112,7 +114,7 @@ class Board
 
   def []=(pos, val)
     row, col = pos
-    @grid[row][col] = val
+    @grid[row][col] = Tile.new(val.to_i, false)
   end
 end
 
