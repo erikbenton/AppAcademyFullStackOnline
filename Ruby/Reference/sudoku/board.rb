@@ -83,7 +83,10 @@ class Board
     square_checks
   end
   
-  def valid_value?(row_idx, col_idx, val)
+  def valid_value?(guess)
+    row_idx = guess[0]
+    col_idx = guess[1]
+    val = guess[2].to_i
     return false if @grid[row_idx][col_idx].to_s != "X".red
     horizontal_checks = self.get_relevant_horizontal_tiles(row_idx)
     vertical_checks = self.get_relevant_vertical_tiles(row_idx, col_idx)
@@ -96,6 +99,10 @@ class Board
   def actual_value?(row_idx, col_idx, val)
     return true if @grid[row_idx][col_idx].to_i == val
     false
+  end
+
+  def full?
+    @grid.flatten.none? { |tile| tile.to_s == "X".red }
   end
 
   def [](pos)
@@ -115,4 +122,5 @@ if __FILE__ == $PROGRAM_NAME
   p board.valid_value?(4, 4, 7)
   p board.valid_value?(4, 4, 4)
   p board.valid_value?(5, 4, 4)
+  p board.full?
 end

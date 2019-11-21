@@ -26,7 +26,6 @@ class Player
 
   def get_input
     input = gets.chomp
-    debugger
     input = input.split(",").map { |ele| ele.strip}
     input[0] = input[0].to_i
     input[1] = input[1].to_i
