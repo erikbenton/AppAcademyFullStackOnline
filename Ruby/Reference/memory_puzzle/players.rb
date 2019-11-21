@@ -46,8 +46,12 @@ class ComputerPlayer < Player
       @next_guess = quick_matches[1]
       return quick_matches[0]
     end
+    already_guessed = []
+    @seen_cards.each do |k, v|
+      already_guessed += v[0]
+    end
     guess = [rand(0...@board_length), rand(0...@board_length)]
-    until !already_taken.include?(guess)
+    until !already_taken.include?(guess) or already_guessed.include?(guess)
       guess = [rand(0...@board_length), rand(0...@board_length)]
     end
     return guess
