@@ -76,6 +76,7 @@ class Game
   def get_guess
     guess = @player.get_guess
     until self.valid_guess?(guess)
+      debugger
       puts "That card is already revealed or off the board, try again"
       guess = @player.get_guess
     end
