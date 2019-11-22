@@ -254,17 +254,18 @@ def make_change(num, arr=[25, 10, 5, 1])
   solutions = []
   total_purse = arr
   while total_purse.length > 1
-    solutions << make_better_change(num, total_purse)
+    first_solution = make_better_change(num, total_purse)
+    solutions << first_solution
     purse = total_purse[1..-1]
     while purse.length > 1
       first_coin = solutions.first[0]
-      p purse.length
       new_solution = [first_coin] + make_better_change(num - first_coin, purse)
       solutions << new_solution
-      # debugger
+      debugger if purse.length == 2
       purse = purse[1..-1]
     end
     total_purse = arr[1..-1]
+    p total_purse.length
   end
   res = solutions.first
   solutions.each { |solution| res = solution if solution.length < res.length }
