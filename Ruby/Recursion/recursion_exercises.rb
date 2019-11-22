@@ -203,3 +203,71 @@ end
 p permutations([1, 2, 3])
 puts
 p permutations([1, 2, 3, 4])
+puts
+
+def greedy_make_change(num, arr=[25, 10, 5, 1])
+  return [] if num == 0
+  return [arr[-1]] if num == 1
+  coin = []
+  idx = 0
+  while idx < arr.length
+    if num >= arr[idx]
+      coin << arr[idx]
+      break
+    end
+    idx += 1
+  end
+  coin += greedy_make_change(num - arr[idx], arr)
+end
+
+p greedy_make_change(39)
+p greedy_make_change(50)
+p greedy_make_change(24, [10,7,1])
+puts
+
+def make_better_change(num, arr=[25, 10, 5, 1])
+  return [] if num == 0
+  return [arr[-1]] if num == 1
+  coin = []
+  idx = 0
+  while idx < arr.length
+    if num >= arr[idx]
+      coin << arr[idx]
+      break
+    end
+    idx += 1
+  end
+  new_purse = arr[idx..-1]
+  debugger if !coin or !num or !arr or !new_purse
+  if !new_purse.is_a?(Array)
+    new_purse = arr[-1]
+  end
+  coin += make_better_change(num - arr[idx], new_purse)
+end
+
+p make_better_change(39)
+p make_better_change(50)
+p make_better_change(24, [10,7,1])
+puts
+
+def make_change(num, arr=[25, 10, 5, 1])
+  solutions = []
+  solutions << make_better_change(num, arr)
+  purse = arr[1..-1]
+  while purse.length > 1
+    first_coin = solutions.first[0]
+    p purse.length
+    new_solution = [first_coin] + make_better_change(num - first_coin, purse)
+    solutions << new_solution
+    # debugger
+    purse = purse[1..-1]
+  end
+  res = solutions.first
+  solutions.each { |solution| res = solution if solution.length < res.length }
+  res
+end
+
+p make_change(39)
+p make_change(50)
+p make_change(14, [10,7,1])
+puts
