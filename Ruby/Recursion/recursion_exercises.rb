@@ -252,15 +252,19 @@ puts
 
 def make_change(num, arr=[25, 10, 5, 1])
   solutions = []
-  solutions << make_better_change(num, arr)
-  purse = arr[1..-1]
-  while purse.length > 1
-    first_coin = solutions.first[0]
-    p purse.length
-    new_solution = [first_coin] + make_better_change(num - first_coin, purse)
-    solutions << new_solution
-    # debugger
-    purse = purse[1..-1]
+  total_purse = arr
+  while total_purse.length > 1
+    solutions << make_better_change(num, total_purse)
+    purse = total_purse[1..-1]
+    while purse.length > 1
+      first_coin = solutions.first[0]
+      p purse.length
+      new_solution = [first_coin] + make_better_change(num - first_coin, purse)
+      solutions << new_solution
+      # debugger
+      purse = purse[1..-1]
+    end
+    total_purse = arr[1..-1]
   end
   res = solutions.first
   solutions.each { |solution| res = solution if solution.length < res.length }
