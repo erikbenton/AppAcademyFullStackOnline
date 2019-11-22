@@ -69,6 +69,7 @@ class Game
   end
 
   def valid_guess?(guess)
+    debugger if guess != guess.flatten
     return false if !guess.all? { |num| num.between?(0, @board.length - 1) }
     return @board[guess].facing_down?
   end

@@ -44,8 +44,8 @@ class ComputerPlayer < Player
     @seen_cards.each do |k, v|
       been_seen = v[1]
       pos = v[0]
-      if k == @first_guess[1] and v[0] != @first_guess[0]
-        guess = v[0]
+      if k == @first_guess[1] and v[0] != @first_guess[0] and v[0].length == 1
+        guess = v[0].flatten
         self.update_first_guess(guess)
         return guess
       end
