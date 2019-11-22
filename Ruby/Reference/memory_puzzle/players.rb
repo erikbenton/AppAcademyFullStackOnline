@@ -22,7 +22,7 @@ class ComputerPlayer < Player
   end
 
   def receive_first_guess(pos, card)
-    
+    @first_guess = [pos, card.to_s]
   end
 
   def receive_unmatched_card(pos, card)
@@ -44,6 +44,11 @@ class ComputerPlayer < Player
     @seen_cards.each do |k, v|
       been_seen = v[1]
       pos = v[0]
+      if k == @first_guess[1] and v[0] != @first_guess[0]
+        guess = v[0]
+        self.update_first_guess(guess)
+        return guess
+      end
       already_taken += pos if been_seen
       quick_matches += pos if !been_seen and pos.length > 1
     end

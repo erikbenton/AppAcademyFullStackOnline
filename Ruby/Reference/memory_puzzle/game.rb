@@ -91,7 +91,7 @@ class Game
       if @guesses.length == 1
         @first_card = @board[guess]
         @first_card.reveal
-        # @player.receive_unmatched_card(@guesses[0], @first_card)
+        @player.receive_first_guess(@guesses[0], @first_card)
       else
         @second_card = @board[guess]
         @second_card.reveal
