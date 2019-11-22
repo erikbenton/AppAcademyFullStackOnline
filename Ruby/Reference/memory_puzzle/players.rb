@@ -18,7 +18,11 @@ class ComputerPlayer < Player
     @board_length = board_length
     @seen_cards = Hash.new { |h,k| h[k] = [[], false]}
     @next_guess = []
-    @previous_guess = []
+    @first_guess = [[], false]
+  end
+
+  def receive_first_guess(pos, card)
+    
   end
 
   def receive_unmatched_card(pos, card)
@@ -52,7 +56,7 @@ class ComputerPlayer < Player
     until self.valid_guess?(already_taken, already_guessed, guess)
       guess = self.make_guess
     end
-    self.update_previous_guess(guess)
+    self.update_first_guess(guess)
     return guess
   end
 
@@ -68,7 +72,7 @@ class ComputerPlayer < Player
     valid = true
     valid &= !already_taken.include?(guess)
     valid &= !already_guessed.include?(guess)
-    valid &= (guess != @previous_guess)
+    valid &= (guess != @first_guess[0])
     valid
   end
 
@@ -76,11 +80,11 @@ class ComputerPlayer < Player
     [rand(0...@board_length), rand(0...@board_length)]
   end
 
-  def update_previous_guess(guess)
-    if @previous_guess.empty?
-      @previous_guess = guess
+  def update_first_guess(guess)
+    if @first_guess[0].empty?
+      @first_guess[0] = guess
     else
-      @previous_guess = []
+      @first_guess = [[], false]
     end
   end
 end
