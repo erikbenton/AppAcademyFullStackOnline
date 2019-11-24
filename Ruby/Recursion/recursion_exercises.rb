@@ -251,13 +251,16 @@ p make_better_change(24, [10,7,1])
 puts
 
 def make_change(num, coins=[25, 10, 5, 1])
-  total_combos = []
-  coins.each_with_index do |coin, idx|
-    combos = greedy(num - coin, coins[idx..-1])
-    combos.map! { |sub_change| sub_change + [coin] }
-    total_combos += change
+  return [num] if coins.include?(num)
+  options = []
+  coins.each do |coin|
+    if num > coin
+      options << [coin] + make_change(num - coin, coins)
+    end
   end
-  total_combos
+  shortest = options.first
+  options.each { |option| shortest = option if option.length < shortest.length }
+  shortest
 end
 
 p make_change(39)
