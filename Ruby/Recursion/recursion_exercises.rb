@@ -250,29 +250,38 @@ p make_better_change(50)
 p make_better_change(24, [10,7,1])
 puts
 
-def make_change(num, arr=[25, 10, 5, 1])
-  solutions = []
-  total_purse = arr
-  while total_purse.length > 1
-    first_solution = make_better_change(num, total_purse)
-    solutions << first_solution
-    purse = total_purse[1..-1]
-    while purse.length > 1
-      first_coin = solutions.first[0]
-      new_solution = [first_coin] + make_better_change(num - first_coin, purse)
-      solutions << new_solution
-      debugger if purse.length == 2
-      purse = purse[1..-1]
-    end
-    total_purse = arr[1..-1]
-    p total_purse.length
+def make_change(num, coins=[25, 10, 5, 1])
+  total_combos = []
+  coins.each_with_index do |coin, idx|
+    combos = greedy(num - coin, coins[idx..-1])
+    combos.map! { |sub_change| sub_change + [coin] }
+    total_combos += change
   end
-  res = solutions.first
-  solutions.each { |solution| res = solution if solution.length < res.length }
-  res
+  total_combos
 end
 
 p make_change(39)
 p make_change(50)
 p make_change(14, [10,7,1])
 puts
+
+def greedy(num, coins)
+  change = []
+  return change if num < 1
+  if coins.length == 1 # and coins[0] == 1
+    num.times do
+      change << 1
+    end
+    return change
+  end
+  coin = coins.first
+  if num > coin
+    change << coin
+    return change + greedy(num - coin, coins)
+  else
+    return change + greedy(num, coins[1..-1])
+  end
+end
+
+def purse_shift(num, coins)
+end
