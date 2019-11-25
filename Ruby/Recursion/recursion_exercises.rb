@@ -250,23 +250,6 @@ p make_better_change(50)
 p make_better_change(24, [10,7,1])
 puts
 
-def make_change(num, coins=[25, 10, 5, 1])
-  return [num] if coins.include?(num)
-  options = []
-  coins.each do |coin|
-    if num > coin
-      options << [coin] + make_change(num - coin, coins)
-    end
-  end
-  shortest = options.first
-  options.each { |option| shortest = option if option.length < shortest.length }
-  shortest
-end
-
-p make_change(39)
-p make_change(50)
-p make_change(14, [10,7,1])
-puts
 
 def greedy(num, coins)
   change = []
@@ -286,5 +269,20 @@ def greedy(num, coins)
   end
 end
 
-def purse_shift(num, coins)
+def make_change(num, coins=[25, 10, 5, 1])
+  return [num] if coins.include?(num)
+  options = []
+  coins.each do |coin|
+    if num > coin
+      options << [coin] + make_change(num - coin, coins)
+    end
+  end
+  shortest = options.first
+  options.each { |option| shortest = option if option.length < shortest.length }
+  shortest
 end
+
+p make_change(39)
+p make_change(50)
+p make_change(14, [10,7,1])
+puts
