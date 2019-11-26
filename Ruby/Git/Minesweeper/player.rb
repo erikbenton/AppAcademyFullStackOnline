@@ -5,12 +5,18 @@ class Player
 
   def valid_pos?(pos)
     return true if pos == "reveal"
-    pos.is_a?(Array) && pos.length == 2
+    valid = true
+    return false unless pos.is_a?(Array)
+    return true if pos.length == 2
+    if pos.length == 3
+      return pos[-1].downcase == "f"
+    end
+    false
   end
 
   def parse_pos(pos)
     return pos if pos == "reveal"
-    pos.split(",").map { |idx| idx.to_i }
+    pos.split(",").map { |idx| ("0".."999").to_a.include?(idx) ? idx.to_i : idx }
   end
 
   def prompt

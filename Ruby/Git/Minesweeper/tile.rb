@@ -1,7 +1,8 @@
 class Tile
-  def initialize(value="X", revealed=false)
+  def initialize(value="X", revealed=false, flagged=false)
     @value = value
     @revealed = revealed
+    @flagged = flagged
   end
 
   def value
@@ -13,6 +14,9 @@ class Tile
   end
 
   def to_s
+    if flagged?
+      return "F"
+    end
     @value.to_s
   end
 
@@ -26,5 +30,13 @@ class Tile
 
   def reveal
     @revealed = true
+  end
+
+  def flag
+    @flagged = true
+  end
+
+  def flagged?
+    @flagged
   end
 end

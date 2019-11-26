@@ -84,7 +84,7 @@ class Board
     rows.each_with_index do |row, idx|
       row_string = ""
       row.each do |tile|
-        if tile.revealed?
+        if tile.revealed? or tile.flagged?
           row_string += " " + tile.to_s
         else
           row_string += " X"
@@ -127,7 +127,7 @@ class Board
     rows.each_with_index do |row, idx|
       row_string = ""
       row.each do |tile|
-        row_string += " " + tile.to_s
+        row_string += " " + tile.value.to_s
       end
       puts idx.to_s + row_string
     end
@@ -142,7 +142,10 @@ class Board
   end
 
   def check_position(pos)
-    if !self[pos].bomb?
+    if pos.length == 3 and !self[pos[0..1]].revealed?
+      self[pos[0..1]].flag
+      return true
+    elsif !self[pos].bomb? and !self[pos].flagged?
       reveal_neighbors(pos)
       self[pos].reveal
       return true
