@@ -25,7 +25,7 @@ class Tile
   end
 
   def bomb?
-    self.to_s == "B"
+    @value == "B"
   end
 
   def reveal

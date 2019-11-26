@@ -105,7 +105,7 @@ class Board
 
   def reveal_neighbors(pos)
     tile = self[pos]
-    if !tile.bomb?
+    if !tile.bomb? and !tile.flagged?
       changes = [[-1,0],[0,-1],[1,0],[0,1]]
       changes.each do |change|
         local_x = pos[1] + change[0]
