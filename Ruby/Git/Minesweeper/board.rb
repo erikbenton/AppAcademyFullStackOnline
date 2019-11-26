@@ -5,15 +5,19 @@ class Board
 
   def initialize(size)
     @grid = Array.new(size) { Array.new(size) {Tile.new} }
-    @bomb_locations = self.create_bomb_locations
+    @num_bombs = (size * size) / 6
     populate_bombs
-    update_tiles
+  end
+  
+  def populate_bombs
+    create_bomb_locations
+    place_bombs
+    update_tile_values
   end
 
   def create_bomb_locations
-    num_bombs = (size * size) / 4
     locations = []
-    until locations.length == num_bombs
+    until locations.length == @num_bombs
       x = rand(0...size)
       y = rand(0...size)
       locations << [x, y] if !locations.include?([x,y])
@@ -21,13 +25,13 @@ class Board
     locations
   end
 
-  def populate_bombs
-    @bomb_locations.each do |pos|
+  def place_bombs
+    create_bomb_locations.each do |pos|
       self[pos] = Tile.new("B") 
     end
   end
 
-  def update_tiles
+  def update_tile_values
     grid.each_with_index do |row, y|
       row.each_with_index do |tile, x|
         bomb_count = 0
@@ -48,6 +52,7 @@ class Board
   end
 
   def valid_position?(pos)
+    return false if !pos.is_a?(Array)
     x, y = pos
     x.between?(0, size - 1) and y.between?(0, size - 1)
   end
@@ -79,7 +84,7 @@ class Board
     rows.each_with_index do |row, idx|
       row_string = ""
       row.each do |tile|
-        if tile.revealed? || true
+        if tile.revealed?
           row_string += " " + tile.to_s
         else
           row_string += " X"
@@ -87,6 +92,7 @@ class Board
       end
       puts idx.to_s + row_string
     end
+    puts "There are: #{@num_bombs} bombs and #{number_revealed}/#{number_playable_tiles} non-bomb tiles"
   end
 
   def game_over?(guess)
@@ -94,11 +100,50 @@ class Board
   end
 
   def over?
-    grid.flatten.all? { |tile| tile.revealed? if !title.bomb? }
+    grid.flatten.all? { |tile| tile.revealed? or tile.bomb? }
+  end
+
+  def reveal_neighbors(pos)
+    tile = self[pos]
+    if !tile.bomb?
+      changes = [[-1,0],[0,-1],[1,0],[0,1]]
+      changes.each do |change|
+        local_x = pos[1] + change[0]
+        local_y = pos[0] + change[1]
+        local_tile = [local_y, local_x]
+        if valid_position?(local_tile)
+          if !self[local_tile].bomb? and !self[local_tile].revealed?
+            self[local_tile].reveal
+            self.reveal_neighbors(local_tile) if self[local_tile].value == 0
+          end
+        end
+      end
+      tile.reveal
+    end
+  end
+
+  def reveal
+    puts "  " + (0...size).to_a.join(" ")
+    rows.each_with_index do |row, idx|
+      row_string = ""
+      row.each do |tile|
+        row_string += " " + tile.to_s
+      end
+      puts idx.to_s + row_string
+    end
+  end
+
+  def number_revealed
+    grid.flatten.count { |tile| tile.revealed? }
+  end
+
+  def number_playable_tiles
+    grid.flatten.length - @num_bombs
   end
 
   def check_position(pos)
     if !self[pos].bomb?
+      reveal_neighbors(pos)
       self[pos].reveal
       return true
     else

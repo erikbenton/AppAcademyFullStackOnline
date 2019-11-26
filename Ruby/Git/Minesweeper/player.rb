@@ -4,10 +4,12 @@ class Player
   end
 
   def valid_pos?(pos)
+    return true if pos == "reveal"
     pos.is_a?(Array) && pos.length == 2
   end
 
   def parse_pos(pos)
+    return pos if pos == "reveal"
     pos.split(",").map { |idx| idx.to_i }
   end
 
