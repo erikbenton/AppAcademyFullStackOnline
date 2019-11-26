@@ -33,7 +33,19 @@ class Board
   def update_tiles
     grid.each_with_index do |row, y|
       row.each_with_index do |tile, x|
-
+        bomb_count = 0
+        if tile.to_s != "B"
+          changes = [[-1,-1],[-1,0],[0,-1],[1,1],[1,0],[0,1], [-1,1], [1,-1]]
+          changes.each do |change|
+            local_x = x + change[0]
+            local_y = y + change[1]
+            if local_x.between?(0, size - 1) and local_y.between?(0, size - 1)
+              local_tile = [local_y, local_x]
+              bomb_count += 1 if self[local_tile].to_s == "B"
+            end
+          end
+          tile.value = bomb_count
+        end
       end
     end
   end
@@ -65,7 +77,7 @@ class Board
     rows.each_with_index do |row, idx|
       row_string = ""
       row.each do |tile|
-        if tile.revealed?
+        if tile.revealed? || true
           row_string += " " + tile.to_s
         else
           row_string += " X"

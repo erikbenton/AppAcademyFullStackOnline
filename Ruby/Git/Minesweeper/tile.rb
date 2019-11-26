@@ -8,6 +8,10 @@ class Tile
     @value
   end
 
+  def value=(val)
+    @value = val
+  end
+
   def to_s
     @value.to_s
   end
