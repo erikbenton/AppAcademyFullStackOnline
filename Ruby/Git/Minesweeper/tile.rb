@@ -20,6 +20,10 @@ class Tile
     @revealed
   end
 
+  def bomb?
+    self.to_s == "B"
+  end
+
   def reveal
     @revealed = true
   end

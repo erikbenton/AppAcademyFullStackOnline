@@ -1,5 +1,5 @@
 class Player
-  def initialize(name)
+  def initialize(name="Erik")
     @name = name
   end
 
