@@ -16,19 +16,20 @@ class Minesweeper
     until size and size.to_i > 0
       size = gets.chomp.to_i
     end
-    game = Minesweeper.new(size)
+    game = Minesweeper.new(size.to_i)
     game.play_turn
   end
 
   def self.load_game
     game = begin
       YAML.load(File.open(Dir.pwd + "/saved_game.yml"))
-    rescue ArgumentError => e
+    rescue => e
       puts "Could not parse YAML: #{e.message}"
+      puts "What size of board would you like to play with?"
       return false
     end
+    system "clear"
     puts "Game Loaded"
-    # debugger
     game.play_turn
     true
   end
@@ -43,9 +44,9 @@ class Minesweeper
     until board.over?
       pos = nil
       pos = player.prompt
-      game_options(pos)
+      break if save_game?(pos)
       until pos && board.valid_position?(pos)
-        puts "That was outside the range of the board"
+        puts "That was outside the range of the board" unless pos == "reveal"
         pos = player.prompt
       end
       break if is_it_bomb?(pos)
@@ -53,14 +54,19 @@ class Minesweeper
     end
   end
 
-  def game_options(pos)
+  def save_game?(pos)
     if pos == "save"
-      File.open(Dir.pwd + "/saved_game.yml", "w") { |f| f.write(self.to_yaml) }
+      save_directory = Dir.pwd + "/saved_game.yml"
+      File.open(save_directory, "w") { |f| f.write(self.to_yaml) }
+      puts "Game has been saved to #{save_directory}"
+      return true
     elsif pos == "reveal"
+      system "clear"
       board.reveal
     elsif
       system "clear"
     end
+    false
   end
 
   def is_it_bomb?(pos)
