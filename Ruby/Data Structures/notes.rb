@@ -26,3 +26,23 @@
 # Queue
 # FIFO - First In, First Out
 # Enqueue and dequeue
+
+# Tree
+# Binary Tree - <= 2 children per node
+# Ternary Tree - <= 4 children per node
+# n-ary or polytree - <= n children per node
+# Nodes/Vertices, Parents/Children, root/leaves, depth
+# MUST HAVE DIRECTION
+
+# BFS - Breadth First Search
+#   Start with root node
+#     queue = [root]
+#     until queue.empty?
+#       el = queue.shift
+#       process!(el)
+#       el.children.each do |child|
+#         queue << child
+#       end
+#     end
+# DFS - Depth First Search
+#   Straight to the bottom
