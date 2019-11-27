@@ -36,13 +36,28 @@
 
 # BFS - Breadth First Search
 #   Start with root node
-#     queue = [root]
-#     until queue.empty?
-#       el = queue.shift
-#       process!(el)
-#       el.children.each do |child|
-#         queue << child
-#       end
-#     end
+  def BFS(target)
+    queue = [root]
+    until queue.empty?
+      el = queue.shift
+      return el if el.val == target
+      el.children.each do |child|
+        queue << child
+      end
+    end
+  end
+
 # DFS - Depth First Search
 #   Straight to the bottom
+#   Base case: root.nil? -> return nil
+#              root.val == target -> return root
+#   Inductive Step: If I DFS on left-side or right-side, it has to be in either
+def dfs(root, target)
+  return nil if root.nil?
+  return root if root.val == target
+  root.children.each do |child|
+    search_res = dfs(child, target)
+    return search_res unless search_res.nil?
+  end
+  nil
+end
