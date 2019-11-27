@@ -4,7 +4,7 @@ class Player
   end
 
   def valid_pos?(pos)
-    return true if pos == "reveal"
+    return true if pos == "reveal" or pos == "save" or pos == "load"
     valid = true
     return false unless pos.is_a?(Array)
     return true if pos.length == 2
@@ -15,7 +15,7 @@ class Player
   end
 
   def parse_pos(pos)
-    return pos if pos == "reveal"
+    return pos if pos == "reveal" or pos == "save" or pos == "load"
     pos.split(",").map { |idx| ("0".."999").to_a.include?(idx) ? idx.to_i : idx }
   end
 
