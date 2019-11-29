@@ -80,19 +80,40 @@ class Board
   end
 
   def render
-    puts "  " + (0...size).to_a.join(" ")
+    tile_width = self.cell_width
+    header = ("0"...size.to_s).to_a.map { |tile| tile.rjust(tile_width + 1) }
+    puts " " * tile_width + header.join
     rows.each_with_index do |row, idx|
       row_string = ""
       row.each do |tile|
+        new_tile = ""
         if tile.revealed? or tile.flagged?
-          row_string += " " + tile.to_s
+          new_tile = " " + tile.to_s
         else
-          row_string += " X"
+          new_tile = " X"
         end
+        row_string += new_tile.rjust(tile_width + 1)
       end
-      puts idx.to_s + row_string
+      puts idx.to_s.rjust(tile_width) + row_string
     end
     puts "There are: #{@num_bombs} bombs and #{number_revealed}/#{number_playable_tiles} non-bomb tiles"
+  end
+
+  def reveal
+    tile_width = self.cell_width
+    header = ("0"...size.to_s).to_a.map { |tile| tile.rjust(tile_width + 1) }
+    puts " " * tile_width + header.join
+    rows.each_with_index do |row, idx|
+      row_string = ""
+      row.each do |tile|
+        row_string += tile.value.to_s.rjust(tile_width + 1)
+      end
+      puts idx.to_s.rjust(tile_width) + row_string
+    end
+  end
+
+  def cell_width
+    grid.length.to_s.split("").length
   end
 
   def game_over?(guess)
@@ -119,17 +140,6 @@ class Board
         end
       end
       tile.reveal
-    end
-  end
-
-  def reveal
-    puts "  " + (0...size).to_a.join(" ")
-    rows.each_with_index do |row, idx|
-      row_string = ""
-      row.each do |tile|
-        row_string += " " + tile.value.to_s
-      end
-      puts idx.to_s + row_string
     end
   end
 
