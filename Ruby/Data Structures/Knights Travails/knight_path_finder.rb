@@ -13,6 +13,25 @@ class KnightPathFinder
 
   def initialize(root)
     @root_node = PolyTreeNode.new(root)
-    @considered_positions = [root]
+    @considered_positions = []
   end
+
+  def new_move_positions
+    new_moves = KnightPathFinder.valid_moves(@root_node.value).filter do |move|
+      !@considered_positions.include?(move)
+    end
+    new_moves.each { |move| @considered_positions << move }
+    new_moves
+  end
+end
+
+if __FILE__ == $PROGRAM_NAME
+
+  p KnightPathFinder.valid_moves([0,0])
+  p KnightPathFinder.valid_moves([1,5])
+  p KnightPathFinder.valid_moves([4,4])
+  p KnightPathFinder.valid_moves([8,8])
+  p KnightPathFinder.valid_moves([-8,-8])
+  p KnightPathFinder.valid_moves([10,10])
+
 end
