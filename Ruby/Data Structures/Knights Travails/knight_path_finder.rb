@@ -14,6 +14,7 @@ class KnightPathFinder
   def initialize(root)
     @root_node = PolyTreeNode.new(root)
     @considered_positions = [root]
+    @move_trace = Hash.new(nil)
     KnightPathFinder.valid_moves(root).each do |child|
       @root_node.add_child(PolyTreeNode.new(child))
     end
@@ -31,31 +32,34 @@ class KnightPathFinder
     queue = [@root_node]
     until queue.empty?
       node = queue.shift
-      return true if node.value == target
+      return node if node.value == target
       node.children.each do |child|
         child.children = new_move_positions(child.value).map do |move|
           PolyTreeNode.new(move)
         end
+        @move_trace[child] = node
         queue << child
       end
     end
     false
   end
+
+  def find_path(target)
+    trace = []
+    target_node = build_move_tree(target)
+    until @move_trace[target_node].nil?
+      trace = [target_node.value] + trace
+      target_node = @move_trace[target_node]
+    end
+    p trace
+  end
 end
 
 if __FILE__ == $PROGRAM_NAME
-
-  p KnightPathFinder.valid_moves([0,0])
-  p KnightPathFinder.valid_moves([1,5])
-  p KnightPathFinder.valid_moves([4,4])
-  p KnightPathFinder.valid_moves([8,8])
-  p KnightPathFinder.valid_moves([-8,-8])
-  p KnightPathFinder.valid_moves([10,10])
-
   knight = KnightPathFinder.new([0,0])
   (0..8).to_a.each do |row_idx|
     (0..8).to_a.each do |col_idx|
-      p "[#{row_idx}, #{col_idx}] #{knight.build_move_tree([row_idx,col_idx])}"
+      knight.find_path([row_idx,col_idx])
     end
   end
 end
