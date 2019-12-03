@@ -18,8 +18,13 @@ class PolyTreeNode
     @parent
   end
 
-  def add_child(new_node)
-    new_node.parent = new_node
+  def add_child(child)
+    child.parent = self
+  end
+
+  def remove_child(child)
+    child.parent = nil
+    raise "Not a child" unless @children.delete(child)
   end
 end
 
