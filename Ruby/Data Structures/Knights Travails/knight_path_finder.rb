@@ -13,7 +13,10 @@ class KnightPathFinder
 
   def initialize(root)
     @root_node = PolyTreeNode.new(root)
-    @considered_positions = []
+    @considered_positions = [root]
+    KnightPathFinder.valid_moves(root).each do |child|
+      @root_node.add_child(PolyTreeNode.new(child))
+    end
   end
 
   def new_move_positions
@@ -22,6 +25,19 @@ class KnightPathFinder
     end
     new_moves.each { |move| @considered_positions << move }
     new_moves
+  end
+
+  def build_move_tree(target)
+    queue = [@root_node]
+    until queue.empty?
+      debugger
+      node = queue.shift
+      return node if node.value == target
+      node.children.each do |child|
+        child.children = new_move_positions.map { |move| PolyTreeNode.new(move) }
+        queue << child
+      end
+    end
   end
 end
 
@@ -33,5 +49,8 @@ if __FILE__ == $PROGRAM_NAME
   p KnightPathFinder.valid_moves([8,8])
   p KnightPathFinder.valid_moves([-8,-8])
   p KnightPathFinder.valid_moves([10,10])
+
+  knight = KnightPathFinder.new([0,0])
+  knight.build_move_tree([2,1])
 
 end
