@@ -36,6 +36,17 @@ class PolyTreeNode
     end
     nil
   end
+
+  def bfs(target)
+    queue = [self]
+    until queue.empty?
+      el = queue.shift
+      return el if el.value == target
+      el.children.each do |child|
+        queue << child
+      end
+    end
+  end
 end
 
 if __FILE__ == $PROGRAM_NAME
