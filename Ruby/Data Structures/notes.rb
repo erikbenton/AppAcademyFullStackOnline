@@ -36,16 +36,16 @@
 
 # BFS - Breadth First Search
 #   Start with root node
-  def BFS(target)
-    queue = [root]
-    until queue.empty?
-      el = queue.shift
-      return el if el.val == target
-      el.children.each do |child|
-        queue << child
-      end
+def BFS(target)
+  queue = [root]
+  until queue.empty?
+    el = queue.shift
+    return el if el.val == target
+    el.children.each do |child|
+      queue << child
     end
   end
+end
 
 # DFS - Depth First Search
 #   Straight to the bottom
