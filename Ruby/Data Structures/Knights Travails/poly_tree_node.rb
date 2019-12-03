@@ -1,7 +1,6 @@
 require "byebug"
 class PolyTreeNode
   attr_reader :value, :children
-  attr_writer :children
 
   def initialize(value)
     @value = value
@@ -17,6 +16,12 @@ class PolyTreeNode
 
   def parent
     @parent
+  end
+
+  def children=(child_arr)
+    child_arr.each do |child|
+      add_child(child)
+    end
   end
 
   def add_child(child)
@@ -50,6 +55,6 @@ class PolyTreeNode
   end
 
   def inspect
-    { 'value' => @value, 'parent' => @parent, "children" => @children }.inspect
+    { 'value' => @value, 'parent' => @parent}.inspect
   end
 end
