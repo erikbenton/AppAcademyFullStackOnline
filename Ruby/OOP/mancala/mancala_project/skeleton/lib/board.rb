@@ -1,14 +1,21 @@
+require "byebug"
 class Board
   attr_accessor :cups
 
   def initialize(name1, name2)
+    @cups = place_stones
   end
 
   def place_stones
-    # helper method to #initialize every non-store cup with four stones each
+    stones = Array.new(14) { [] }
+    ((0..5).to_a + (7..12).to_a).each do |idx|
+      4.times { stones[idx] << :stone }
+    end
+    stones
   end
 
   def valid_move?(start_pos)
+    raise "Invalid starting cup" unless start_pos.between?(1,12) && start_pos != 6
   end
 
   def make_move(start_pos, current_player_name)
