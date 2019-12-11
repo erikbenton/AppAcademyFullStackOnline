@@ -43,17 +43,12 @@ class Board
   end
 
   def update_position(pos, current_player_name)
-    pos += 1
     if current_player_name == @name1
-      if pos == 13
-        pos += 1
-      end
+      pos += 1 if pos == 13
     else
-      if pos == 6
-        pos += 1
-      end
+      pos += 1 if pos == 6
     end
-    return pos % @cups.length
+    return (pos + 1) % @cups.length
   end
 
   def next_turn(ending_cup_idx)
