@@ -27,27 +27,19 @@ class Board
     @cups[start_pos] = []
     current_pos = update_position(start_pos, current_player_name)
     until wallet == 0
-      if current_pos == 6
-        if current_player_name == @name1
-          @cups[current_pos] << :stone
-          wallet -= 1
-        end
-      elsif current_pos == 13
-        if current_player_name == @name2
-          @cups[current_pos] << :stone
-          wallet -= 1
-        end
-      else
-        debugger
-        @cups[current_pos] << :stone
+      if valid_cup?(current_pos, current_player_name)
+        @cups[current_pos].push(:stone)
         wallet -= 1
-        if wallet == 0 && @cups[current_pos].length > 1
-          wallet == @cups[current_pos].length
-          @cups[current_pos] = []
-        end
       end
-      current_pos = update_position(start_pos, current_player_name)
+      current_pos = update_position(current_pos, current_player_name)
     end
+    render
+  end
+
+  def valid_cup?(cup_pos, player_name)
+    return false if cup_pos == 6 && player_name != @name1
+    return false if cup_pos == 13 && player_name != @name2
+    true
   end
 
   def update_position(pos, current_player_name)
