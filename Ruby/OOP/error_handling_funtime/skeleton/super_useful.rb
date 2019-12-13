@@ -42,8 +42,11 @@ end
 class BestFriend
   def initialize(name, yrs_known, fav_pastime)
     @name = name
+    raise "Name is invalid" if @name.length <= 0
     @yrs_known = yrs_known
+    raise "Known less than 5 years" if @yrs_known < 5
     @fav_pastime = fav_pastime
+    raise "Favorite pastime is invalid" if @fav_pastime.length <= 0
   end
 
   def talk_about_friendship
