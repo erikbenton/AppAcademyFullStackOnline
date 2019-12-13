@@ -34,14 +34,18 @@ class Board
       end
     end
     render
-    next_turn(current_pos)
-    if ending_cup?(current_pos)
+    next_turn(current_pos, current_player_name)
+  end
+
+  def next_turn(ending_cup_idx, player_name)
+    # helper method to determine whether #make_move returns :switch, :prompt, or ending_cup_idx
+    if ending_cup?(ending_cup_idx)
       return :switch
     end
-    if players_cup?(current_pos, current_player_name)
+    if players_cup?(ending_cup_idx, player_name)
       return :prompt
     end
-    return current_pos
+    return ending_cup_idx
   end
 
   def valid_cup?(cup_pos, player_name)
@@ -68,10 +72,6 @@ class Board
       pos += 1 if pos == 6
     end
     return (pos + 1) % @cups.length
-  end
-
-  def next_turn(ending_cup_idx)
-    # helper method to determine whether #make_move returns :switch, :prompt, or ending_cup_idx
   end
 
   def render
