@@ -6,33 +6,43 @@ class Board
   attr_reader :rows
 
   def initialize
-    @rows = Array.new(8) { Array.new(8, NullPiece.new) }
+    initialize_nulls
     initialize_rows
-    @sentinel = NullPiece.new
+    @sentinel = NullPiece.new(nil, nil, nil)
+  end
+
+  def initialize_nulls
+    @rows = Array.new(8) { Array.new(8) }
+    (0..7).each do |row|
+      (0..7).each do |col|
+        pos = [row, col]
+        self.add_piece(NullPiece.new(nil, nil, pos), pos)
+      end
+    end
   end
 
   def initialize_pawns(color)
     row = color == :black ? 6 : 1
-    self[[row,0]] = Piece.new(color, self, [row,0])
-    self[[row,1]] = Piece.new(color, self, [row,1])
-    self[[row,2]] = Piece.new(color, self, [row,2])
-    self[[row,3]] = Piece.new(color, self, [row,3])
-    self[[row,4]] = Piece.new(color, self, [row,4])
-    self[[row,5]] = Piece.new(color, self, [row,5])
-    self[[row,6]] = Piece.new(color, self, [row,6])
-    self[[row,7]] = Piece.new(color, self, [row,7])
+    self.add_piece(Piece.new(color, self, [row,0]), [row,0])
+    self.add_piece(Piece.new(color, self, [row,1]), [row,1])
+    self.add_piece(Piece.new(color, self, [row,2]), [row,2])
+    self.add_piece(Piece.new(color, self, [row,3]), [row,3])
+    self.add_piece(Piece.new(color, self, [row,4]), [row,4])
+    self.add_piece(Piece.new(color, self, [row,5]), [row,5])
+    self.add_piece(Piece.new(color, self, [row,6]), [row,6])
+    self.add_piece(Piece.new(color, self, [row,7]), [row,7])
   end
 
   def initialize_royalty(color)
     row = color == :black ? 7 : 0
-    self[[row,0]] = Piece.new(color, self, [row,0])
-    self[[row,1]] = Piece.new(color, self, [row,1])
-    self[[row,2]] = Piece.new(color, self, [row,2])
-    self[[row,3]] = Piece.new(color, self, [row,3])
-    self[[row,4]] = Piece.new(color, self, [row,4])
-    self[[row,5]] = Piece.new(color, self, [row,5])
-    self[[row,6]] = Piece.new(color, self, [row,6])
-    self[[row,7]] = Piece.new(color, self, [row,7])
+    self.add_piece(Piece.new(color, self, [row,0]), [row,0])
+    self.add_piece(Piece.new(color, self, [row,1]), [row,1])
+    self.add_piece(Piece.new(color, self, [row,2]), [row,2])
+    self.add_piece(Piece.new(color, self, [row,3]), [row,3])
+    self.add_piece(Piece.new(color, self, [row,4]), [row,4])
+    self.add_piece(Piece.new(color, self, [row,5]), [row,5])
+    self.add_piece(Piece.new(color, self, [row,6]), [row,6])
+    self.add_piece(Piece.new(color, self, [row,7]), [row,7])
   end
 
   def initialize_rows
@@ -43,16 +53,12 @@ class Board
   end
 
   def [](pos)
-    raise "Non-Integer position" unless pos.all? { |el| el.is_a?(Integer) }
-    raise "Position off the board" unless pos.all? { |el| el.between?(0,7) }
+    valid_pos?(pos)
     row, col = pos
     rows[row][col]
   end
 
   def []=(pos, val)
-    raise "Non-Integer position" unless pos.all? { |el| el.is_a?(Integer) }
-    raise "Position off the board" unless pos.all? { |el| el.between?(0,8) }
-    raise "Non-Valid piece" unless val.is_a?(Piece) || val.is_a?(NullPiece)
     row, col = pos
     rows[row][col] = val
   end
@@ -60,21 +66,76 @@ class Board
   def move_piece(start_pos, end_pos)
     raise "No piece at start position" unless self[start_pos].is_a?(Piece)
     begin
-      self[end_pos] = self[start_pos]
-      self[start_pos] = NullPiece.new
+      self[start_pos].pos = end_pos
+      # debugger if end_pos == [2,2]
+      self.add_piece(self[start_pos], end_pos)
+      self.add_piece(NullPiece.new(nil, nil, start_pos), start_pos)
     rescue => exception
       raise "Unable to move there: " + exception.message
     end
     true
   end
+
+  def valid_pos?(pos)
+    raise "Non-Integer position" unless pos.all? { |el| el.is_a?(Integer) }
+    raise "Position off the board" unless pos.all? { |el| el.between?(0,8) }
+  end
+
+  def add_piece(piece, pos)
+    raise "Non-Valid piece" unless piece.is_a?(Piece) || piece.is_a?(NullPiece)
+    valid_pos?(pos)
+    self[pos] = piece
+  end
+
+  def checkmate?(color)
+
+  end
+
+  def in_check?(color)
+
+  end
+
+  def find_king(color)
+
+  end
+
+  def pieces
+    rows.flatten
+  end
+
+  def dup
+    pieces_clone = pieces
+    new_board = Board.new
+    pieces_clone.each do |piece|
+      new_piece = piece.class.new(piece.color, new_board, piece.pos)
+      new_board.add_piece(new_piece, new_piece.pos)
+    end
+    new_board
+  end
+
+  def move_piece!(color, start_pos, end_pos)
+
+  end
+
 end
 
 if __FILE__ == $PROGRAM_NAME
   b = Board.new
   p b.move_piece([0,0], [2,2])
+  puts "b after move [2,2]"
+  p b[[2,2]]
+  puts "Duping b"
+  n_b = b.dup
+  puts "n_b before move [2,2]"
+  p n_b[[2,2]]
+  puts 
+  p n_b.move_piece([2,2], [0,0])
+  puts "n_b after move [2,2]"
+  p n_b[[2,2]]
+  puts "===="
+  p b[[0,0]]
   puts
-  p b.move_piece([0,0], [0,0])
   puts
-  puts
-  p b[[1,0]]
+  p n_b[[0,0]]
+
 end
