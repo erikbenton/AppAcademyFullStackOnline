@@ -1,3 +1,4 @@
+require "byebug"
 require_relative "piece.rb"
 require_relative "null_piece.rb"
 class Board
@@ -42,22 +43,27 @@ class Board
   end
 
   def [](pos)
+    raise "Non-Integer position" unless pos.all? { |el| el.is_a?(Integer) }
+    raise "Position off the board" unless pos.all? { |el| el.between?(0,7) }
     row, col = pos
     rows[row][col]
   end
 
   def []=(pos, val)
+    raise "Non-Integer position" unless pos.all? { |el| el.is_a?(Integer) }
+    raise "Position off the board" unless pos.all? { |el| el.between?(0,8) }
+    raise "Non-Valid piece" unless val.is_a?(Piece) || val.is_a?(NullPiece)
     row, col = pos
     rows[row][col] = val
   end
 
   def move_piece(start_pos, end_pos)
-    raise "No peice at start" if self[start_pos].is_a?(NullPiece)
+    raise "No piece at start position" unless self[start_pos].is_a?(Piece)
     begin
       self[end_pos] = self[start_pos]
       self[start_pos] = NullPiece.new
     rescue => exception
-      raise "Unable to move there"
+      raise "Unable to move there: " + exception.message
     end
     true
   end
@@ -65,7 +71,10 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   b = Board.new
-  p b.move_piece([0,0], ["A",2])
+  p b.move_piece([0,0], [2,2])
   puts
-  p b
+  p b.move_piece([0,0], [0,0])
+  puts
+  puts
+  p b[[1,0]]
 end
