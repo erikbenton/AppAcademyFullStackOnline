@@ -92,7 +92,10 @@ class Board
   end
 
   def find_king(color)
-
+    pieces_clone = pieces
+    pieces_clone.each do |piece|
+      return piece.pos if piece.is_a?(King) && piece.color == color
+    end
   end
 
   def pieces
@@ -182,5 +185,9 @@ if __FILE__ == $PROGRAM_NAME
   b.render
   puts
   p b[[6,1]].valid_moves
+  puts
+  p b.find_king(:black)
+  puts
+  p b.find_king(:white)
 
 end
