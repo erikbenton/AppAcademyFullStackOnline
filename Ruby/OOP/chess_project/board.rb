@@ -2,14 +2,16 @@ require "byebug"
 require_relative "piece.rb"
 require_relative "null_piece.rb"
 require_relative "rook_bishop_queen.rb"
+require_relative "knight_king.rb"
+require_relative "pawn.rb"
 class Board
   
   attr_reader :rows
 
   def initialize
+    @sentinel = NullPiece.instance
     initialize_nulls
     initialize_rows
-    @sentinel = NullPiece.new(nil, nil, nil)
   end
 
   def initialize_nulls
@@ -17,32 +19,25 @@ class Board
     (0..7).each do |row|
       (0..7).each do |col|
         pos = [row, col]
-        self.add_piece(NullPiece.new(nil, nil, pos), pos)
+        self.add_piece(@sentinel, pos)
       end
     end
   end
 
   def initialize_pawns(color)
     row = color == :black ? 6 : 1
-    self.add_piece(Piece.new(color, self, [row,0]), [row,0])
-    self.add_piece(Piece.new(color, self, [row,1]), [row,1])
-    self.add_piece(Piece.new(color, self, [row,2]), [row,2])
-    self.add_piece(Piece.new(color, self, [row,3]), [row,3])
-    self.add_piece(Piece.new(color, self, [row,4]), [row,4])
-    self.add_piece(Piece.new(color, self, [row,5]), [row,5])
-    self.add_piece(Piece.new(color, self, [row,6]), [row,6])
-    self.add_piece(Piece.new(color, self, [row,7]), [row,7])
+    (0..7).each { |col| add_piece(Pawn.new(color, self, [row,col]), [row,col]) }
   end
 
   def initialize_royalty(color)
     row = color == :black ? 7 : 0
     self.add_piece(Rook.new(color, self, [row,0]), [row,0])
-    self.add_piece(Piece.new(color, self, [row,1]), [row,1])
+    self.add_piece(Knight.new(color, self, [row,1]), [row,1])
     self.add_piece(Bishop.new(color, self, [row,2]), [row,2])
-    self.add_piece(Piece.new(color, self, [row,3]), [row,3])
+    self.add_piece(King.new(color, self, [row,3]), [row,3])
     self.add_piece(Queen.new(color, self, [row,4]), [row,4])
     self.add_piece(Bishop.new(color, self, [row,5]), [row,5])
-    self.add_piece(Piece.new(color, self, [row,6]), [row,6])
+    self.add_piece(Knight.new(color, self, [row,6]), [row,6])
     self.add_piece(Rook.new(color, self, [row,7]), [row,7])
   end
 
@@ -69,7 +64,7 @@ class Board
     begin
       self[start_pos].pos = end_pos
       self.add_piece(self[start_pos], end_pos)
-      self.add_piece(NullPiece.new(nil, nil, start_pos), start_pos)
+      self.add_piece(@sentinel, start_pos)
     rescue => exception
       raise "Unable to move there: " + exception.message
     end
@@ -107,9 +102,17 @@ class Board
   def dup
     pieces_clone = pieces
     new_board = Board.new
-    pieces_clone.each do |piece|
-      new_piece = piece.class.new(piece.color, new_board, piece.pos)
-      new_board.add_piece(new_piece, new_piece.pos)
+    (0..7).each do |row|
+      (0..7).each do |col|
+        pos = [row, col]
+        piece = self[pos]
+        if piece.empty?
+          new_piece = @sentinel
+        else
+          new_piece = piece.class.new(piece.color, new_board, piece.pos)
+        end
+        new_board.add_piece(new_piece, pos)
+      end
     end
     new_board
   end
@@ -120,7 +123,7 @@ class Board
       new_board = self.dup
       new_board[start_pos].pos = end_pos
       new_board.add_piece(new_board[start_pos], end_pos)
-      new_board.add_piece(NullPiece.new(nil, nil, start_pos), start_pos)
+      new_board.add_piece(@sentinel, start_pos)
     rescue => exception
       raise "Unable to move there: " + exception.message
     end
@@ -142,20 +145,20 @@ if __FILE__ == $PROGRAM_NAME
   b = Board.new
   p b.move_piece([0,0], [2,2])
   puts "b after move [2,2]"
-  p b[[2,2]]
+  p b[[2,2]].to_s
   puts "Duping b"
   n_b = b.dup
   puts "n_b before move [2,2]"
-  p n_b[[2,2]]
+  p n_b[[2,2]].to_s
   puts 
   p n_b.move_piece([2,2], [0,0])
   puts "n_b after move [2,2]"
-  p n_b[[2,2]]
+  p n_b[[2,2]].to_s
   puts "===="
-  p b[[0,0]]
+  p b[[0,0]].to_s
   puts
   puts
-  p n_b[[0,0]]
+  p n_b[[0,0]].to_s
   puts
   p b[[2,2]].to_s
   puts
@@ -166,6 +169,18 @@ if __FILE__ == $PROGRAM_NAME
   b.move_piece([0,2], [3,3])
   b.render
   puts
-  p b[[3,3]].moves
+  p b[[3,3]].valid_moves
+  puts
+  p b[[7,1]].valid_moves
+  puts
+  puts
+  p b[[6,1]].valid_moves
+  b.move_piece([1,0], [5,0])
+  b.move_piece([1,1], [5,1])
+  b.move_piece([1,2], [5,2])
+  puts
+  b.render
+  puts
+  p b[[6,1]].valid_moves
 
 end

@@ -14,12 +14,24 @@ class Piece
   end
 
   def to_s
-    return "#{self.class.to_s} @ #{pos}" if color.nil?
+    return "Null Piece" if self.is_a?(NullPiece)
     "#{color.capitalize} #{self.class.to_s} @ #{pos}"
   end
 
   def symbol
     return "P"
+  end
+
+  def valid_moves
+    self.moves
+  end
+
+  def empty?
+    self.is_a?(NullPiece)
+  end
+
+  def opponent?(piece)
+    (self.color != piece.color) && !piece.empty?
   end
 
 end
