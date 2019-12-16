@@ -1,6 +1,7 @@
 require "byebug"
 require_relative "piece.rb"
 require_relative "null_piece.rb"
+require_relative "rook_bishop_queen.rb"
 class Board
   
   attr_reader :rows
@@ -35,14 +36,14 @@ class Board
 
   def initialize_royalty(color)
     row = color == :black ? 7 : 0
-    self.add_piece(Piece.new(color, self, [row,0]), [row,0])
+    self.add_piece(Rook.new(color, self, [row,0]), [row,0])
     self.add_piece(Piece.new(color, self, [row,1]), [row,1])
-    self.add_piece(Piece.new(color, self, [row,2]), [row,2])
+    self.add_piece(Bishop.new(color, self, [row,2]), [row,2])
     self.add_piece(Piece.new(color, self, [row,3]), [row,3])
-    self.add_piece(Piece.new(color, self, [row,4]), [row,4])
-    self.add_piece(Piece.new(color, self, [row,5]), [row,5])
+    self.add_piece(Queen.new(color, self, [row,4]), [row,4])
+    self.add_piece(Bishop.new(color, self, [row,5]), [row,5])
     self.add_piece(Piece.new(color, self, [row,6]), [row,6])
-    self.add_piece(Piece.new(color, self, [row,7]), [row,7])
+    self.add_piece(Rook.new(color, self, [row,7]), [row,7])
   end
 
   def initialize_rows
@@ -67,7 +68,6 @@ class Board
     raise "No piece at start position" unless self[start_pos].is_a?(Piece)
     begin
       self[start_pos].pos = end_pos
-      # debugger if end_pos == [2,2]
       self.add_piece(self[start_pos], end_pos)
       self.add_piece(NullPiece.new(nil, nil, start_pos), start_pos)
     rescue => exception
@@ -79,6 +79,7 @@ class Board
   def valid_pos?(pos)
     raise "Non-Integer position" unless pos.all? { |el| el.is_a?(Integer) }
     raise "Position off the board" unless pos.all? { |el| el.between?(0,8) }
+    true
   end
 
   def add_piece(piece, pos)
@@ -114,7 +115,25 @@ class Board
   end
 
   def move_piece!(color, start_pos, end_pos)
+    raise "No piece at start position" unless self[start_pos].is_a?(Piece)
+    begin
+      new_board = self.dup
+      new_board[start_pos].pos = end_pos
+      new_board.add_piece(new_board[start_pos], end_pos)
+      new_board.add_piece(NullPiece.new(nil, nil, start_pos), start_pos)
+    rescue => exception
+      raise "Unable to move there: " + exception.message
+    end
+    new_board
+  end
 
+  def render
+    rows.each do |row|
+      row.each do |piece|
+        print piece.symbol + " "
+      end
+      puts
+    end
   end
 
 end
@@ -137,5 +156,16 @@ if __FILE__ == $PROGRAM_NAME
   puts
   puts
   p n_b[[0,0]]
+  puts
+  p b[[2,2]].to_s
+  puts
+  p b[[2,2]].moves
+  puts
+  b.render
+  puts
+  b.move_piece([0,2], [3,3])
+  b.render
+  puts
+  p b[[3,3]].moves
 
 end
