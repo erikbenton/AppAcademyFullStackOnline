@@ -26,7 +26,7 @@ class Simon
   end
 
   def add_random_color
-
+    seq.push(COLORS[rand(COLORS.length)])
   end
 
   def round_success_message
