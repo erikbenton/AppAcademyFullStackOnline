@@ -1,3 +1,4 @@
+require "byebug"
 class Piece
 
   attr_reader :color, :board, :pos
@@ -10,6 +11,27 @@ class Piece
 
   def pos=(val)
     @pos = val
+  end
+
+  def to_s
+    return "Null Piece" if self.is_a?(NullPiece)
+    "#{color.capitalize} #{self.class.to_s} @ #{pos}"
+  end
+
+  def symbol
+    return "P"
+  end
+
+  def valid_moves
+    self.moves
+  end
+
+  def empty?
+    self.is_a?(NullPiece)
+  end
+
+  def opponent?(piece)
+    (self.color != piece.color) && !piece.empty?
   end
 
 end
