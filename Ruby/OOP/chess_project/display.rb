@@ -2,7 +2,7 @@ require "colorize"
 require_relative "cursor.rb"
 require_relative "board.rb"
 class Display
-  attr_accessor :board
+  attr_accessor :board, :cursor
 
   def initialize(board)
     @board = board
@@ -12,7 +12,11 @@ class Display
   def render
     board.rows.each do |row|
       row.each do |piece|
-        print piece.symbol + " "
+        if piece.pos == cursor.cursor_pos
+          print "C" + " "
+        else
+          print piece.symbol + " "
+        end
       end
       puts
     end
@@ -22,4 +26,12 @@ end
 if __FILE__ == $PROGRAM_NAME
   disp = Display.new(Board.new)
   disp.render
+  inp = ""
+  until inp == "exit"
+    begin
+      inp = gets.chomp
+    rescue => exception
+      retry
+    end
+  end
 end
