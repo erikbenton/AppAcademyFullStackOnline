@@ -32,7 +32,7 @@ MOVES = {
 
 class Cursor
 
-  attr_reader :cursor_pos, :board, :selected
+  attr_accessor :cursor_pos, :board, :selected
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
@@ -77,8 +77,25 @@ class Cursor
   end
 
   def handle_key(key)
+    Process.exit(0) if key == :ctrl_c
+    diff = MOVES[key]
+    begin
+      cursor_pos = update_pos(diff)
+    rescue StandardError => exception
+      puts exception.message
+      get_input
+    end
   end
 
   def update_pos(diff)
+    new_pos = cursor_pos
+    (0...diff.length).each do |idx|
+      new_pos[idx] += diff[idx]
+    end
+    if board.valid_pos?(new_pos)
+      return new_pos
+    else
+      raise "Invalid Cursor Position" 
+    end
   end
 end

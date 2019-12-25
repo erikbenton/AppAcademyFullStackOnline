@@ -26,12 +26,12 @@ end
 if __FILE__ == $PROGRAM_NAME
   disp = Display.new(Board.new)
   disp.render
-  inp = ""
-  until inp == "exit"
+  while true
     begin
-      inp = gets.chomp
+      disp.cursor.get_input
     rescue => exception
       retry
     end
+    disp.render
   end
 end
