@@ -24,7 +24,12 @@ class Piece
 
   def valid_moves
     raise "No valid moves for a Null Piece" if self.class == NullPiece
-    self.moves
+    possible_moves = self.moves
+    all_valid_moves = possible_moves.select do |move|
+      new_board = board.move_piece!(color, self.pos, move)
+      !new_board.in_check?(color)
+    end
+    all_valid_moves
   end
 
   def empty?
