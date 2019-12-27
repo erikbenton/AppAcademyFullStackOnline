@@ -23,6 +23,7 @@ class Piece
   end
 
   def valid_moves
+    raise "No valid moves for a Null Piece" if self.class == NullPiece
     self.moves
   end
 

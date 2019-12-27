@@ -29,8 +29,8 @@ end
 if __FILE__ == $PROGRAM_NAME
   disp = Display.new(Board.new)
   disp.board.move_piece([0,1], [5,4])
-  puts disp.board.in_check?(:white)
   puts disp.board.in_check?(:black)
+  puts disp.board.checkmate?(:black)
   p disp.board[[5,4]].valid_moves
   disp.render
   while true
