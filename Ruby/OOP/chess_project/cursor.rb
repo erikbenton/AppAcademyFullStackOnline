@@ -48,7 +48,6 @@ class Cursor
   private
 
   def read_char
-    # debugger
     STDIN.echo = false # stops the console from printing return values
 
     STDIN.raw! # in raw mode data is given as is to the program--the system
@@ -73,7 +72,6 @@ class Cursor
 
     STDIN.cooked! # the opposite of raw mode :)
     STDIN.echo = true # the console prints return values again
-    # debugger
     return input
   end
 
@@ -81,7 +79,7 @@ class Cursor
     Process.exit(0) if key == :ctrl_c
     diff = MOVES[key]
     begin
-      cursor_pos = update_pos(diff)
+      update_pos(diff)
     rescue StandardError => exception
       puts exception.message
       get_input
@@ -89,14 +87,15 @@ class Cursor
   end
 
   def update_pos(diff)
-    new_pos = cursor_pos
+    new_pos = []
     (0...diff.length).each do |idx|
-      new_pos[idx] += diff[idx]
+      new_pos[idx] = diff[idx] + @cursor_pos[idx]
     end
-    if board.valid_pos?(new_pos)
-      return new_pos
-    else
-      raise "Invalid Cursor Position" 
+    begin
+      board.valid_pos?(new_pos)
+      @cursor_pos = new_pos
+    rescue => exception
+      raise "Invalid Cursor Position"
     end
   end
 end

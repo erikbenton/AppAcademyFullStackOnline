@@ -10,12 +10,13 @@ class Display
   end
 
   def render
-    board.rows.each do |row|
-      row.each do |piece|
-        if piece.pos == cursor.cursor_pos
+    (0...8).each do |row|
+      (0...8).each do |col|
+        pos = [row, col]
+        if pos == cursor.cursor_pos
           print "C" + " "
         else
-          print piece.symbol + " "
+          print board[pos].symbol + " "
         end
       end
       puts
@@ -33,7 +34,7 @@ if __FILE__ == $PROGRAM_NAME
       puts exception.message
       retry
     end
-    puts
+    system("clear")
     disp.render
   end
 end
