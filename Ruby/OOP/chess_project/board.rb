@@ -88,7 +88,14 @@ class Board
   end
 
   def in_check?(color)
-
+    king_pos = find_king(color)
+    other_color = color == :black ? :white : :black
+    other_pieces = pieces.filter { |piece| piece.color == other_color }
+    other_pieces.each do |piece|
+      piece_moves = piece.valid_moves
+      return true if piece_moves.include?(king_pos)
+    end
+    false
   end
 
   def find_king(color)

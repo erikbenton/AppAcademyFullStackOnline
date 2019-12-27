@@ -11,6 +11,7 @@ class Display
 
   def render
     (0...8).each do |row|
+      print row.to_s + "| "
       (0...8).each do |col|
         pos = [row, col]
         if pos == cursor.cursor_pos
@@ -21,11 +22,16 @@ class Display
       end
       puts
     end
+    puts "   " + (0...8).to_a.join(" ")
   end
 end
 
 if __FILE__ == $PROGRAM_NAME
   disp = Display.new(Board.new)
+  disp.board.move_piece([0,1], [5,4])
+  puts disp.board.in_check?(:white)
+  puts disp.board.in_check?(:black)
+  p disp.board[[5,4]].valid_moves
   disp.render
   while true
     begin
