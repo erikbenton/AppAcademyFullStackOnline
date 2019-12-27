@@ -1,5 +1,7 @@
 require "io/console"
 require "byebug"
+require_relative "piece.rb"
+
 KEYMAP = {
   " " => :space,
   "h" => :left,
@@ -84,9 +86,10 @@ class Cursor
       if @selected == false
         @selected = @board[@cursor_pos]
         @selected = false if @selected.is_a?(NullPiece)
-      else
+      elsif @selected.is_a?(Piece)
         if @selected.valid_moves.include?(cursor_pos)
           board.move_piece(@selected.pos, cursor_pos)
+          @selected = true
         else
           raise "Not a valid move"
         end

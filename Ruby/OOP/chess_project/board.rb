@@ -83,15 +83,26 @@ class Board
     self[pos] = piece
   end
 
+  # def checkmate?(color)
+  #   return false unless in_check?(color)
+  #   king = find_king(color)
+  #   king_moves = king.moves
+  #   return true if king_moves.empty?
+  #   other_pieces = other_color_pieces(color)
+  #   king_moves.all? do |move|
+  #     other_pieces.any? { |piece| piece.moves.include?(move) }
+  #   end
+  # end
+
   def checkmate?(color)
     return false unless in_check?(color)
     king = find_king(color)
     king_moves = king.moves
-    return true if king_moves.empty?
-    other_pieces = other_color_pieces(color)
-    king_moves.all? do |move|
-      other_pieces.any? { |piece| piece.moves.include?(move) }
+    all_valid_moves = king_moves.select do |move|
+      new_board = move_piece!(color, king.pos, move)
+      !new_board.in_check?(color)
     end
+    all_valid_moves.empty?
   end
 
   def in_check?(color)

@@ -10,35 +10,39 @@ class Display
   end
 
   def render
+    columns = ("A".."H").to_a
     (0...8).each do |row|
-      print (row.to_s + "| ").colorize(:color => :white, :background => :cyan)
+      print ((row + 1).to_s + "| ").colorize(:color => :white, :background => :black)
       (0...8).each do |col|
         pos = [row, col]
         piece = board[pos]
         foreground = nil
-        background = nil
+        background = (row + col).even? ? :blue : :cyan
+        symbol = piece.symbol
         if piece.is_a?(NullPiece)
-          foreground = :cyan
-          background = :cyan
+          foreground = background
         else
           foreground = piece.color
-          background = :cyan
         end
-        if cursor.selected != false
+        if cursor.selected.is_a?(Piece)
           if cursor.selected.valid_moves.include?(pos)
-            background = :magenta
+            if symbol == " "
+              symbol = "X"
+              foreground = :magenta
+            else
+              background = :magenta
+            end
           end
         end
         if pos == cursor.cursor_pos
           foreground = piece.color
           background = :red
         end
-        print piece.symbol.colorize(:color => foreground, :background => background)
-        print " ".colorize(:color => :cyan, :background => :cyan)
+        print (symbol + " ").colorize(:color => foreground, :background => background)
       end
       puts
     end
-    puts ("   " + (0...8).to_a.join(" ") + " ").colorize(:color => :white, :background => :cyan)
+    puts ("   " + ("A".."H").to_a.join(" ") + " ").colorize(:color => :white, :background => :black)
   end
 end
 

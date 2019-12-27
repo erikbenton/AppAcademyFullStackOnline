@@ -1,5 +1,6 @@
 require_relative "display.rb"
 require_relative "player.rb"
+require "byebug"
 class Game
   attr_accessor :board, :display, :players, :current_player
   def initialize
@@ -16,27 +17,12 @@ class Game
 end
 
 if __FILE__ == $PROGRAM_NAME
+  system("clear")
   game = Game.new
   game.display.render
-  p game.current_player
-  game.swap_turn!
-  puts
-  p game.current_player
-  while true
-    begin
-      game.display.cursor.get_input
-    rescue => exception
-      puts exception.message
-      retry
-    end
-    system("clear")
-    game.display.render
-    piece = game.display.cursor.selected
-    if piece != false
-      puts
-      puts "Your selected piece is: #{piece.class} at #{piece.pos}"
-      puts "With moves to:"
-      piece.valid_moves.each { |move| p move}
-    end
+  puts "Current player is: #{game.current_player.color.to_s.capitalize}"
+  until game.board.checkmate?(game.current_player.color)
+    game.swap_turn! if game.current_player.make_move
+    puts "Current player is: #{game.current_player.color.to_s.capitalize}"
   end
 end
