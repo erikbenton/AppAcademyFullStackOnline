@@ -10,6 +10,7 @@ KEYMAP = {
   "a" => :left,
   "s" => :down,
   "d" => :right,
+  "q" => :deselect,
   "\t" => :tab,
   "\r" => :return,
   "\n" => :newline,
@@ -76,12 +77,14 @@ class Cursor
   end
 
   def handle_key(key)
-    @selected = false
     case key
     when :ctrl_c
       Process.exit(0)
     when :space
       @selected = @board[@cursor_pos]
+      @selected = false if @selected.is_a?(NullPiece)
+    when :deselect
+      @selected = false
     else
       diff = MOVES[key]
       begin
