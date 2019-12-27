@@ -76,13 +76,20 @@ class Cursor
   end
 
   def handle_key(key)
-    Process.exit(0) if key == :ctrl_c
-    diff = MOVES[key]
-    begin
-      update_pos(diff)
-    rescue StandardError => exception
-      puts exception.message
-      get_input
+    @selected = false
+    case key
+    when :ctrl_c
+      Process.exit(0)
+    when :space
+      @selected = @board[@cursor_pos]
+    else
+      diff = MOVES[key]
+      begin
+        update_pos(diff)
+      rescue StandardError => exception
+        puts exception.message
+        get_input
+      end
     end
   end
 
