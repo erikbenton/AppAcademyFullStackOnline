@@ -30,8 +30,10 @@ if __FILE__ == $PROGRAM_NAME
     begin
       disp.cursor.get_input
     rescue => exception
+      puts exception.message
       retry
     end
+    puts
     disp.render
   end
 end

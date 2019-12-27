@@ -1,5 +1,5 @@
 require "io/console"
-
+require "byebug"
 KEYMAP = {
   " " => :space,
   "h" => :left,
@@ -48,6 +48,7 @@ class Cursor
   private
 
   def read_char
+    # debugger
     STDIN.echo = false # stops the console from printing return values
 
     STDIN.raw! # in raw mode data is given as is to the program--the system
@@ -70,9 +71,9 @@ class Cursor
       input << STDIN.read_nonblock(2) rescue nil
     end
 
-    STDIN.echo = true # the console prints return values again
     STDIN.cooked! # the opposite of raw mode :)
-
+    STDIN.echo = true # the console prints return values again
+    # debugger
     return input
   end
 
