@@ -15,13 +15,25 @@ class Display
       (0...8).each do |col|
         pos = [row, col]
         piece = board[pos]
-        if pos == cursor.cursor_pos
-          print piece.symbol.colorize(:color => piece.color, :background => :red)
-        elsif piece.is_a?(NullPiece)
-          print piece.symbol.colorize(:color => :cyan, :background => :cyan)
+        foreground = nil
+        background = nil
+        if piece.is_a?(NullPiece)
+          foreground = :cyan
+          background = :cyan
         else
-          print piece.symbol.colorize(:color => piece.color, :background => :cyan)
+          foreground = piece.color
+          background = :cyan
         end
+        if cursor.selected != false
+          if cursor.selected.valid_moves.include?(pos)
+            background = :magenta
+          end
+        end
+        if pos == cursor.cursor_pos
+          foreground = piece.color
+          background = :red
+        end
+        print piece.symbol.colorize(:color => foreground, :background => background)
         print " ".colorize(:color => :cyan, :background => :cyan)
       end
       puts
@@ -31,26 +43,6 @@ class Display
 end
 
 if __FILE__ == $PROGRAM_NAME
-#   String.colors                       # return array of all possible colors names
-# String.modes                        # return array of all possible modes
-# String.color_samples                # displays color samples in all combinations
-# String.disable_colorization         # check if colorization is disabled
-# String.disable_colorization = false # enable colorization
-# String.disable_colorization false   # enable colorization
-# # String.disable_colorization = true  # disable colorization
-# # String.disable_colorization true    # disable colorization
-
-# puts "This is blue".colorize(:color => :black, :background => :light_black)
-# puts "This is blue".colorize(:color => :black, :background => :cyan)
-# puts "This is light blue".colorize(:light_blue)
-# puts "This is also blue".colorize(:color => :blue)
-# puts "This is light blue with red background".colorize(:color => :light_blue, :background => :red)
-# puts "This is light blue with red background".colorize(:light_blue ).colorize( :background => :red)
-# puts "This is blue text on red".blue.on_red
-# puts "This is red on blue".colorize(:red).on_blue
-# puts "This is red on blue and underline".colorize(:red).on_blue.underline
-# puts "This is blue text on red".blue.on_red.blink
-# puts "This is uncolorized".blue.on_red.uncolorize
   disp = Display.new(Board.new)
   disp.render
   while true
@@ -65,7 +57,7 @@ if __FILE__ == $PROGRAM_NAME
     piece = disp.cursor.selected
     if piece != false
       puts
-      puts "Your selected piece is: #{piece.class}, at #{piece.pos}"
+      puts "Your selected piece is: #{piece.class} at #{piece.pos}"
       puts "With moves to:"
       piece.valid_moves.each { |move| p move}
     end

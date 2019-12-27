@@ -81,8 +81,16 @@ class Cursor
     when :ctrl_c
       Process.exit(0)
     when :space
-      @selected = @board[@cursor_pos]
-      @selected = false if @selected.is_a?(NullPiece)
+      if @selected == false
+        @selected = @board[@cursor_pos]
+        @selected = false if @selected.is_a?(NullPiece)
+      else
+        if @selected.valid_moves.include?(cursor_pos)
+          board.move_piece(@selected.pos, cursor_pos)
+        else
+          raise "Not a valid move"
+        end
+      end
     when :deselect
       @selected = false
     else
