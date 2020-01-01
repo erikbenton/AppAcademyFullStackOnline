@@ -1,4 +1,6 @@
 require "io/console"
+require "byebug"
+require_relative "piece.rb"
 
 KEYMAP = {
   " " => :space,
@@ -10,6 +12,7 @@ KEYMAP = {
   "a" => :left,
   "s" => :down,
   "d" => :right,
+  "q" => :deselect,
   "\t" => :tab,
   "\r" => :return,
   "\n" => :newline,
@@ -32,11 +35,12 @@ MOVES = {
 
 class Cursor
 
-  attr_reader :cursor_pos, :board
+  attr_accessor :cursor_pos, :board, :selected
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
+    @selected = false
   end
 
   def get_input
@@ -69,15 +73,50 @@ class Cursor
       input << STDIN.read_nonblock(2) rescue nil
     end
 
-    STDIN.echo = true # the console prints return values again
     STDIN.cooked! # the opposite of raw mode :)
-
+    STDIN.echo = true # the console prints return values again
     return input
   end
 
   def handle_key(key)
+    case key
+    when :ctrl_c
+      Process.exit(0)
+    when :space
+      if @selected == false
+        @selected = @board[@cursor_pos]
+        @selected = false if @selected.is_a?(NullPiece)
+      elsif @selected.is_a?(Piece)
+        if @selected.valid_moves.include?(cursor_pos)
+          board.move_piece(@selected.pos, cursor_pos)
+          @selected = true
+        else
+          raise "Not a valid move"
+        end
+      end
+    when :deselect
+      @selected = false
+    else
+      diff = MOVES[key]
+      begin
+        update_pos(diff)
+      rescue StandardError => exception
+        puts exception.message
+        get_input
+      end
+    end
   end
 
   def update_pos(diff)
+    new_pos = []
+    (0...diff.length).each do |idx|
+      new_pos[idx] = diff[idx] + @cursor_pos[idx]
+    end
+    begin
+      board.valid_pos?(new_pos)
+      @cursor_pos = new_pos
+    rescue => exception
+      raise "Invalid Cursor Position"
+    end
   end
 end

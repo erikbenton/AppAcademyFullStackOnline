@@ -83,23 +83,56 @@ class Board
     self[pos] = piece
   end
 
-  def checkmate?(color)
+  # def checkmate?(color)
+  #   return false unless in_check?(color)
+  #   king = find_king(color)
+  #   king_moves = king.moves
+  #   return true if king_moves.empty?
+  #   other_pieces = other_color_pieces(color)
+  #   king_moves.all? do |move|
+  #     other_pieces.any? { |piece| piece.moves.include?(move) }
+  #   end
+  # end
 
+  def checkmate?(color)
+    return false unless in_check?(color)
+    king = find_king(color)
+    king_moves = king.moves
+    all_valid_moves = king_moves.select do |move|
+      new_board = move_piece!(color, king.pos, move)
+      !new_board.in_check?(color)
+    end
+    all_valid_moves.empty?
   end
 
   def in_check?(color)
-
+    king_pos = find_king(color).pos
+    other_pieces = other_color_pieces(color)
+    other_pieces.each do |piece|
+      piece_moves = piece.moves
+      return true if piece_moves.include?(king_pos)
+    end
+    false
   end
 
   def find_king(color)
     pieces_clone = pieces
     pieces_clone.each do |piece|
-      return piece.pos if piece.is_a?(King) && piece.color == color
+      return piece if piece.is_a?(King) && piece.color == color
     end
   end
 
   def pieces
     rows.flatten
+  end
+
+  def pieces_color(color)
+    pieces.filter { |piece| piece.color == color }
+  end
+
+  def other_color_pieces(color)
+    other_color = color == :black ? :white : :black
+    return pieces_color(other_color)
   end
 
   def dup

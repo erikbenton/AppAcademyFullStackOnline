@@ -1,3 +1,4 @@
+require "byebug"
 module Stepable
   def moves
     diffs = self.move_diffs
