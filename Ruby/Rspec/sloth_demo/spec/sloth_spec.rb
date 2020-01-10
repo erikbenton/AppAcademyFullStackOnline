@@ -12,4 +12,12 @@ describe Sloth do
       expect(sloth.foods).to be_empty
     end
   end
+
+  describe "#eat" do
+    it "adds a new food to the foods array" do
+      expect(sloth.foods).to_not include("leaves")
+      sloth.eat("leaves")
+      expect(sloth.foods).to include("leaves")
+    end
+  end
 end
