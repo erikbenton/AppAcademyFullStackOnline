@@ -18,5 +18,9 @@ describe Dessert do
         expect(brownie.type).to eq("giant brownie")
       end
     end
+
+    it "raises an error if the amount is not a number" do
+      expect { Dessert.new("brownie", "tons") }.to raise_error("amount must be a number")
+    end
   end
 end
