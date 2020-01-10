@@ -1,9 +1,8 @@
 require "dessert"
-require "drink"
 
 describe Dessert do
   subject(:brownie) { Dessert.new("brownie", 50) }
-  let(:milk) { Drink.new("milk") }
+  let(:milk) { double("milk") }
 
   describe "#initialize" do
     it "takes in a type" do
