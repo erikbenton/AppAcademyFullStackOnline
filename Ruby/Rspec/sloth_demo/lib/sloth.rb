@@ -4,4 +4,8 @@ class Sloth
     @name = name
     @foods = []
   end
+
+  def eat(food)
+    @foods << food
+  end
 end
