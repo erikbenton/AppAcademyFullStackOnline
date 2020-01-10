@@ -13,4 +13,15 @@ class Sloth
   def drink(beverage, amount)
     @drinks[beverage] += amount
   end
+
+  def run(direction)
+    valid_directions = ["west", "east", "south", "north"]
+    raise ArgumentError if valid_directions.none? { |dir| direction.downcase.include?(dir)}
+    "I'm running #{direction} @ 0.001mph"
+  end
+
+  protected
+  def secret_sloth
+    "Shhh... this is a secret"
+  end
 end

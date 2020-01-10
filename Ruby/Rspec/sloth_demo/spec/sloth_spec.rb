@@ -31,4 +31,20 @@ describe Sloth do
       expect(sloth.drinks).to have_value(10)
     end
   end
+
+  describe "#run" do
+    it "returns a string that includes the direction" do
+      expect(sloth.run("west")).to include("west")
+    end
+
+    it "raises an ArgumentError if the direction is invalid" do
+      expect { sloth.run("All over the place") }.to raise_error(ArgumentError)
+    end
+  end
+
+  describe "#secret_sloth" do
+    it "returns a secret" do
+      expect(sloth.secret_sloth).to include("secret")
+    end
+  end
 end
