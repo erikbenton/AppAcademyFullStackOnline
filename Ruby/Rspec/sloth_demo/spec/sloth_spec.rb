@@ -42,9 +42,9 @@ describe Sloth do
     end
   end
 
-  describe "#secret_sloth" do
-    it "returns a secret" do
-      expect(sloth.secret_sloth).to include("secret")
-    end
-  end
+  # describe "#secret_sloth" do
+  #   it "returns a secret" do
+  #     expect(sloth.secret_sloth).to include("secret")
+  #   end
+  # end
 end
