@@ -6,4 +6,8 @@ class Dessert
     @amount = amount
     @type = amount > 100 ? "giant #{type}" : type
   end
+
+  def eat(drink)
+    drink.dip(self)
+  end
 end
