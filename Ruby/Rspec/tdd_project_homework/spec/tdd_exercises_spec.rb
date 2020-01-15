@@ -90,8 +90,28 @@ describe TowersOfHanoi do
     it "initializes with 1 full pillar and 2 empty pillars" do
       towers = TowersOfHanoi.new
       expect(towers.pillar_1).to eq([3, 2, 1])
-      expect(towers.pillar_2).to eq([0, 0, 0])
-      expect(towers.pillar_3).to eq([0, 0, 0])
+      expect(towers.pillar_2).to eq([])
+      expect(towers.pillar_3).to eq([])
     end
+  end
+
+  describe "#move(from, to)" do
+    it "moves the top disc in the 'from' pillar to the 'to' pillar" do
+      expect(towers.pillar_1).to eq([3, 2, 1])
+      expect(towers.pillar_2).to eq([])
+      towers.move(1, 2)
+      expect(towers.pillar_1).to eq([3, 2])
+      expect(towers.pillar_2).to eq([1])
+    end
+
+    context "if trying to place a larger disc on a smaller disc" do
+      it "raises an error about being an invalid move" do
+        
+      end
+    end
+  end
+
+  describe "#won?" do
+    
   end
 end
