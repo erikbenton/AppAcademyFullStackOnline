@@ -83,3 +83,15 @@ describe "stock_picker" do
     end
   end
 end
+
+describe TowersOfHanoi do
+  
+  describe "#initialize" do
+    it "initializes with 1 full pillar and 2 empty pillars" do
+      towers = TowersOfHanoi.new
+      expect(towers.pillar_1).to eq([3, 2, 1])
+      expect(towers.pillar_2).to eq([0, 0, 0])
+      expect(towers.pillar_3).to eq([0, 0, 0])
+    end
+  end
+end

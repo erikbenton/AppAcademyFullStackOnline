@@ -43,3 +43,13 @@ def stock_picker(stocks)
   end
   best_pair
 end
+
+class TowersOfHanoi
+  attr_reader :pillar_1, :pillar_2, :pillar_3, :pillars
+  def initialize
+    @pillar_1 = [3, 2, 1]
+    @pillar_2 = [0, 0, 0]
+    @pillar_3 = [0, 0, 0]
+    @pillars = [@pillar_1, @pillar_2, @pillar_3]
+  end
+end
