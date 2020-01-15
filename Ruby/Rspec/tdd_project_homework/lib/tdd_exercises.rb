@@ -18,15 +18,20 @@ class Array
   end
 
   def my_transpose
-    dim = self.length
-    raise "not a square matrix" if self.any? { |row| row.length != dim }
+    dim = self[0].length
     transp = []
     dim.times { transp << [] }
-    (0...dim).each do |row|
+    (0...self.length).each do |row|
       self[row].each_with_index do |val, col|
         transp[col][row] = val
       end
     end
     transp
   end
+end
+
+def stock_picker(stocks)
+  current_max = 0
+  current_min = 0
+  best_roi = stocks[current_max] - stocks[current_min]
 end
