@@ -53,11 +53,16 @@ end
 describe "stock_picker" do
 
   easy = [10, 9, 10, 1, 4, 7, 55, 8]
-  max_first = [10, 9, 55, 1, 4, 7, 10, 8]
+  max_first = [10, 9, 11, 1, 4, 7, 10, 8]
   bad = [10, 9, 8, 7, 6, 5, 4, 3]
+  not_stocks = ["a", 7, Array.new(), 6]
 
   it "accepts an array of stock prices" do
-    
+    expect { stock_picker(easy) }.to_not raise_error()
+    expect { stock_picker([]) }.to raise_error("not enough days of stocks")
+    expect { stock_picker([]) }.to raise_error("not enough days of stocks")
+    expect { stock_picker([1, 4]) }.to_not raise_error()
+    expect { stock_picker(not_stocks) }.to raise_error("invalid stock prices")
   end
 
   context "when the lowest day is before the max day" do
@@ -77,6 +82,4 @@ describe "stock_picker" do
       expect(stock_picker(max_first)).to eq([3, 6])
     end
   end
-
-  it "finds the best day to sell"
 end

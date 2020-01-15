@@ -31,7 +31,15 @@ class Array
 end
 
 def stock_picker(stocks)
-  current_max = 0
-  current_min = 0
-  best_roi = stocks[current_max] - stocks[current_min]
+  raise "not enough days of stocks" if stocks.length < 2
+  raise "invalid stock prices" unless stocks.all? { |el| el.is_a?(Numeric) }
+  best_pair = [0, 1]
+  (0...stocks.length).each do |first_day|
+    ((first_day + 1)...stocks.length).each do |next_day|
+      if (stocks[next_day] - stocks[first_day]) > stocks[best_pair[1]] - stocks[best_pair[0]]
+        best_pair = [first_day, next_day]
+      end
+    end
+  end
+  best_pair
 end
