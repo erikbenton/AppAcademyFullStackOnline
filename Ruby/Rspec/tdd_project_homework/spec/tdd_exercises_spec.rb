@@ -29,7 +29,12 @@ describe Array do
         [1, 4, 7],
         [2, 5, 8]
       ]
+      non_square = [
+        [0, 1, 2],
+        [3, 4, 5]
+      ]
       expect(mat.my_transpose).to eq(trans)
+      expect { non_square.my_transpose }.to raise_error("not a square matrix")
     end
   end
 end

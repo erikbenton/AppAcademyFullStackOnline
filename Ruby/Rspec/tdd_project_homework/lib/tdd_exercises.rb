@@ -16,4 +16,17 @@ class Array
     end
     sums
   end
+
+  def my_transpose
+    dim = self.length
+    raise "not a square matrix" if self.any? { |row| row.length != dim }
+    transp = []
+    dim.times { transp << [] }
+    (0...dim).each do |row|
+      self[row].each_with_index do |val, col|
+        transp[col][row] = val
+      end
+    end
+    transp
+  end
 end
