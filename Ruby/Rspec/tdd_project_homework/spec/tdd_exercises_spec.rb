@@ -85,33 +85,70 @@ describe "stock_picker" do
 end
 
 describe TowersOfHanoi do
+  toh = TowersOfHanoi.new
   
   describe "#initialize" do
+    it "starts with three towers" do
+      expect(toh.towers.length).to eq(3)
+    end
+
     it "initializes with 1 full pillar and 2 empty pillars" do
-      towers = TowersOfHanoi.new
-      expect(towers.pillar_1).to eq([3, 2, 1])
-      expect(towers.pillar_2).to eq([])
-      expect(towers.pillar_3).to eq([])
+      expect(toh.towers[0]).to eq([3, 2, 1])
+      expect(toh.towers[1]).to eq([])
+      expect(toh.towers[2]).to eq([])
     end
   end
 
   describe "#move(from, to)" do
     it "moves the top disc in the 'from' pillar to the 'to' pillar" do
-      expect(towers.pillar_1).to eq([3, 2, 1])
-      expect(towers.pillar_2).to eq([])
-      towers.move(1, 2)
-      expect(towers.pillar_1).to eq([3, 2])
-      expect(towers.pillar_2).to eq([1])
+      expect(toh.towers[0]).to eq([3, 2, 1])
+      expect(toh.towers[1]).to eq([])
+      toh.move(0, 1)
+      expect(toh.towers[0]).to eq([3, 2])
+      expect(toh.towers[1]).to eq([1])
     end
 
     context "if trying to place a larger disc on a smaller disc" do
       it "raises an error about being an invalid move" do
-        
+        toh.towers[0] = [3,2]
+        toh.towers[1] = [1]
+        expect {toh.move(0, 1) }.to raise_error("invalid move: large disc on top of small disc")
+      end
+    end
+    context "if trying to move a disc from an empty pillar" do
+      it "raises an error about being an invalid move" do
+        toh.towers[0] = []
+        toh.towers[1] = []
+        expect {toh.move(0, 1) }.to raise_error("invalid move: no discs in that tower")
       end
     end
   end
 
   describe "#won?" do
-    
+
+    context "when the game isn't over" do
+      it "returns false" do
+        toh.towers[0] = [3]
+        toh.towers[1] = [2]
+        toh.towers[2] = [1]
+        expect(toh.won?).to eq(false)
+      end
+    end
+
+    context "when the game is over" do
+      it "finds all discs on the last tower" do
+        toh.towers[0] = []
+        toh.towers[1] = []
+        toh.towers[2] = [3,2,1]
+        expect(toh.won?).to eq(true)
+      end
+
+      it "makes sure all the discs are in the proper order" do
+        toh.towers[0] = []
+        toh.towers[1] = []
+        toh.towers[2] = [2,1,3]
+        expect(toh.won?).to eq(false)
+      end
+    end
   end
 end

@@ -1,3 +1,4 @@
+require "byebug"
 class Array
   def my_uniq
     uniqs = []
@@ -45,16 +46,22 @@ def stock_picker(stocks)
 end
 
 class TowersOfHanoi
-  attr_reader :pillar_1, :pillar_2, :pillar_3, :pillars
+  attr_accessor :towers
+
   def initialize
-    @pillar_1 = []
-    @pillar_2 = []
-    @pillar_3 = []
-    @pillar_1.push(3, 2, 1)
-    @pillars = [@pillar_1, @pillar_2, @pillar_3]
+    @towers = [[], [], []]
+    @towers[0].push(3, 2, 1)
   end
 
   def move(from, to)
-    
+    raise "invalid move: no discs in that tower" if @towers[from].empty?
+    if !@towers[to].empty? && (@towers[to][-1] < @towers[from][-1])
+      raise "invalid move: large disc on top of small disc"
+    end
+    @towers[to].push(@towers[from].pop)
+  end
+
+  def won?
+    @towers.one? { |tower| tower.length > 0 } && @towers[-1] == @towers[-1].sort { |a,b| b <=> a }
   end
 end
