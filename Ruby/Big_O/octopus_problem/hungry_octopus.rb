@@ -30,7 +30,7 @@ def dominant_octopus(fish)
   mid = fish.length / 2
 
   # Call merge sort on both sides of the midpoint
-  left= fish[0...mid]
+  left = fish[0...mid]
   right = fish[mid..-1]
 
   sorted_left, sorted_right = dominant_octopus(left), dominant_octopus(right)
