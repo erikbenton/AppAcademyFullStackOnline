@@ -18,7 +18,7 @@ def sluggish_octopus(fish)
   fish[-1]
 end
 
-fishies = ['fish', 'fiiish', 'fiiiiish', 'fiiiish', 'fffish', 'ffiiiiisshh', 'fsh', 'fiiiissshhhhhh', "fssshhh"];
+fishies = ['fish', 'fiiish', 'fiiiiish', 'fiiiish', 'fffish', 'ffiiiiisshh', 'fsh', 'fiiiissshhhhhh', "fssshhh", "trolol"]
 
 puts sluggish_octopus(fishies.dup)
 
@@ -33,25 +33,31 @@ def dominant_octopus(fish)
   left = fish[0...mid]
   right = fish[mid..-1]
 
-  sorted_left, sorted_right = dominant_octopus(left), dominant_octopus(right)
-  merge(left, right)
+  sorted_left = dominant_octopus(left)
+  sorted_right = dominant_octopus(right)
+  
+  merge(sorted_left, sorted_right)
 end
 
 def merge(left, right)
+  l_idx = 0
+  r_idx = 0
   sorted_arr = []
-  until left.empty? || right.empty?
-    if left.first.length < right.first.length
-      sorted_arr << left.shift
+  while l_idx < left.length && r_idx < right.length
+    if left[l_idx].length < right[r_idx].length
+      sorted_arr << left[l_idx]
+      l_idx += 1
     else
-      sorted_arr << right.shift
+      sorted_arr << right[r_idx]
+      r_idx += 1
     end
   end
-  left + sorted_arr + right
+  sorted_arr + left[l_idx..-1] + right[r_idx..-1]
 end
 
 puts 
 puts fishies
 puts
-puts dominant_octopus(fishies)
+p dominant_octopus(fishies)
 puts
 puts fishies[-1]
