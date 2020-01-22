@@ -35,7 +35,7 @@ def dominant_octopus(fish)
 
   sorted_left = dominant_octopus(left)
   sorted_right = dominant_octopus(right)
-  
+
   merge(sorted_left, sorted_right)
 end
 
@@ -58,6 +58,21 @@ end
 puts 
 puts fishies
 puts
-p dominant_octopus(fishies)
+puts (dominant_octopus(fishies))[-1]
+puts
+puts fishies[-1]
+
+def clever_octopus(fish)
+  max = fish.first
+  fish.each do |ele|
+    max = ele if ele.length > max.length
+  end
+  max
+end
+
+puts 
+puts fishies
+puts
+puts clever_octopus(fishies)
 puts
 puts fishies[-1]
