@@ -76,3 +76,24 @@ puts
 puts clever_octopus(fishies)
 puts
 puts fishies[-1]
+
+def slow_dance(dir, tiles)
+  tiles.each_with_index do |tile, idx|
+    return idx if dir == tile
+  end
+  -1
+end
+
+def fast_dance(dir, tiles)
+  tiles[dir]
+end
+
+tiles_array = ["up", "right-up", "right", "right-down", "down", "left-down", "left",  "left-up" ]
+
+puts slow_dance("up", tiles_array)
+puts slow_dance("right-down", tiles_array)
+
+new_tiles_data_structure = {"up" => 0, "right-up" => 1, "right" => 2, "right-down" => 3, "down" => 4, "left-down" => 5, "left" => 6,  "left-up" => 7}
+
+puts fast_dance("up", new_tiles_data_structure)
+puts fast_dance("right-down", new_tiles_data_structure)
