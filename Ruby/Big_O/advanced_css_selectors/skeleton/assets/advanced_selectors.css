@@ -59,7 +59,7 @@ form input:last-child:hover {
 }
 
 #directions+ol li:nth-of-type(2n) {
-  background-color: blue;
+  background-color: lightgray;
 }
 
 h2+.user_review {
