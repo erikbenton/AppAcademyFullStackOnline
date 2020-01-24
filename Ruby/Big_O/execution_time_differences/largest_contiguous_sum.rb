@@ -26,6 +26,26 @@ def largest_contiguous_subsum(arr)
   puts "#{max} (from #{sub_arrays[max_idx]})"
 end
 
+# How this works
+# Kadane's Algorithm keeps track of the largest sum by going through te array
+# linearly, summing up the numbers as it goes. The algorithm assumes that any
+# "chain" of numbers that sum to a negative number should be dropped from the
+# contiguous chain since it is "removing/subtracting" from the largest sum.
+# This can be seen in the line => max_ending = 0 if max_ending < 0
+# If a "chain" sums to a negative number, then that chain is dropped and the
+# sub_array is cinched up to the point where there is no longer a negative sum
+# HOWEVER
+# Kadane's algorithm only works with an array that is not only negative numbers
+# There has to be one non-negative number so:
+# [0, 1, -1] is valid
+# [0] is valid
+# [-1, -2, -3] is NOT valid
+# So there is an initial O(n) check for if the numbers are all negative
+# If they are, then just find the max of the array
+# Both of these are additive O(n) processes, thus O(n + n) => O(n)
+# Since there are always only 2 "meaningful" variables, independent of the
+# input size, this would be O(1) space/memory complexity
+
 def kadanes_algorithm(arr)
   unless arr.all? { |ele| ele < 0 }
     max_so_far = 0
