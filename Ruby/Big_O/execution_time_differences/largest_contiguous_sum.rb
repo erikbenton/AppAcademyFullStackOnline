@@ -31,7 +31,7 @@ end
 # linearly, summing up the numbers as it goes. The algorithm assumes that any
 # "chain" of numbers that sum to a negative number should be dropped from the
 # contiguous chain since it is "removing/subtracting" from the largest sum.
-# This can be seen in the line => max_ending = 0 if max_ending < 0
+# This can be seen in the line (55) => max_ending = 0 if max_ending < 0
 # If a "chain" sums to a negative number, then that chain is dropped and the
 # sub_array is cinched up to the point where there is no longer a negative sum
 # HOWEVER
