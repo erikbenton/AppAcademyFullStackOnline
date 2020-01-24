@@ -22,4 +22,19 @@ end
 puts
 puts second_anagram?("gizmo", "sally")
 puts second_anagram?("lives", "elvis")
-# puts second_anagram?("godzillaaa", "gdozillaaa")
+puts second_anagram?("godzillaaaaaaaa", "gdozillaaaaaaaa")
+
+def third_anagram?(first_word, second_word)
+  first = first_word.split("").sort
+  second = second_word.split("").sort
+  first == second
+end
+
+puts
+puts third_anagram?("gizmo", "sally")
+puts third_anagram?("lives", "elvis")
+puts third_anagram?("godzillaaaaaaaa", "gdozillaaaaaaaa")
+
+# Assuming that the Array#sort method in ruby is operating in O(nln(n)) time
+# Complexity, then in theory the third_anagram? method could be slightly
+# Faster for smaller inputs, but asymptotically the second_anagram? is faster
