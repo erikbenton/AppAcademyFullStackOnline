@@ -6,13 +6,18 @@ class MinMaxStack
   end
 
   def pop
-    @store.pop
+    val = @store.pop
+    if @store.empty?
+      @max = nil
+      @min = nil
+    end
+    val
   end
 
   def push(val)
     @store.push(val)
     @max = val if @max.nil? || @max < val
-    @max = val if @min.nil? || @min > val
+    @min = val if @min.nil? || @min > val
   end
 
   def peek
