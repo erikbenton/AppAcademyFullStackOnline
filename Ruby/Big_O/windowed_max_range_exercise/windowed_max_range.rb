@@ -1,4 +1,5 @@
 require "byebug"
+require_relative "min_max_stack_queue.rb"
 
 def windowed_max_range(arr, size)
   current_max_range = nil
