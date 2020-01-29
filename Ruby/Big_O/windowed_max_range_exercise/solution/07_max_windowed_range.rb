@@ -1,4 +1,5 @@
 require_relative "06_min_max_stack_queue"
+require "benchmark"
 
 # O(n) Optimized solution
 def max_windowed_range(array, window_size)
@@ -35,8 +36,16 @@ if __FILE__ == $PROGRAM_NAME
   p max_windowed_range([1, 0, 2, 5, 4, 8], 3) == 5 # 0, 2, 5
   p max_windowed_range([1, 0, 2, 5, 4, 8], 4) == 6 # 2, 5, 4, 8
   p max_windowed_range([1, 3, 2, 5, 4, 8], 5) == 6 # 3, 2, 5, 4, 8
-  arr = (0..1000000).to_a.shuffle!
-  puts "Go!"
-  p max_windowed_range(arr, 5)
-  # puts windowed_max_range_slow(arr, 5)
+
+  arr_1 = (0...10000).to_a.shuffle!
+  arr_2 = (0...100000).to_a.shuffle!
+  arr_3 = (0...1000000).to_a.shuffle!
+  Benchmark.bm do |x|
+    x.report("fast:") { max_windowed_range(arr_1, 3) }
+    x.report("slow:") { windowed_max_range_slow(arr_1, 3) }
+    x.report("fast:") { max_windowed_range(arr_2, 3) }
+    x.report("slow:") { windowed_max_range_slow(arr_2, 3) }
+    x.report("fast:") { max_windowed_range(arr_3, 3) }
+    x.report("slow:") { windowed_max_range_slow(arr_3, 3) }
+  end
 end
