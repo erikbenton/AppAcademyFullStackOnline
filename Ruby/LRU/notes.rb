@@ -24,3 +24,33 @@
     # Blowfish
 
 # Every object in Ruby has a Object#hash method to be "hashable"
+
+# ==========
+#  Hash Set
+# ==========
+
+# {2, 4, 6,8, 16, "hello", "dolly"}
+#  [ [], [], [], [] ]
+
+# Mod each hash value for each object
+
+# 2.hash -> 7928567 -> 7928567 % 4 = 3
+# [ [], [], [], [2] ]
+
+# 4.hash -> 8925562 -> 8925562 % 4 = 2
+# [ [], [], [4], [2] ]
+
+# 8.hash -> 123456 -> 123456 % 4 = 0
+# [ [8], [], [4], [2] ]
+
+# 16.hash -> 123457 -> 123457 % 4 = 1
+# [ [8], [16], [4], [2] ]
+
+# Expand n -> 2n --> 4 -> 8
+# 2.hash % 8 -> 1
+# 4.hash % 8 -> 6
+# 8.hash % 8 -> 7
+# 16.hash % 8 -> 2
+# "hello".hash % 8 -> 1
+# "dolly".hash % 8 -> 6
+# [ [], [2, "hello"], [16], [], [], [], [4, "dolly"], [8] ]
