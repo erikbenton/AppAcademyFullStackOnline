@@ -9,14 +9,23 @@ class LRUCache
   end
 
   def add(el)
-    # Delete el if it's in the store
-    @store.delete(el) if @store.include?(el)
+    eject(el)
     @store.push(el) # Add to store
-    @store = @store.drop(@size) if count > @size
+    chop
   end
 
   def show
     p @store
+  end
+
+  private
+
+  def eject(el)
+    @store.delete(el) if @store.include?(el)
+  end
+
+  def chop
+    @store = @store.drop(@size) if count > @size
   end
 end
 
