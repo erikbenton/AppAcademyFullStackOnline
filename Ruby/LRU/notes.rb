@@ -96,3 +96,28 @@
   # LL -> [1,1]
   # LL
 # ]
+
+# =========
+#  Caching 
+# =========
+
+# Think about Super Mario Bros. lol
+# Wanna be able to cache objects in the game
+# because we can't save EVERYTHING to memory
+
+# LRU - Least Recently Used
+# heuristic used to determine what stays in the cache
+# Need to store info for when the object was last used
+# Or use a Linked List since that is ordered
+
+# LL => [mario, bowser, goomba]
+
+# {
+  # "mario" => LL[0]
+  # "bowser" => LL[1]
+  # "goomba" => LL[2] 
+# }
+
+# eject -> use LL method of ejecting tail/head O(1)
+# insert -> Use LL method to put at head/tail O(1)
+# read -> Use hash map read O(1)
