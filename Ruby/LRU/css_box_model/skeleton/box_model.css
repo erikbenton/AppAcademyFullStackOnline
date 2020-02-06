@@ -1,8 +1,11 @@
 div {
-  height: 200px;
   width: 200px;
   padding: 50px;
   border: 5px solid black;
+}
+
+.fixed-height {
+  height: 200px;
 }
 
 #first-div {
@@ -16,7 +19,7 @@ div {
 
 #third-div {
   background-color: cadetblue;
-  height: 10px;
+  min-height: 10px;
   max-height: 1000px;
 }
 
