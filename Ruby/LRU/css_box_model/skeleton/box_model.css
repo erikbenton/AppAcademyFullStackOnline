@@ -38,7 +38,7 @@ div {
 #third-div {
   background-color: cadetblue;
   min-height: 10px;
-  max-height: 1000px;
+  /* max-height: 1000px; */
   width: 500px;
 }
 
