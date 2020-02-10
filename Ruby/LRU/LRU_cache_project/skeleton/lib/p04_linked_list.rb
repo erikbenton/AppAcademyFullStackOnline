@@ -21,6 +21,7 @@ class Node
     next_node.prev = prev_node
     self.next = nil
     self.prev = nil
+    true
   end
 end
 
@@ -76,6 +77,7 @@ class LinkedList
 
   def remove(key)
     self.each { |node| return node.remove if node.key == key }
+    # debugger
     nil
   end
 
