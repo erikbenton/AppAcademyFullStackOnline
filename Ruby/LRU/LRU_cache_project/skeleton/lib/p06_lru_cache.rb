@@ -36,7 +36,7 @@ class LRUCache
     @store.append(key, val)
     @map.set(key, @store.last)
     eject! if @map.count > @max
-    return val
+    return @store.last
   end
 
   def update_node!(node)
@@ -54,6 +54,7 @@ class LRUCache
   end
 
   def eject!
+    @map.delete(@store.first.key)
     @store.first.remove
   end
 end
