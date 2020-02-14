@@ -55,19 +55,30 @@ class DynamicArray
   end
 
   def push(val)
-    resize!
+    # debugger if val == 10
+    resize! if @count >= capacity
     @store[@count] = val
     @count += 1
   end
 
   def unshift(val)
-    resize!
+    @count += 1
+    resize! if @count >= capacity
+    # debugger
+    (1...@count).to_a.reverse.each do |idx|
+      @store[idx] = @store[idx - 1]
+    end
+    # debugger
+    @store[0] = val
+    # debugger
   end
 
   def pop
     return nil if @count == 0
     @count -= 1
-    @store[@count]
+    el = @store[@count]
+    @store[@count] = nil
+    el
   end
 
   def shift
@@ -103,10 +114,12 @@ class DynamicArray
   private
 
   def resize!
-    if @count >= capacity
-      temp_arr = @store.dup
-      @store = StaticArray.new(capacity * 2)
-      temp_arr.each { |el| @store << el }
+    temp_arr = @store.dup
+    @store = StaticArray.new(capacity * 2)
+    (0...temp_arr.length).to_a.each do |ind|
+      # debugger
+      el = temp_arr[ind]
+      @store[ind] = el
     end
   end
 end
