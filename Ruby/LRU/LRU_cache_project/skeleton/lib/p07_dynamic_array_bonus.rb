@@ -36,13 +36,24 @@ class DynamicArray
   end
 
   def [](i)
-    @store[i]
+    return @store[i] unless i < 0
+    ind = @count + i
+    return nil if ind < 0 || ind >= @count
+    return @store[ind]
   end
 
   def []=(i, val)
-    @count += 1 if @store[i].nil?
-    @count -= 1 if val.nil?
-    @store[i] = val
+    unless i < 0
+      @count += 1 if @store[i].nil?
+      @count -= 1 if val.nil?
+      @store[i] = val
+    else
+      ind = @count + i
+      return nil if ind < 0 || ind >= @count
+      @count += 1 if @store[ind].nil?
+      @count -= 1 if val.nil?
+      @store[ind] = val
+    end
   end
 
   def capacity
@@ -55,7 +66,6 @@ class DynamicArray
   end
 
   def push(val)
-    # debugger if val == 10
     resize! if @count >= capacity
     @store[@count] = val
     @count += 1
@@ -64,13 +74,10 @@ class DynamicArray
   def unshift(val)
     @count += 1
     resize! if @count >= capacity
-    # debugger
     (1...@count).to_a.reverse.each do |idx|
       @store[idx] = @store[idx - 1]
     end
-    # debugger
     @store[0] = val
-    # debugger
   end
 
   def pop
@@ -84,7 +91,7 @@ class DynamicArray
   def shift
     return nil if @count < 1
     el = @store[0]
-    (0...(@count - 1)).to_a.reverse.each do |idx|
+    (0...(@count - 1)).to_a.each do |idx|
       @store[idx] = @store[idx + 1]
     end
     @count -= 1
@@ -113,7 +120,10 @@ class DynamicArray
 
   def ==(other)
     return false unless [Array, DynamicArray].include?(other.class)
-    # ...
+    (0...@count).to_a.each do |idx|
+      return false if @store[idx] != other[idx]
+    end
+    true
   end
 
   alias_method :<<, :push
