@@ -82,6 +82,14 @@ class DynamicArray
   end
 
   def shift
+    return nil if @count < 1
+    el = @store[0]
+    (0...(@count - 1)).to_a.reverse.each do |idx|
+      @store[idx] = @store[idx + 1]
+    end
+    @count -= 1
+    @store[@count] = nil
+    el
   end
 
   def first
@@ -117,7 +125,6 @@ class DynamicArray
     temp_arr = @store.dup
     @store = StaticArray.new(capacity * 2)
     (0...temp_arr.length).to_a.each do |ind|
-      # debugger
       el = temp_arr[ind]
       @store[ind] = el
     end
