@@ -43,16 +43,18 @@ class DynamicArray
   end
 
   def []=(i, val)
-    unless i < 0
+    if i > @count
+      start = @count
+      (start...i).to_a.each do |idx|
+        self.push(nil)
+      end
+      self.push(val)
+    else
+      i = @count + i if i < 0
+      return nil if i < 0 || i >= @count
       @count += 1 if @store[i].nil?
       @count -= 1 if val.nil?
       @store[i] = val
-    else
-      ind = @count + i
-      return nil if ind < 0 || ind >= @count
-      @count += 1 if @store[ind].nil?
-      @count -= 1 if val.nil?
-      @store[ind] = val
     end
   end
 
