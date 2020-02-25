@@ -1,6 +1,8 @@
 require 'rspec'
 require '03a_nobel_bonus'
 
+puts "Here?"
+
 describe 'nobel bonus problems' do
   describe 'physics_no_chemistry' do
     it 'shows years in which physics prizes (but not chemistry) were awarded' do
