@@ -155,7 +155,6 @@ def prolific_actors
     HAVING
       COUNT(*) >= 15
     ORDER BY actors.name
-      
   SQL
 end
 
@@ -164,25 +163,45 @@ def films_by_cast_size
   # in the cast (descending), then by title (ascending).
   execute(<<-SQL)
     SELECT
-      movies.title
+      movies.title, COUNT(DISTINCT castings.actor_id)
     FROM
       movies
     JOIN
       castings ON movies.id = castings.movie_id
-    JOIN
-      actors ON castings.actor_id = actors.id
     WHERE
       movies.yr = 1978
     GROUP BY
       movies.id
-    HAVING
-      COUNT(*) >= 15
-    ORDER BY COUNT(castings.*) DESC, movies.title ASC
+    ORDER BY COUNT(*) DESC, movies.title ASC
   SQL
 end
 
 def colleagues_of_garfunkel
   # List all the people who have played alongside 'Art Garfunkel'.
   execute(<<-SQL)
+    SELECT
+      actors.name
+    FROM
+      actors
+    JOIN
+      castings ON actors.id = castings.actor_id
+    JOIN
+      movies ON castings.movie_id = movies.id
+    WHERE
+      movies.id IN(
+        SELECT
+          castings.movie_id
+        FROM
+          castings
+        WHERE
+          castings.actor_id = (
+            SELECT
+              actors.id
+            FROM
+              actors
+            WHERE
+              actors.name = 'Art Garfunkel'
+          )
+      ) AND actors.name != 'Art Garfunkel'
   SQL
 end
