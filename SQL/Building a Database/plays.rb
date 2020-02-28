@@ -100,14 +100,13 @@ class Playwright
 
   def self.get_playwright(name)
     data = PlayDBConnection.instance.execute(<<-SQL, name)
-      SELECT DISTINCT
+      SELECT
         *
       FROM
         playwrights
       WHERE
         playwrights.name = ?
     SQL
-    # debugger
     playwright = Playwright.new(data.first)
   end
 
