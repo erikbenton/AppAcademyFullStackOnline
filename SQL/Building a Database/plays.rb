@@ -12,6 +12,7 @@ class PlayDBConnection < SQLite3::Database
 end
 
 class Play
+  attr_accessor :id, :title, :year, :playwright_id
   def self.all
     data = PlayDBConnection.instance.execute("
       SELECT
@@ -41,6 +42,14 @@ class Play
   end
 
   def update
-    
+    raise "#{self} is not in database" if @id.nil?
+    PlayDBConnection.instance.execute(<<-SQL, @title, @year, @playwright_id, @id)
+      UPDATE
+        plays
+      SET
+        title = ?, year = ?, playwright_id = ?
+      WHERE
+        id = ?
+    SQL
   end
 end
