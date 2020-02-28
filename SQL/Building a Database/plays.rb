@@ -1,5 +1,6 @@
 require 'sqlite3'
 require 'singleton'
+require 'byebug'
 
 class PlayDBConnection < SQLite3::Database
   include Singleton
@@ -97,6 +98,19 @@ class Playwright
     data.map { |datum| Playwright.new(datum) }
   end
 
+  def self.get_playwright(name)
+    data = PlayDBConnection.instance.execute(<<-SQL, name)
+      SELECT DISTINCT
+        *
+      FROM
+        playwrights
+      WHERE
+        playwrights.name = ?
+    SQL
+    # debugger
+    playwright = Playwright.new(data.first)
+  end
+
   def initialize(options)
     @id = options['id']
     @name = options['name']
@@ -124,6 +138,17 @@ class Playwright
         birth_year = ?
       WHERE
         id = ?
+    SQL
+  end
+
+  def get_plays
+    plays = PlayDBConnection.instance.execute(<<-SQL, @id)
+      SELECT
+        *
+      FROM
+        plays
+      WHERE
+        plays.playwright_id = ?
     SQL
   end
 end
