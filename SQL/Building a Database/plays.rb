@@ -84,3 +84,22 @@ class Play
     SQL
   end
 end
+
+class Playwright
+  attr_accessor :id, :name, :birth_year
+  def self.all
+    data = PlayDBConnection.instance.execute(<<-SQL)
+      SELECT
+        *
+      FROM
+        playwrights
+    SQL
+    data.map { |datum| Playwright.new(datum) }
+  end
+
+  def initialize(options)
+    @id = options['id']
+    @name = options['name']
+    @birth_year = options['birth_year']
+  end
+end
