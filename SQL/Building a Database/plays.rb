@@ -102,4 +102,15 @@ class Playwright
     @name = options['name']
     @birth_year = options['birth_year']
   end
+
+  def create
+    raise "#{self} is already in the database" unless @id.nil?
+    PlayDBConnection.instance.execute(<<-SQL, @name, @birth_year)
+      INSERT INTO
+        playwrights (name, birth_year)
+      VALUES
+        (?, ?)
+    SQL
+    @id = PlayDBConnection.instance.last_insert_row_id
+  end
 end
