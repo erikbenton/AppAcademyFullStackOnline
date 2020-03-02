@@ -10,7 +10,7 @@ class Reply
       FROM
         replies;
     SQL
-    rplies.map { |reply| Reply.new(reply) }
+    replies.map { |reply| Reply.new(reply) }
   end
 
   def self.find_by_id(id)
@@ -22,6 +22,8 @@ class Reply
       WHERE
         replies.id = ?;
     SQL
+    raise "No reply with id: #{id}" if reply.nil? || reply.empty?
+    Reply.new(reply.first)
   end
 
   def initialize(options)
@@ -33,3 +35,7 @@ class Reply
   end
 end
 
+if __FILE__ == $PROGRAM_NAME
+  p Reply.all
+  p Reply.find_by_id(1)
+end

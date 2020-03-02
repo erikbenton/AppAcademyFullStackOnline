@@ -1,13 +1,13 @@
 PRAGMA foreign_keys = ON;
 
 -- Dropping all the tables first
-DROP TABLE questions_likes;
-DROP TABLE questions_follows;
+DROP TABLE question_likes;
+DROP TABLE question_follows;
 DROP TABLE replies;
 DROP TABLE questions;
 DROP TABLE users;
 
--- Creating A Users table
+-- Creating a Users table
 CREATE TABLE users (
   id INTEGER PRIMARY KEY,
   fname TEXT NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE questions (
 );
 
 -- Creating a Question Follows table
-CREATE TABLE questions_follows (
+CREATE TABLE question_follows (
   id INTEGER PRIMARY KEY,
   question_id INTEGER NOT NULL,
   follower_id INTEGER NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE replies (
 );
 
 -- Create a Question Likes table
-CREATE TABLE questions_likes (
+CREATE TABLE question_likes (
   id INTEGER PRIMARY KEY,
   user_id INTEGER NOT NULL,
   question_id INTEGER NOT NULL,
@@ -116,7 +116,7 @@ VALUES
 
 -- Putting some simple follows in
 INSERT INTO
-  questions_follows (question_id, follower_id)
+  question_follows (question_id, follower_id)
 VALUES
   (2, 1), -- Erik follows Car Start
   (1, 3); -- Danny likes Oil Q
@@ -144,8 +144,9 @@ VALUES
         AND author_id = 1
     ), 2, "Thanks for the help...");
 
+-- Putting in some simple likes
 INSERT INTO
-  questions_likes (user_id, question_id)
+  question_likes (user_id, question_id)
 VALUES
   (1, 1),
   (3, 1),
