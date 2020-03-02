@@ -1,7 +1,7 @@
 require_relative 'questions_database.rb'
 require_relative 'user.rb'
 require_relative 'reply.rb'
-require_relative 'question_follows.rb'
+require_relative 'question_follow.rb'
 
 class Question
   
