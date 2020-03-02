@@ -26,6 +26,19 @@ class Question
     Question.new(question.first)
   end
 
+  def self.find_by_author_id(author_id)
+    question = QuestionsDBConnection.instance.execute(<<-SQL, author_id)
+      SELECT
+        *
+      FROM
+        questions
+      WHERE
+        questions.author_id = ?;
+    SQL
+    raise "No question with author_id: #{author_id}" if question.nil? || question.empty?
+    Question.new(question.first)
+  end
+
   def initialize(options)
     @id = options['id']
     @title = options['title']

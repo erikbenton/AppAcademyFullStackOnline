@@ -26,6 +26,20 @@ class User
     raise "No user with id: #{id}" if user.nil? || user.empty?
     User.new(user.first)
   end
+
+  def self.find_by_name(fname, lname)
+    user = QuestionsDBConnection.instance.execute(<<-SQL, fname, lname)
+      SELECT
+        *
+      FROM
+        users
+      WHERE
+        users.fname = ?
+        AND users.lname = ?;
+    SQL
+    raise "No user with name: #{fname} #{lname}" if user.nil? || user.empty?
+    User.new(user.first)
+  end
   
   def initialize(options)
     @fname = options['fname']
@@ -44,5 +58,9 @@ if __FILE__ == $PROGRAM_NAME
   rescue => exception
     puts exception.message
   end
-  
+
+  puts
+
+  p User.find_by_name("Erik", "Benton")
+
 end
