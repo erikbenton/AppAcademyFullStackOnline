@@ -1,4 +1,6 @@
 require_relative "questions_database.rb"
+require_relative 'user.rb'
+require_relative 'question.rb'
 
 class Reply
   attr_accessor :id, :question_id, :parent_id, :author_id, :body
@@ -27,29 +29,29 @@ class Reply
   end
 
   def self.find_by_question_id(question_id)
-    reply = QuestionsDBConnection.instance.execute(<<-SQL, question_id)
+    replies = QuestionsDBConnection.instance.execute(<<-SQL, question_id)
       SELECT
         *
       FROM
-        questions
+        replies
       WHERE
-        questions.question_id = ?;
+        replies.question_id = ?;
     SQL
-    raise "No reply with question_id: #{question_id}" if reply.nil? || reply.empty?
-    Reply.new(reply.first)
+    raise "No replies with question_id: #{question_id}" if replies.nil? || replies.empty?
+    replies.map { |reply| Reply.new(reply.first) }
   end
 
   def self.find_by_author_id(author_id)
-    reply = QuestionsDBConnection.instance.execute(<<-SQL, author_id)
+    replies = QuestionsDBConnection.instance.execute(<<-SQL, author_id)
       SELECT
         *
       FROM
-        questions
+        replies
       WHERE
-        questions.author_id = ?;
+        replies.author_id = ?;
     SQL
-    raise "No reply with author_id: #{author_id}" if reply.nil? || reply.empty?
-    Reply.new(reply.first)
+    raise "No replies with author_id: #{author_id}" if replies.nil? || replies.empty?
+    replies.map { |reply| Reply.new(reply) }
   end
 
   def initialize(options)
@@ -59,9 +61,42 @@ class Reply
     @author_id = options['author_id']
     @body = options['body']
   end
+
+  def author
+    User.find_by_id(@author_id)
+  end
+
+  def question
+    Question.find_by_id(@question_id)
+  end
+
+  def parent_reply
+    return nil if @parent_id.nil?
+    Reply.find_by_id(@parent_id)
+  end
+
+  def child_replies
+    children = QuestionsDBConnection.instance.execute(<<-SQL, @id)
+      SELECT
+        *
+      FROM
+        replies
+      WHERE
+        replies.parent_id = ?;
+    SQL
+    children.map { |child| Reply.new(child) }
+  end
+
 end
 
 if __FILE__ == $PROGRAM_NAME
   p Reply.all
-  p Reply.find_by_id(1)
+  
+  erik_reply = Reply.find_by_id(1)
+  utas_reply = Reply.find_by_id(3)
+
+  puts
+
+  p erik_reply.child_replies.first.body
+  p utas_reply.parent_reply.body
 end

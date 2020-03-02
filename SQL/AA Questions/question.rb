@@ -1,4 +1,6 @@
 require_relative 'questions_database.rb'
+require_relative 'user.rb'
+require_relative 'reply.rb'
 
 class Question
   
@@ -27,7 +29,7 @@ class Question
   end
 
   def self.find_by_author_id(author_id)
-    question = QuestionsDBConnection.instance.execute(<<-SQL, author_id)
+    questions = QuestionsDBConnection.instance.execute(<<-SQL, author_id)
       SELECT
         *
       FROM
@@ -35,8 +37,8 @@ class Question
       WHERE
         questions.author_id = ?;
     SQL
-    raise "No question with author_id: #{author_id}" if question.nil? || question.empty?
-    Question.new(question.first)
+    raise "No questions with author_id: #{author_id}" if questions.nil? || questions.empty?
+    questions.map { |question| Question.new(question) }
   end
 
   def initialize(options)
@@ -46,9 +48,22 @@ class Question
     @author_id = options['author_id']
   end
 
+  def author
+    User.find_by_id(@author_id)
+  end
+
+  def replies
+    Reply.find_by_question_id(@id)
+  end
+
 end
 
 if __FILE__ == $PROGRAM_NAME
   p Question.all
-  p Question.find_by_id(1)
+  
+  first_q = Question.find_by_id(1)
+
+  puts
+
+  p first_q.author
 end

@@ -1,4 +1,6 @@
 require_relative 'questions_database.rb'
+require_relative 'question.rb'
+require_relative 'reply.rb'
 require 'byebug'
 
 class User
@@ -47,6 +49,14 @@ class User
     @lname = options['lname']
   end
 
+  def authored_questions
+    Question.find_by_author_id(@id)
+  end
+
+  def authored_replies
+    Reply.find_by_author_id(@id)
+  end
+
 end
 
 if __FILE__ == $PROGRAM_NAME
@@ -61,6 +71,13 @@ if __FILE__ == $PROGRAM_NAME
 
   puts
 
-  p User.find_by_name("Erik", "Benton")
+  erik = User.find_by_name("Erik", "Benton")
+
+  puts erik.authored_questions
+  puts
+  erik.authored_replies.each do |reply|
+    puts reply.body
+  end
+
 
 end
