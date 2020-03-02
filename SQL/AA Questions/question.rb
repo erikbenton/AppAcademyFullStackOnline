@@ -22,7 +22,7 @@ class Question
       WHERE
         questions.id = ?;
     SQL
-    raise "No question with id: #{id}" if question.nil?
+    raise "No question with id: #{id}" if question.nil? || question.empty?
     Question.new(question.first)
   end
 

@@ -113,3 +113,42 @@ VALUES
       users.lname LIKE '%D''evito%'
     )
   );
+
+-- Putting some simple follows in
+INSERT INTO
+  questions_follows (question_id, follower_id)
+VALUES
+  (2, 1), -- Erik follows Car Start
+  (1, 3); -- Danny likes Oil Q
+
+-- Putting in some basic replies
+INSERT INTO
+  replies (question_id, parent_id, author_id, body)
+VALUES
+  (2, NULL, 1, "My car doesn't like starting either =/"),
+  (1, NULL, 3, "Try the SQLZoo demo guy");
+
+-- Only way to self-reference the first reply
+INSERT INTO
+  replies (question_id, parent_id, author_id, body)
+VALUES
+  (2,
+    (
+      SELECT
+        id
+      FROM
+        replies
+      WHERE
+        question_id = 2
+        AND parent_id IS NULL
+        AND author_id = 1
+    ), 2, "Thanks for the help...");
+
+INSERT INTO
+  questions_likes (user_id, question_id)
+VALUES
+  (1, 1),
+  (3, 1),
+  (2, 2),
+  (1, 2);
+

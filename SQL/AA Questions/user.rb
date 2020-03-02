@@ -23,6 +23,7 @@ class User
       WHERE
         users.id = ?;
     SQL
+    raise "No user with id: #{id}" if user.nil? || user.empty?
     User.new(user.first)
   end
   
@@ -37,4 +38,11 @@ end
 if __FILE__ == $PROGRAM_NAME
   p User.all
   p User.find_by_id(1)
+  
+  begin
+    User.find_by_id(10)
+  rescue => exception
+    puts exception.message
+  end
+  
 end
