@@ -1,4 +1,6 @@
 require_relative "questions_database.rb"
+require_relative 'user.rb'
+require_relative 'question.rb'
 
 class QuestionLike
   attr_accessor :id, :user_id, :question_id
@@ -23,6 +25,22 @@ class QuestionLike
     SQL
     raise "No like with id: #{id}" if like.nil? || like.empty?
     QuestionLike.new(like.first)
+  end
+
+  def self.likers_by_question_id(question_id)
+    likers = QuestionsDBConnection.instance.execute(<<-SQL, question_id)
+      SELECT
+        users.*
+      FROM
+        users
+      JOIN
+        question_likes
+      ON
+        question_likes.user_id = users.id
+      WHERE
+        question_likes.question_id = ?;
+    SQL
+    likers.map { |liker| User.new(liker) }
   end
 
   def initialize(options)
