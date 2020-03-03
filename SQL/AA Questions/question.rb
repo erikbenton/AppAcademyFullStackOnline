@@ -7,7 +7,7 @@ require_relative 'question_like.rb'
 class Question
   attr_accessor :id, :title, :body, :author_id
   def self.all
-    questions = QuestionsDBConnection.instance.execute(<<-SQL)
+    questions = QuestionsDBConnection.execute(<<-SQL)
       SELECT
         *
       FROM
@@ -17,7 +17,7 @@ class Question
   end
 
   def self.find_by_id(id)
-    question = QuestionsDBConnection.instance.execute(<<-SQL, id)
+    question = QuestionsDBConnection.execute(<<-SQL, id)
       SELECT
         *
       FROM
@@ -30,7 +30,7 @@ class Question
   end
 
   def self.find_by_author_id(author_id)
-    questions = QuestionsDBConnection.instance.execute(<<-SQL, author_id)
+    questions = QuestionsDBConnection.execute(<<-SQL, author_id)
       SELECT
         *
       FROM
@@ -84,18 +84,18 @@ class Question
   private
 
   def insert
-    QuestionsDBConnection.instance.execute(<<-SQL, @title, @body, @author_id)
+    QuestionsDBConnection.execute(<<-SQL, @title, @body, @author_id)
       INSERT INTO
         questions (title, body, author_id)
       VALUES
         (?, ?, ?);
     SQL
-    @id = QuestionsDBConnection.instance.last_insert_row_id
+    @id = QuestionsDBConnection.last_insert_row_id
   end
 
   def update
     begin
-      QuestionsDBConnection.instance.execute(<<-SQL, @title, @body, @author_id, @id)
+      QuestionsDBConnection.execute(<<-SQL, @title, @body, @author_id, @id)
         UPDATE
           questions
         SET

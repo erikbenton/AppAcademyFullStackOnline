@@ -6,7 +6,7 @@ class Reply
   attr_accessor :id, :question_id, :parent_id, :author_id, :body
 
   def self.all
-    replies = QuestionsDBConnection.instance.execute(<<-SQL)
+    replies = QuestionsDBConnection.execute(<<-SQL)
       SELECT
         *
       FROM
@@ -16,7 +16,7 @@ class Reply
   end
 
   def self.find_by_id(id)
-    reply = QuestionsDBConnection.instance.execute(<<-SQL, id)
+    reply = QuestionsDBConnection.execute(<<-SQL, id)
       SELECT
         *
       FROM
@@ -29,7 +29,7 @@ class Reply
   end
 
   def self.find_by_question_id(question_id)
-    replies = QuestionsDBConnection.instance.execute(<<-SQL, question_id)
+    replies = QuestionsDBConnection.execute(<<-SQL, question_id)
       SELECT
         *
       FROM
@@ -42,7 +42,7 @@ class Reply
   end
 
   def self.find_by_author_id(author_id)
-    replies = QuestionsDBConnection.instance.execute(<<-SQL, author_id)
+    replies = QuestionsDBConnection.execute(<<-SQL, author_id)
       SELECT
         *
       FROM
@@ -76,7 +76,7 @@ class Reply
   end
 
   def child_replies
-    children = QuestionsDBConnection.instance.execute(<<-SQL, @id)
+    children = QuestionsDBConnection.execute(<<-SQL, @id)
       SELECT
         *
       FROM
@@ -94,18 +94,18 @@ class Reply
   private
 
   def insert
-    QuestionsDBConnection.instance.execute(<<-SQL, @question_id, @parent_id, @author_id, @body)
+    QuestionsDBConnection.execute(<<-SQL, @question_id, @parent_id, @author_id, @body)
       INSERT INTO
         replies (question_id, parent_id, author_id, body)
       VALUES
         (?, ?, ?, ?);
     SQL
-    @id = QuestionsDBConnection.instance.last_insert_row_id
+    @id = QuestionsDBConnection.last_insert_row_id
   end
 
   def update
     begin
-      QuestionsDBConnection.instance.execute(<<-SQL, @question_id, @parent_id, @author_id, @body, @id)
+      QuestionsDBConnection.execute(<<-SQL, @question_id, @parent_id, @author_id, @body, @id)
         UPDATE
           replies
         SET

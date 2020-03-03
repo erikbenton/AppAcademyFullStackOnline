@@ -19,7 +19,7 @@ class User
   end
 
   def self.find_by_id(id)
-    user = QuestionsDBConnection.instance.execute(<<-SQL, id)
+    user = QuestionsDBConnection.execute(<<-SQL, id)
       SELECT
         *
       FROM
@@ -68,7 +68,7 @@ class User
   end
 
   def average_karma
-    questions_and_likes = QuestionsDBConnection.instance.execute(<<-SQL, @id)
+    questions_and_likes = QuestionsDBConnection.execute(<<-SQL, @id)
       SELECT
         CAST(COUNT(question_likes.id) AS FLOAT)
           / CAST(COUNT(DISTINCT(questions.id)) AS FLOAT)
@@ -92,17 +92,17 @@ class User
   private
 
   def insert
-    QuestionsDBConnection.instance.execute(<<-SQL, @fname, @lname)
+    QuestionsDBConnection.execute(<<-SQL, @fname, @lname)
       INSERT INTO
         users (fname, lname)
       VALUES
         (?, ?);
     SQL
-    @id = QuestionsDBConnection.instance.last_insert_row_id
+    @id = QuestionsDBConnection.last_insert_row_id
   end
 
   def update
-    QuestionsDBConnection.instance.execute(<<-SQL, @fname, @lname, @id)
+    QuestionsDBConnection.execute(<<-SQL, @fname, @lname, @id)
       UPDATE
         users
       SET

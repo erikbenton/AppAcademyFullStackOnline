@@ -5,7 +5,7 @@ require_relative 'question.rb'
 class QuestionFollow
   attr_accessor :id, :question_id, :follower_id
   def self.all
-    follows = QuestionsDBConnection.instance.execute(<<-SQL)
+    follows = QuestionsDBConnection.execute(<<-SQL)
       SELECT
         *
       FROM
@@ -15,7 +15,7 @@ class QuestionFollow
   end
 
   def self.find_by_id(id)
-    follow = QuestionsDBConnection.instance.execute(<<-SQL, id)
+    follow = QuestionsDBConnection.execute(<<-SQL, id)
       SELECT
         *
       FROM
@@ -27,7 +27,7 @@ class QuestionFollow
   end
 
   def self.followers_for_question_id(question_id)
-    followers = QuestionsDBConnection.instance.execute(<<-SQL, question_id)
+    followers = QuestionsDBConnection.execute(<<-SQL, question_id)
       SELECT
         users.*
       FROM
@@ -43,7 +43,7 @@ class QuestionFollow
   end
 
   def self.followed_questions_for_user_id(user_id)
-    questions = QuestionsDBConnection.instance.execute(<<-SQL, user_id)
+    questions = QuestionsDBConnection.execute(<<-SQL, user_id)
       SELECT
         questions.*
       FROM
@@ -59,7 +59,7 @@ class QuestionFollow
   end
 
   def self.most_followed_questions(n)
-    most_followed = QuestionsDBConnection.instance.execute(<<-SQL, n)
+    most_followed = QuestionsDBConnection.execute(<<-SQL, n)
       SELECT
         questions.*
       FROM

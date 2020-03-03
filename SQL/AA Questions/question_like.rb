@@ -5,7 +5,7 @@ require_relative 'question.rb'
 class QuestionLike
   attr_accessor :id, :user_id, :question_id
   def self.all
-    likes = QuestionsDBConnection.instance.execute(<<-SQL)
+    likes = QuestionsDBConnection.execute(<<-SQL)
       SELECT
         *
       FROM
@@ -15,7 +15,7 @@ class QuestionLike
   end
 
   def self.find_by_id(id)
-    like = QuestionsDBConnection.instance.execute(<<-SQL, id)
+    like = QuestionsDBConnection.execute(<<-SQL, id)
       SELECT
         *
       FROM
@@ -28,7 +28,7 @@ class QuestionLike
   end
 
   def self.likers_by_question_id(question_id)
-    likers = QuestionsDBConnection.instance.execute(<<-SQL, question_id)
+    likers = QuestionsDBConnection.execute(<<-SQL, question_id)
       SELECT
         users.*
       FROM
@@ -44,7 +44,7 @@ class QuestionLike
   end
 
   def self.num_likes_for_question_id(question_id)
-    count = QuestionsDBConnection.instance.execute(<<-SQL, question_id)
+    count = QuestionsDBConnection.execute(<<-SQL, question_id)
       SELECT
         COUNT(users.id) AS 'num_likes'
       FROM
@@ -60,7 +60,7 @@ class QuestionLike
   end
 
   def self.liked_questions_for_user_id(user_id)
-    liked_questions = QuestionsDBConnection.instance.execute(<<-SQL, user_id)
+    liked_questions = QuestionsDBConnection.execute(<<-SQL, user_id)
       SELECT
         questions.*
       FROM
@@ -76,7 +76,7 @@ class QuestionLike
   end
 
   def self.most_liked_questions(n)
-    most_liked = QuestionsDBConnection.instance.execute(<<-SQL, n)
+    most_liked = QuestionsDBConnection.execute(<<-SQL, n)
       SELECT
         *
       FROM
