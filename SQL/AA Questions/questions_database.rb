@@ -18,5 +18,12 @@ class QuestionsDBConnection < SQLite3::Database
     self.instance.last_insert_row_id
   end
 
-  
+  def self.get_first_row(*args)
+    self.instance.get_first_row(*args)
+  end
+
+  def self.get_first_value(*args)
+    self.instance.get_first_value(*args)
+  end
+
 end

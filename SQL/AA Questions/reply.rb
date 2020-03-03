@@ -1,32 +1,10 @@
-require_relative "questions_database.rb"
+require_relative 'questions_database.rb'
+require_relative 'model_base'
 require_relative 'user.rb'
 require_relative 'question.rb'
 
-class Reply
+class Reply < ModelBase
   attr_accessor :id, :question_id, :parent_id, :author_id, :body
-
-  def self.all
-    replies = QuestionsDBConnection.execute(<<-SQL)
-      SELECT
-        *
-      FROM
-        replies;
-    SQL
-    replies.map { |reply| Reply.new(reply) }
-  end
-
-  def self.find_by_id(id)
-    reply = QuestionsDBConnection.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        replies
-      WHERE
-        replies.id = ?;
-    SQL
-    raise "No reply with id: #{id}" if reply.nil? || reply.empty?
-    Reply.new(reply.first)
-  end
 
   def self.find_by_question_id(question_id)
     replies = QuestionsDBConnection.execute(<<-SQL, question_id)

@@ -1,38 +1,16 @@
 require_relative 'questions_database.rb'
+require_relative 'model_base'
 require_relative 'question.rb'
 require_relative 'reply.rb'
 require_relative 'question_follow.rb'
 require_relative 'question_like.rb'
 require 'byebug'
 
-class User
+class User < ModelBase
   attr_accessor :id, :fname, :lname
 
-  def self.all
-    users = QuestionsDBConnection.instance.execute(<<-SQL)
-      SELECT
-        *
-      FROM
-        users;
-    SQL
-    users.map { |user| User.new(user) }
-  end
-
-  def self.find_by_id(id)
-    user = QuestionsDBConnection.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        users
-      WHERE
-        users.id = ?;
-    SQL
-    raise "No user with id: #{id}" if user.nil? || user.empty?
-    User.new(user.first)
-  end
-
   def self.find_by_name(fname, lname)
-    user = QuestionsDBConnection.instance.execute(<<-SQL, fname, lname)
+    user = QuestionsDBConnection.execute(<<-SQL, fname, lname)
       SELECT
         *
       FROM
@@ -85,13 +63,13 @@ class User
     questions_and_likes.first['avg_karma']
   end
 
-  def save
+  def save_1
     @id.nil? ? insert : update
   end
 
   private
 
-  def insert
+  def insert_1
     QuestionsDBConnection.execute(<<-SQL, @fname, @lname)
       INSERT INTO
         users (fname, lname)
@@ -101,7 +79,7 @@ class User
     @id = QuestionsDBConnection.last_insert_row_id
   end
 
-  def update
+  def update_1
     QuestionsDBConnection.execute(<<-SQL, @fname, @lname, @id)
       UPDATE
         users

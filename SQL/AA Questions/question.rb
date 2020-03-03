@@ -1,34 +1,13 @@
 require_relative 'questions_database.rb'
+require_relative 'model_base'
 require_relative 'user.rb'
 require_relative 'reply.rb'
 require_relative 'question_follow.rb'
 require_relative 'question_like.rb'
 
-class Question
+class Question < ModelBase
   attr_accessor :id, :title, :body, :author_id
-  def self.all
-    questions = QuestionsDBConnection.execute(<<-SQL)
-      SELECT
-        *
-      FROM
-        questions;
-    SQL
-    questions.map { |question| Question.new(question) }
-  end
-
-  def self.find_by_id(id)
-    question = QuestionsDBConnection.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        questions
-      WHERE
-        questions.id = ?;
-    SQL
-    raise "No question with id: #{id}" if question.nil? || question.empty?
-    Question.new(question.first)
-  end
-
+  
   def self.find_by_author_id(author_id)
     questions = QuestionsDBConnection.execute(<<-SQL, author_id)
       SELECT

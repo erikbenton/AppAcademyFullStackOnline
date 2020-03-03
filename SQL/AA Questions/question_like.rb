@@ -1,32 +1,11 @@
 require_relative "questions_database.rb"
+require_relative 'model_base'
 require_relative 'user.rb'
 require_relative 'question.rb'
 
-class QuestionLike
+class QuestionLike < ModelBase
   attr_accessor :id, :user_id, :question_id
-  def self.all
-    likes = QuestionsDBConnection.execute(<<-SQL)
-      SELECT
-        *
-      FROM
-        question_likes;
-    SQL
-    likes.map { |like| QuestionLike.new(like) }
-  end
-
-  def self.find_by_id(id)
-    like = QuestionsDBConnection.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        question_likes
-      WHERE
-        question_likes.id = ?;
-    SQL
-    raise "No like with id: #{id}" if like.nil? || like.empty?
-    QuestionLike.new(like.first)
-  end
-
+  
   def self.likers_by_question_id(question_id)
     likers = QuestionsDBConnection.execute(<<-SQL, question_id)
       SELECT

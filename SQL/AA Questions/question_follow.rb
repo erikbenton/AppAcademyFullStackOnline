@@ -1,30 +1,10 @@
 require_relative "questions_database.rb"
+require_relative 'model_base'
 require_relative 'user.rb'
 require_relative 'question.rb'
 
-class QuestionFollow
+class QuestionFollow < ModelBase
   attr_accessor :id, :question_id, :follower_id
-  def self.all
-    follows = QuestionsDBConnection.execute(<<-SQL)
-      SELECT
-        *
-      FROM
-        question_follows;
-    SQL
-    follows.map { |follow| QuestionFollow.new(follow) }
-  end
-
-  def self.find_by_id(id)
-    follow = QuestionsDBConnection.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        question_follows
-      WHERE
-        question_follows.id = ?;
-    SQL
-    QuestionFollow.new(follow.first)
-  end
 
   def self.followers_for_question_id(question_id)
     followers = QuestionsDBConnection.execute(<<-SQL, question_id)
