@@ -2,6 +2,7 @@ require_relative 'questions_database.rb'
 require_relative 'question.rb'
 require_relative 'reply.rb'
 require_relative 'question_follow.rb'
+require_relative 'question_like.rb'
 require 'byebug'
 
 class User
@@ -60,6 +61,10 @@ class User
 
   def followed_question
     QuestionFollow.followed_questions_for_user_id(@id)
+  end
+
+  def liked_questions
+    QuestionLike.liked_questions_for_user_id(@id)
   end
 
 end

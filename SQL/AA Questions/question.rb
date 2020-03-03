@@ -2,6 +2,7 @@ require_relative 'questions_database.rb'
 require_relative 'user.rb'
 require_relative 'reply.rb'
 require_relative 'question_follow.rb'
+require_relative 'question_like.rb'
 
 class Question
   
@@ -63,6 +64,14 @@ class Question
 
   def followers
     QuestionFollow.followers_for_question_id(@id)
+  end
+
+  def likers
+    QuestionLike.likers_by_question_id(@id)
+  end
+
+  def num_likers
+    QuestionLike.num_likes_for_question_id(@id)
   end
 
 end
