@@ -87,6 +87,41 @@ class Reply
     children.map { |child| Reply.new(child) }
   end
 
+  def save
+    @id.nil? ? insert : update
+  end
+
+  private
+
+  def insert
+    QuestionsDBConnection.instance.execute(<<-SQL, @question_id, @parent_id, @author_id, @body)
+      INSERT INTO
+        replies (question_id, parent_id, author_id, body)
+      VALUES
+        (?, ?, ?, ?);
+    SQL
+    @id = QuestionsDBConnection.instance.last_insert_row_id
+  end
+
+  def update
+    begin
+      QuestionsDBConnection.instance.execute(<<-SQL, @question_id, @parent_id, @author_id, @body, @id)
+        UPDATE
+          replies
+        SET
+          question_id = ?,
+          parent_id = ?,
+          author_id = ?,
+          body = ?
+        WHERE
+          replies.id = ?;
+      SQL
+    rescue => exception
+      return false
+    end
+    true
+  end
+
 end
 
 if __FILE__ == $PROGRAM_NAME

@@ -5,9 +5,8 @@ require_relative 'question_follow.rb'
 require_relative 'question_like.rb'
 
 class Question
-  
+  attr_accessor :id, :title, :body, :author_id
   def self.all
-    attr_accessor :id, :title, :body, :author_id
     questions = QuestionsDBConnection.instance.execute(<<-SQL)
       SELECT
         *
@@ -76,6 +75,40 @@ class Question
 
   def num_likers
     QuestionLike.num_likes_for_question_id(@id)
+  end
+
+  def save
+    @id.nil? ? insert : update
+  end
+
+  private
+
+  def insert
+    QuestionsDBConnection.instance.execute(<<-SQL, @title, @body, @author_id)
+      INSERT INTO
+        questions (title, body, author_id)
+      VALUES
+        (?, ?, ?);
+    SQL
+    @id = QuestionsDBConnection.instance.last_insert_row_id
+  end
+
+  def update
+    begin
+      QuestionsDBConnection.instance.execute(<<-SQL, @title, @body, @author_id, @id)
+        UPDATE
+          questions
+        SET
+          title = ?,
+          body = ?,
+          author_id = ?
+        WHERE
+          questions.id = ?;
+      SQL
+    rescue => exception
+      return false
+    end
+    true
   end
 
 end

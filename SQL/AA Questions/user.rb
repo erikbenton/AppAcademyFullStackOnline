@@ -85,6 +85,34 @@ class User
     questions_and_likes.first['avg_karma']
   end
 
+  def save
+    @id.nil? ? insert : update
+  end
+
+  private
+
+  def insert
+    QuestionsDBConnection.instance.execute(<<-SQL, @fname, @lname)
+      INSERT INTO
+        users (fname, lname)
+      VALUES
+        (?, ?);
+    SQL
+    @id = QuestionsDBConnection.instance.last_insert_row_id
+  end
+
+  def update
+    QuestionsDBConnection.instance.execute(<<-SQL, @fname, @lname, @id)
+      UPDATE
+        users
+      SET
+        fname = ?,
+        lname = ?
+      WHERE
+        users.id = ?;
+    SQL
+  end
+
 end
 
 if __FILE__ == $PROGRAM_NAME
