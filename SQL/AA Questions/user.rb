@@ -67,6 +67,24 @@ class User
     QuestionLike.liked_questions_for_user_id(@id)
   end
 
+  def average_karma
+    questions_and_likes = QuestionsDBConnection.instance.execute(<<-SQL, @id)
+      SELECT
+        CAST(COUNT(question_likes.id) AS FLOAT)
+          / CAST(COUNT(DISTINCT(questions.id)) AS FLOAT)
+        AS 'avg_karma'
+      FROM
+        questions
+      LEFT OUTER JOIN
+        question_likes
+      ON
+        questions.id = question_likes.question_id
+      WHERE
+        questions.author_id = ?;
+    SQL
+    questions_and_likes.first['avg_karma']
+  end
+
 end
 
 if __FILE__ == $PROGRAM_NAME
