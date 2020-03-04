@@ -58,7 +58,7 @@ class ModelBase
       VALUES
         (#{question_marks});
     SQL
-    id = QuestionsDBConnection.last_insert_row_id
+    @id = QuestionsDBConnection.last_insert_row_id
   end
 
   def update  

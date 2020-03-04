@@ -56,40 +56,6 @@ class Question < ModelBase
     QuestionLike.num_likes_for_question_id(@id)
   end
 
-  def save
-    @id.nil? ? insert : update
-  end
-
-  private
-
-  def insert
-    QuestionsDBConnection.execute(<<-SQL, @title, @body, @author_id)
-      INSERT INTO
-        questions (title, body, author_id)
-      VALUES
-        (?, ?, ?);
-    SQL
-    @id = QuestionsDBConnection.last_insert_row_id
-  end
-
-  def update
-    begin
-      QuestionsDBConnection.execute(<<-SQL, @title, @body, @author_id, @id)
-        UPDATE
-          questions
-        SET
-          title = ?,
-          body = ?,
-          author_id = ?
-        WHERE
-          questions.id = ?;
-      SQL
-    rescue => exception
-      return false
-    end
-    true
-  end
-
 end
 
 if __FILE__ == $PROGRAM_NAME
