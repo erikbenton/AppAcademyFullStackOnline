@@ -30,18 +30,40 @@ class ModelBase
     self.new(datum)
   end
 
+  def self.where(parameters)
+    where_line = where_parameters(parameters)
+    data = QuestionsDBConnection.execute(<<-SQL)
+      SELECT
+        *
+      FROM
+        #{table}
+      WHERE
+        #{where_line}
+    SQL
+    parse_data(data)
+  end
+
   def save
     @id.nil? ? insert : update
   end
 
+  private
+
+  def self.where_parameters(parameters)
+    where_line = []
+    parameters.each_pair do |k, v|
+      where_line << "#{k} = \'#{v}\'"
+    end
+    where_line = where_line.join(" AND ") + ";"
+    where_line
+  end
+  
   def attrs
     Hash[instance_variables.map do |var|
       [var[1..-1], instance_variable_get(var)]
     end]
   end
-
-  private
-
+  
   def self.parse_data(data)
     data.map { |datum| self.new(datum) }
   end
