@@ -30,8 +30,8 @@ class ModelBase
     self.new(datum)
   end
 
-  def self.where(parameters)
-    where_line = where_parameters(parameters)
+  def self.where(params)
+    where_line = params.is_a?(Hash) ? where_params(params) : params
     data = QuestionsDBConnection.execute(<<-SQL)
       SELECT
         *
@@ -43,15 +43,19 @@ class ModelBase
     parse_data(data)
   end
 
+  def self.find_by(params)
+    self.where(params)
+  end
+
   def save
     @id.nil? ? insert : update
   end
 
   private
 
-  def self.where_parameters(parameters)
+  def self.where_params(params)
     where_line = []
-    parameters.each_pair do |k, v|
+    params.each_pair do |k, v|
       where_line << "#{k} = \'#{v}\'"
     end
     where_line = where_line.join(" AND ") + ";"
