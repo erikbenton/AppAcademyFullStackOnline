@@ -1,3 +1,5 @@
 How to add debugger to VSCode
 https://stackoverflow.com/questions/51539711/how-to-debug-ruby-code-on-visual-studio-code
 
+Rails + Postgres fe_sendauth: no password supplied
+https://stackoverflow.com/questions/13690162/rails-postgres-fe-sendauth-no-password-supplied
