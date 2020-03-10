@@ -8,6 +8,10 @@ const madlib = function(verb, adjective, noun) {
 
 madlib('make', 'best', 'guac');
 
-const isSubString = function(searchString, subString) {
-  
+const isSubstring = function(searchString, subString) {
+  let words = searchString.split(" ");
+  return words.some(word => word === subString);
 };
+
+console.log(isSubstring("time to program", "time"));
+console.log(isSubstring("Jump for joy", "joys"));
