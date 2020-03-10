@@ -15,3 +15,12 @@ const isSubstring = function(searchString, subString) {
 
 console.log(isSubstring("time to program", "time"));
 console.log(isSubstring("Jump for joy", "joys"));
+
+const fizzBuzz = function(arr) {
+  let res = arr.filter(number => {
+    return (((number % 3 == 0) || (number % 5 ==0)) && !((number % 3 == 0) && (number % 5 == 0)));
+  })
+  return res;
+};
+
+console.log(fizzBuzz([1,3,5,10,15,21,30,42]));
