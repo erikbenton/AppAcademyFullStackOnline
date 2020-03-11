@@ -24,3 +24,7 @@ const fizzBuzz = function(arr) {
 };
 
 console.log(fizzBuzz([1,3,5,10,15,21,30,42]));
+
+class Elephant {
+
+};
