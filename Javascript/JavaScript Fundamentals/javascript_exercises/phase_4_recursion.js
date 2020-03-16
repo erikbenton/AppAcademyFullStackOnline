@@ -158,11 +158,10 @@ const mergesort = (arr) => {
       return arr;
     } else {
       let mid = Math.floor(arr.length / 2);
-      let left = arr.slice(0, mid);
-      let right = arr.slice(mid);
-      return merger(arr.slice(0, mid), arr.slice(mid))
+      let left = mergeHelp(arr.slice(0, mid));
+      let right = mergeHelp(arr.slice(mid));
+      return merger(left, right);
     }
-
   };
 
   const merger = (left, right) => {
