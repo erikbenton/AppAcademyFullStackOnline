@@ -25,6 +25,7 @@ const fizzBuzz = function(arr) {
 
 console.log(fizzBuzz([1,3,5,10,15,21,30,42]));
 
+<<<<<<< HEAD
 const isPrime = (number) => {
   let i = 2;
   while (i < number) {
@@ -58,3 +59,8 @@ const sumOfNPrimes = (n) => {
 console.log(sumOfNPrimes(0));
 console.log(sumOfNPrimes(1));
 console.log(sumOfNPrimes(4));
+=======
+class Elephant {
+
+};
+>>>>>>> 9ca109e13baac3725dc5012c5ed7fb9e33da868e
