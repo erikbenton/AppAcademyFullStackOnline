@@ -5,8 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>PSEUDO CONTENT</title>
+  <style>
+    h1 {
+      background: yellow;
+    }
+
+    h1:before {
+      content: "☂ ☂ ";
+      background: green;
+      display: block;
+
+      width: 100px;
+      height: 100px;
+    }
+
+    a:after {
+      content: " -> " attr(href);
+    }
+
+  </style>
 </head>
 <body>
-  
+
+  <a href="https://www.Google.com">Google</a>
+
+  <h1>Cats</h1>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, quidem. Incidunt, tempore mollitia expedita quo deserunt vero cum saepe est ex non, aperiam blanditiis. Dolores nobis incidunt minima commodi excepturi.</p>
+
+  <h1>Clouds</h1>
+  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis blanditiis vel sed consequuntur id? Nulla quasi culpa magni laudantium voluptates debitis quam, corrupti dolore. Tenetur libero harum quasi quidem facilis.</p>
+
+  <h1>Lasers</h1>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam libero commodi labore harum, beatae, nostrum tenetur ea earum ab aut repellendus laborum explicabo modi, dolore temporibus saepe ex. Earum, at!</p>
+
 </body>
 </html>
