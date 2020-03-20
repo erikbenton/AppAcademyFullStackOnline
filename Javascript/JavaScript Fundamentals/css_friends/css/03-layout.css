@@ -1,1 +1,16 @@
 /* PHASE 3: Layout */
+.content-sidebar, .content-main {
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  min-height: 200px;
+  padding: 20px;
+  border: gray 1px solid;
+}
+.content-sidebar {
+  background: blue;
+}
+
+.content-main {
+  background: chocolate;
+}
