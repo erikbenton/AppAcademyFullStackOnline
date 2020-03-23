@@ -3,3 +3,6 @@ https://stackoverflow.com/questions/51539711/how-to-debug-ruby-code-on-visual-st
 
 Rails + Postgres fe_sendauth: no password supplied
 https://stackoverflow.com/questions/13690162/rails-postgres-fe-sendauth-no-password-supplied
+
+Mocha Tests say that '.' is not an internal or external command
+https://stackoverflow.com/questions/47805077/why-does-running-npm-test-result-in-is-not-recognized-as-an-internal-or-ext
