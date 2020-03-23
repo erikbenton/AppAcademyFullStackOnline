@@ -1,4 +1,8 @@
 /* PHASE 3: Layout */
+.content {
+  display: justify-content;
+}
+
 .content-sidebar, .content-main {
   display: inline-block;
   width: 200px;
