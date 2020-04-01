@@ -28,22 +28,46 @@ class Board {
    * throwing an Error if the position is invalid.
    */
   getPiece(pos) {
+    let x = pos[0];
+    let y = pos[1];
+    return this.grid[x][y];
   }
   /**
    * Checks if there are any valid moves for the given color.
    */
   hasMove(color) {
+    let moves = this.validMoves(color);
+    return moves.length > 0;
+    // let res = true;
+    // for(let row = 0; row < this.grid.length; row++) {
+    //   for(let col = 0; col < this.grid[row].length; col++) {
+    //     let pos = [row, col];
+    //     if ( isMine(pos, color) ) {
+    //       let spot = this.getPiece(pos);
+    //       DIRS.forEach(element => {
+            
+    //       });
+    //     }
+    //   }
+    // }
   }
   /**
    * Checks if the piece at a given position
    * matches a given color.
    */
   isMine(pos, color) {
+    let spot = this.getPiece(pos);
+    if (spot) {
+      return spot.color === color;
+    }
+    return false;
   }
   /**
    * Checks if a given position has a piece on it.
    */
   isOccupied(pos) {
+    let spot = this.getPiece(pos);
+    return spot instanceof Piece;
   }
   /**
    * Checks if both the white player and
@@ -55,6 +79,13 @@ class Board {
    * Checks if a given position is on the Board.
    */
   isValidPos(pos) {
+    try {
+      let x = pos[0];
+      let y = pos[1];
+      return ( (x > -1 && x < 8) && (y > -1 && y < 8) );
+    } catch (error) {
+      
+    }
   }
   /**
    * Adds a new piece of the given color to the given position, flipping the
@@ -81,6 +112,46 @@ class Board {
    * the Board for a given color.
    */
   validMoves(color) {
+    let moves = [];
+    for(let row = 0; row < this.grid.length; row++) {
+      for(let col = 0; col < this.grid[row].length; col++) {
+        let pos = [row, col];
+        if ( this.isMine(pos, color) ) {
+          let spot = this.getPiece(pos);
+          Board.DIRS.forEach(move => {
+            let new_pos = [row + move[0], col + move[1]];
+            try {
+              if (this.isValidPos(new_pos)) {
+                if ( !this.isMine(new_pos, color) ) {
+                  // Now we have finally found a piece on the board of 'color'
+                  // with an adjacent piece of the opposite color
+                  try {
+                    let opp_pos = new_pos;
+                    while (this.isValidPos(opp_pos) && !this.isMine(opp_pos, color)) {
+                      opp_pos[0] = opp_pos[0] + move[0];
+                      opp_pos[1] = opp_pos[1] + move[1];
+                      let opp_piece = this.getPiece(opp_pos);
+                      if (!(opp_piece instanceof Piece)) {
+                        moves.push(opp_pos);
+                        opp_pos = [-1, -1];
+                      }
+                      if (this.isMine(opp_pos, color)){
+                        opp_pos = [-1, -1];
+                      }
+                    }
+                  } catch (error) {
+
+                  }
+                }
+              }
+            } catch (error) {
+              
+            }
+          });
+        }
+      }
+    }
+    return moves;
   }
 }
 
@@ -117,3 +188,6 @@ function _positionsToFlip (board, pos, color, dir, piecesToFlip) {
 
 
 module.exports = Board;
+
+let test_board = new Board();
+test_board.validMoves("white");
