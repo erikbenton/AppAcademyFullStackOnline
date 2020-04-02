@@ -122,7 +122,7 @@ class Board {
             let new_pos = [row + move[0], col + move[1]];
             try {
               if (this.isValidPos(new_pos)) {
-                if ( !this.isMine(new_pos, color) ) {
+                if ( !this.isMine(new_pos, color) && (this.getPiece(new_pos) instanceof Piece)) {
                   // Now we have finally found a piece on the board of 'color'
                   // with an adjacent piece of the opposite color
                   try {
@@ -189,5 +189,24 @@ function _positionsToFlip (board, pos, color, dir, piecesToFlip) {
 
 module.exports = Board;
 
-let test_board = new Board();
-test_board.validMoves("white");
+// let test_board = new Board();
+// let the_moves = test_board.validMoves("black");
+// // console.log(the_moves[3] == [2,3]);
+// // console.log(the_moves.includes([2,3]));
+
+
+
+// the_moves.forEach(function(move, index) {
+//   let validPositions = [
+//     [5, 4],
+//     [3, 2],
+//     [4, 5],
+//     [2, 3]
+//   ];
+//   let validPosition = validPositions[index];
+//   console.log(`Actual: ${move}`);
+//   console.log(` Valid: ${validPosition}`);
+//   console.log(`${move[0] == validPosition[0]} and ${move[1] == validPosition[1]}`);
+//   // assert.equal(actualPosition[0], validPosition[0]);
+//   // assert.equal(actualPosition[1], validPosition[1]);
+// });

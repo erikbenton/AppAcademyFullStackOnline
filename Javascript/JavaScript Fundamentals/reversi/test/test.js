@@ -203,10 +203,10 @@ describe("Board", function () {
 
     it('should return an array of valid moves when some are left', function() {
       const validPositions = [
-        [2, 3],
+        [5, 4],
         [3, 2],
         [4, 5],
-        [5, 4]
+        [2, 3]
       ];
       const actualPositions = testBoard.validMoves('black');
 
