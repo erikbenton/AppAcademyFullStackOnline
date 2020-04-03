@@ -95,6 +95,15 @@ class Board {
    * color being flipped.
    */
   validMove(pos, color) {
+    let moves = this.validMoves(color);
+    let res = false;
+
+    moves.forEach(function(move, index) {
+      if ( (move[0] == pos[0]) && (move[1] == pos[1]) ) {
+        res = true;
+      }
+    })
+    return res;
   }
   /**
    * Produces an array of all valid positions on
