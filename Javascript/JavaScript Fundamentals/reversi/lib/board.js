@@ -38,18 +38,6 @@ class Board {
   hasMove(color) {
     let moves = this.validMoves(color);
     return moves.length > 0;
-    // let res = true;
-    // for(let row = 0; row < this.grid.length; row++) {
-    //   for(let col = 0; col < this.grid[row].length; col++) {
-    //     let pos = [row, col];
-    //     if ( isMine(pos, color) ) {
-    //       let spot = this.getPiece(pos);
-    //       DIRS.forEach(element => {
-            
-    //       });
-    //     }
-    //   }
-    // }
   }
   /**
    * Checks if the piece at a given position
@@ -74,6 +62,7 @@ class Board {
    * the black player are out of moves.
    */
   isOver() {
+    return !( this.hasMove('white') || this.hasMove('black') );
   }
   /**
    * Checks if a given position is on the Board.
