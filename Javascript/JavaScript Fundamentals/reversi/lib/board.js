@@ -54,8 +54,8 @@ class Board {
    * Checks if a given position has a piece on it.
    */
   isOccupied(pos) {
-    let spot = this.getPiece(pos);
-    return spot instanceof Piece;
+    let spot = (this.getPiece(pos) instanceof Piece);
+    return spot;
   }
   /**
    * Checks if both the white player and
@@ -83,6 +83,22 @@ class Board {
    * Throws an error if the position represents an invalid move.
    */
   placePiece(pos, color) {
+    if( !this.validMove(pos, color) || this.isOccupied(pos) ) {
+      throw new Error("Invalid Move");
+    }
+    this.grid[pos[0]][pos[1]] = new Piece(color);
+    Board.DIRS.forEach(dir => {
+      let flipPositions = [];
+      flipPositions = _positionsToFlip(this, pos, color, dir, flipPositions);
+      if(flipPositions instanceof Array && flipPositions.length > 0) {
+        flipPositions.forEach(flipPos => {
+          let flipPiece = this.getPiece(flipPos);
+          if( flipPiece instanceof Piece) {
+            flipPiece.flip();
+          }
+        });
+      }
+    });
   }
   /**
    * Prints a string representation of the Board to the console.
@@ -98,7 +114,7 @@ class Board {
     let moves = this.validMoves(color);
     let res = false;
 
-    moves.forEach(function(move, index) {
+    moves.forEach(function(move) {
       if ( (move[0] == pos[0]) && (move[1] == pos[1]) ) {
         res = true;
       }
@@ -115,7 +131,6 @@ class Board {
       for(let col = 0; col < this.grid[row].length; col++) {
         let pos = [row, col];
         if ( this.isMine(pos, color) ) {
-          let spot = this.getPiece(pos);
           Board.DIRS.forEach(move => {
             let new_pos = [row + move[0], col + move[1]];
             try {
@@ -137,14 +152,10 @@ class Board {
                         opp_pos = [-1, -1];
                       }
                     }
-                  } catch (error) {
-
-                  }
+                  } catch (error) { }
                 }
               }
-            } catch (error) {
-              
-            }
+            } catch (error) { }
           });
         }
       }
@@ -179,6 +190,24 @@ Board.DIRS = [
  * Returns null if no pieces of the opposite color are found.
  */
 function _positionsToFlip (board, pos, color, dir, piecesToFlip) {
+  let new_pos = [pos[0] + dir[0], pos[1] + dir[1]];
+  
+  // If it's the opposite color
+  if( board.isMine(new_pos, _oppColor(color)) ) {
+    piecesToFlip.push(new_pos);
+    return _positionsToFlip(board, new_pos, color, dir, piecesToFlip);
+  }
+  
+  // If it's the same color
+  if( board.isMine(new_pos, color) ) {
+    return piecesToFlip;
+  }
+
+  return null;
+}
+
+function _oppColor(color) {
+  return (color == "black" ? "white" : "black");
 }
 
 
@@ -208,3 +237,4 @@ module.exports = Board;
 //   // assert.equal(actualPosition[0], validPosition[0]);
 //   // assert.equal(actualPosition[1], validPosition[1]);
 // });
+// test_board.placePiece([4,4], 'black');
