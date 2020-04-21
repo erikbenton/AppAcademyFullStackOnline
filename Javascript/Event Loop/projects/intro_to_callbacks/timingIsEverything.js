@@ -44,4 +44,4 @@ class Clock {
   }
 }
 
-const clock = new Clock();
+// const clock = new Clock();
