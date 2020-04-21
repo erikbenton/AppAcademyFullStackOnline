@@ -10,7 +10,7 @@ Function.prototype.myThrottle = function(interval) {
       this();
     }
   }
-}
+};
 
 class Neuron {
   fire() {
