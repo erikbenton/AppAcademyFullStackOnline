@@ -18,8 +18,14 @@ class Game {
       // Move the discs
   }
 
-  prompMove() {
-
+  prompMove(callback) {
+    reader.question("What are your 'From' and 'To' towers? [eg 1 3]\n", function(answer) {
+      if(callback(answer)) {
+        console.log("yay!")
+      } else {
+        console.log("Awww =(");
+      }
+    })
   }
 
   printStacks() {
@@ -45,6 +51,26 @@ class Game {
 
   }
 
+  isValidMove(input) {
+    if( !(typeof input === 'string' || input instanceof String) ) {
+      return false;
+    }
+    let inputArr = input.split(" ");
+
+    if(inputArr.length != 2) {
+      return false;
+    }
+
+    inputArr.forEach(pos => {
+      if( !(pos instanceof Number) && pos > 2 && pos < 0) {
+        return false;
+      }
+    })
+
+    return true;
+
+  }
+
   _isValidMove(from, to) {
 
   }
@@ -58,3 +84,4 @@ class Game {
 let game = new Game();
 
 game.printStacks();
+game.prompMove(game.isValidMove);
