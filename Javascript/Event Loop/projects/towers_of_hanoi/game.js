@@ -45,8 +45,8 @@ class Game {
   
   move() {
     return (input) => {
-      if(this.isValidMove(input)) {
-        let moves = input.split(" ");
+      let moves = this.isValidMove(input)
+      if(moves) {
         console.log("yay");
       } else {
         console.log("Not a valid move");
@@ -65,18 +65,36 @@ class Game {
       return false;
     }
 
-    for(let i = 0; i < inputArr.length; i++) {
-      let pos = parseInt(inputArr[i]);
-      if( pos > 2 || pos < 0 || isNaN(pos)) {
+    let pos1 = parseInt(inputArr[0]) - 1;
+    let pos2 = parseInt(inputArr[1]) - 1;
+    let val1, val2, i;
+    
+    if( (pos1 > 2 || pos1 < 0 || isNaN(pos1))
+       || (this.towers[pos1][0] == 0)) {
+      return false;
+    } else {
+      i = 2;
+      val1 = this.towers[pos1][i];
+      while(this.towers[pos1][i] == 0 && i >= 0) {
+        val1 = this.towers[pos1][i];
+        i--;
+      }
+    }
+    if( pos2 > 2 || pos2 < 0 || isNaN(pos2)) {
+      return false;
+    } else {
+      i = 2;
+      val2 = this.towers[pos2][i];
+      while(this.towers[pos2][i] == 0 && i >= 0) {
+        val2 = this.towers[pos2][i];
+        i--;
+      }
+      if( (val1 > val2) && val2 != 0) {
         return false;
       }
     }
 
-    return true;
-  }
-
-  _isValidMove(from, to) {
-
+    return [pos1, pos2, val1, val2];
   }
 
   _isOver() {
