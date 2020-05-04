@@ -192,5 +192,19 @@ const mergesort = (arr) => {
 console.log(mergesort([3,4,2,5,1,3,7]));
 
 const subsets = (arr) => {
+<<<<<<< HEAD
 
 };
+=======
+  if (arr.length == 0) {
+    return [[]];
+  }
+  let previousSet = subsets(arr.slice(1));
+  let newSets = previousSet.map(set => {
+    return [arr[0]].concat(set);
+  })
+  return previousSet.concat(newSets);
+}
+
+console.log(subsets([1,2,3,4]));
+>>>>>>> 085fe02553347b38e83188ce72581469377b45f0
