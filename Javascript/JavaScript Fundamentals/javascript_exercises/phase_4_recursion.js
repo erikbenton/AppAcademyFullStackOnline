@@ -190,3 +190,7 @@ const mergesort = (arr) => {
 };
 
 console.log(mergesort([3,4,2,5,1,3,7]));
+
+const subsets = (arr) => {
+
+};

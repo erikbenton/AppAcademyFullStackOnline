@@ -14,11 +14,11 @@
       "runtimeExecutable": "C:/Program Files/nodejs/node"
     },
     {
-        "name": "Launch index.html",
-        "type": "chrome",
-        "request": "launch",
-        "file": "${workspaceFolder}/index.html",
-        "runtimeExecutable": "C:/Program Files/nodejs/node"
+      "name": "Launch index.html",
+      "type": "chrome",
+      "request": "launch",
+      "file": "${workspaceFolder}/index.html",
+      "runtimeExecutable": "C:/Program Files/nodejs/node"
     },
     {
       "name": "Ruby Debug",
