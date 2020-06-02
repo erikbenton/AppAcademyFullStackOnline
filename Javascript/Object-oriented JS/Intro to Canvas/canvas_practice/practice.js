@@ -6,4 +6,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
   ctx.fillRect(0, 0, 500, 500);
 
+  ctx.beginPath();
+  ctx.arc(250, 250, 100, 0, 2 * Math.PI);
+  ctx.strokeStyle = 'blue';
+  ctx.lineWidth = 10;
+  ctx.stroke();
+
 });
