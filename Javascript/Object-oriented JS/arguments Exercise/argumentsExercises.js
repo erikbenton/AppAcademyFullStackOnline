@@ -99,6 +99,19 @@ Function.prototype.curry = function(numArgs) {
   return _curry;
 };
 
+Function.prototype.curry2 = function(numArgs) {
+  let callee = this;
+  let allArgs = [];
+  let _curry2 = function() {
+    allArgs = allArgs.concat(Array.from(arguments));
+    if(allArgs.length >= numArgs) {
+      return callee.apply(null, allArgs.splice(0, numArgs));
+    }
+    return _curry2;
+  }
+  return _curry2;
+};
+
 function sum3(x, y, z) {
   return x + y + z;
 }
@@ -106,3 +119,7 @@ function sum3(x, y, z) {
 let sumThree = sum3.curry(3);
 sumThree = sumThree(1,2);
 console.log(sumThree(3,4));
+
+sumThree = sum3.curry2(3);
+sumThree = sumThree(5,6);
+console.log(sumThree(7,8));
