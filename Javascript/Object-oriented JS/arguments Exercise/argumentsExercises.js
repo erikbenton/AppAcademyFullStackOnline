@@ -85,3 +85,24 @@ const curriedSum = function(numArgs) {
 
 const sumCurry = curriedSum(4);
 console.log(sumCurry(5)(30)(20)(1)); // => 56
+
+Function.prototype.curry = function(numArgs) {
+  let callee = this;
+  let allArgs = [];
+  let _curry = function() {
+    allArgs = allArgs.concat(Array.from(arguments));
+    if(allArgs.length >= numArgs) {
+      return callee(...allArgs.splice(0, numArgs));
+    }
+    return _curry;
+  }
+  return _curry;
+};
+
+function sum3(x, y, z) {
+  return x + y + z;
+}
+
+let sumThree = sum3.curry(3);
+sumThree = sumThree(1,2);
+console.log(sumThree(3,4));
