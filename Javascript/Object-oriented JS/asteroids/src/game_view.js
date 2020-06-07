@@ -27,10 +27,7 @@ GameView.prototype.start = function() {
 
 GameView.prototype.draw = function() {
   this.ctx.clearRect(0, 0, this.game.xDim, this.game.yDim);
-  this.game.asteroids.forEach(asteroid => {
-    asteroid.move();
-    asteroid.draw(this.ctx);
-  });
+  this.game.moveObjects(this.ctx);
 };
 
 module.exports = GameView;

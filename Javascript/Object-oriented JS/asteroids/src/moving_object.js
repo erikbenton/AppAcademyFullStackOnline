@@ -5,11 +5,12 @@
  * @param {Object} optObj - options for moving object.
  */
 
-function MovingObject(optObj) {
+function MovingObject(optObj, game) {
   this.pos = optObj["pos"];
   this.vel = optObj["vel"];
   this.radius = optObj["radius"];
   this.color = optObj["color"];
+  this.game = game;
 }
 
 MovingObject.prototype.speak = function() {
@@ -35,6 +36,7 @@ MovingObject.prototype.draw = function(ctx) {
 MovingObject.prototype.move = function() {
   this.pos[0] += this.vel[0];
   this.pos[1] += this.vel[1];
+  this.pos = this.game.wrap(this.pos);
 }
 
 module.exports = MovingObject;

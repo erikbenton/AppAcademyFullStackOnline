@@ -14,15 +14,28 @@ function Game(xDim, yDim) {
 
 Game.prototype.addAsteroids = function(numAsteroids) {
   for(let i = 0; i < numAsteroids; i++) {
-    let newAsteroid = new Asteroid({ pos: Utils.randomPos(this.xDim, this.yDim)})
+    let newAsteroid = new Asteroid({ pos: Utils.randomPos(this.xDim, this.yDim)}, this);
     this.asteroids.push(newAsteroid);
   }
 };
 
 Game.prototype.moveObjects = function(ctx) {
   this.asteroids.forEach(asteroid => {
+    asteroid.move();
     asteroid.draw(ctx);
   });
+};
+
+Game.prototype.wrap = function(pos) {
+  pos[0] %= this.xDim;
+  pos[1] %= this.yDim;
+  if(pos[0] < 0) {
+    pos[0] =  this.xDim - pos[0];
+  }
+  if(pos[1] < 0) {
+    pos[1] =  this.yDim - pos[1];
+  }
+  return pos;
 }
 
 module.exports = Game;

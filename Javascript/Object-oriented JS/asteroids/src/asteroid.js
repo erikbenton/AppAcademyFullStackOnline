@@ -10,11 +10,11 @@ const RADIUS = 20;
  * @constructor
  * @param {Object} optObj - options for moving object.
  */
-function Asteroid(optObj) {
+function Asteroid(optObj, game) {
   optObj["vel"] = Utils.randomVec(1);
   optObj["radius"] = RADIUS;
   optObj["color"] = COLOR;
-  MovingObject.call(this, optObj);
+  MovingObject.call(this, optObj, game);
 }
 
 Utils.inherits(Asteroid, MovingObject);
