@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src/moving_object.js\");\r\nconst Utils = __webpack_require__(/*! ./utils.js */ \"./src/utils.js\");\r\nwindow.MovingObject = MovingObject;\r\n\r\n/**\r\n * Asteroid class.\r\n *\r\n * @constructor\r\n * @param {Object} optObj - options for moving object.\r\n */\r\n\r\nconst COLOR = \"#111111\";\r\nconst RADIUS = 20;\r\n\r\nfunction Asteroid(optObj) {\r\n  optObj[\"vel\"] = Utils.randomVec(1);\r\n  optObj[\"radius\"] = RADIUS;\r\n  optObj[\"color\"] = COLOR;\r\n  MovingObject.call(this, optObj);\r\n}\r\n\r\nUtils.inherits(Asteroid, MovingObject);\r\n\r\nmodule.exports = Asteroid;\n\n//# sourceURL=webpack:///./src/asteroid.js?");
+eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src/moving_object.js\");\r\nconst Utils = __webpack_require__(/*! ./utils.js */ \"./src/utils.js\");\r\n\r\nconst COLOR = \"#555555\";\r\nconst RADIUS = 20;\r\n\r\n/**\r\n * Asteroid class.\r\n *\r\n * @constructor\r\n * @param {Object} optObj - options for moving object.\r\n */\r\nfunction Asteroid(optObj) {\r\n  optObj[\"vel\"] = Utils.randomVec(1);\r\n  optObj[\"radius\"] = RADIUS;\r\n  optObj[\"color\"] = COLOR;\r\n  MovingObject.call(this, optObj);\r\n}\r\n\r\nUtils.inherits(Asteroid, MovingObject);\r\n\r\nmodule.exports = Asteroid;\n\n//# sourceURL=webpack:///./src/asteroid.js?");
 
 /***/ }),
 
@@ -126,7 +126,7 @@ eval("/**\r\n * Movign Object class.\r\n *\r\n * @constructor\r\n * @param {Obje
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("const Utils = {\r\n  // Inherit the parent class\r\n  inherits(childClass, parentClass) {\r\n    let Surrogate = function(){};\r\n    Surrogate.prototype = parentClass.prototype;\r\n    childClass.prototype = new Surrogate();\r\n    childClass.prototype.constructor = childClass;\r\n  },\r\n  // Get a random vector\r\n  randomVec(length) {\r\n    const deg = 2 * Math.PI * Math.random();\r\n    return Utils.scale([Math.sin(deg), Math.cos(deg)], length);\r\n  },\r\n  // Scale the length of a vector by the given amount.\r\n  scale(vec, m) {\r\n    return [vec[0] * m, vec[1] * m];\r\n  }\r\n};\r\n\r\nmodule.exports = Utils;\n\n//# sourceURL=webpack:///./src/utils.js?");
+eval("const Utils = {\r\n  /**\r\n   * Sets up the inheritance prototype chain.\r\n   * @param {Object} childClass - Child class that inherits from parentClass.\r\n   * @param {Object} parentClass - Parent class that childClass inherits from.\r\n   */\r\n  inherits(childClass, parentClass) {\r\n    let Surrogate = function(){};\r\n    Surrogate.prototype = parentClass.prototype;\r\n    childClass.prototype = new Surrogate();\r\n    childClass.prototype.constructor = childClass;\r\n  },\r\n  /**\r\n   * Gets a random 2d vector\r\n   * @param {Number} length - length/norm of the vector.\r\n   */\r\n  randomVec(length) {\r\n    const deg = 2 * Math.PI * Math.random();\r\n    return Utils.scale([Math.sin(deg), Math.cos(deg)], length);\r\n  },\r\n  /**\r\n   * Scales a 2d vector\r\n   * @param {Array} vec - 2D vector to be scaled.\r\n   * @param {Number} m - length to scale the 2d vector by.\r\n   */\r\n  scale(vec, m) {\r\n    return [vec[0] * m, vec[1] * m];\r\n  }\r\n};\r\n\r\nmodule.exports = Utils;\n\n//# sourceURL=webpack:///./src/utils.js?");
 
 /***/ })
 
