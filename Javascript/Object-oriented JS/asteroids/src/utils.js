@@ -33,6 +33,14 @@ const Utils = {
    */
   scale(vec, m) {
     return [vec[0] * m, vec[1] * m];
+  },
+  /**
+   * Gets the distance between two points
+   * @param {Array} pos1 - 2D vector [x1, y1].
+   * @param {Array} pos2 - 2D vector [x2, y2].
+   */
+  distance(pos1, pos2) {
+    return Math.sqrt((pos1[0] - pos2[0])**2 + (pos1[1] - pos2[1])**2);
   }
 };
 

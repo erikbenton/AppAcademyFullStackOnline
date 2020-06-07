@@ -1,5 +1,7 @@
+const Utils = require("./utils.js");
+
 /**
- * Movign Object class.
+ * Moving Object class.
  *
  * @constructor
  * @param {Object} optObj - options for moving object.
@@ -38,5 +40,13 @@ MovingObject.prototype.move = function() {
   this.pos[1] += this.vel[1];
   this.pos = this.game.wrap(this.pos);
 }
+
+MovingObject.prototype.isCollidedWith = function(otherObject) {
+  // Calculate distance between 2 objects
+  let dist = Utils.distance(this.pos, otherObject.pos);
+
+  // See if it's < the sum of their radii
+  return dist < (this.radius + otherObject.radius);
+};
 
 module.exports = MovingObject;

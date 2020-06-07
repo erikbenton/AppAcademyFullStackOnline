@@ -7,8 +7,6 @@ function GameView(ctx) {
 };
 
 GameView.prototype.start = function() {
-  
-  this.game.moveObjects(this.ctx);
 
   //this function will update the position of all the moving objects,
   //clear the canvas, and redraw them
@@ -27,7 +25,7 @@ GameView.prototype.start = function() {
 
 GameView.prototype.draw = function() {
   this.ctx.clearRect(0, 0, this.game.xDim, this.game.yDim);
-  this.game.moveObjects(this.ctx);
+  this.game.step(this.ctx);
 };
 
 module.exports = GameView;

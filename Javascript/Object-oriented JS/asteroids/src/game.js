@@ -38,4 +38,28 @@ Game.prototype.wrap = function(pos) {
   return pos;
 }
 
+Game.prototype.checkCollisions = function() {
+  let asteroidsToRemove = [];
+  for(let i = 0; i < this.asteroids.length; i++) {
+    for(let j = i+1; j < this.asteroids.length; j++) {
+      if(this.asteroids[i].isCollidedWith(this.asteroids[j])) {
+        asteroidsToRemove.push(this.asteroids[i], this.asteroids[j]);
+      }
+    }
+  }
+  asteroidsToRemove.forEach(asteroid => this.remove(asteroid));
+};
+
+Game.prototype.step = function(ctx) {
+  this.moveObjects(ctx)
+  this.checkCollisions();
+};
+
+Game.prototype.remove = function(asteroid) {
+  let index = this.asteroids.indexOf(asteroid);
+  if (index > -1) {
+    this.asteroids.splice(index, 1);
+  }
+};
+
 module.exports = Game;
