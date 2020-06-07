@@ -11,7 +11,7 @@ GameView.prototype.start = function() {
   //this function will update the position of all the moving objects,
   //clear the canvas, and redraw them
   var animateCallback = function(){
-    this.draw(this.ctx);
+    this.game.draw(this.ctx);
     requestAnimationFrame(animateCallback);
 
     //if we didn't know about requestAnimationFrame, we could use setTimeout
@@ -21,11 +21,6 @@ GameView.prototype.start = function() {
   //this will cause the first render and start the endless triggering of
   //the function using requestAnimationFrame
   animateCallback();
-};
-
-GameView.prototype.draw = function() {
-  this.ctx.clearRect(0, 0, this.game.xDim, this.game.yDim);
-  this.game.step(this.ctx);
 };
 
 module.exports = GameView;

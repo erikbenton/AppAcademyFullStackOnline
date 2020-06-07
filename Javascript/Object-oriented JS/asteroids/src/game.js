@@ -1,4 +1,5 @@
 const Asteroid = require("./asteroid.js");
+const Ship = require("./ship.js");
 const Utils = require("./utils.js");
 
 const DIM_X = 500;
@@ -9,6 +10,7 @@ function Game(xDim, yDim) {
   this.xDim = DIM_X;
   this.yDim = DIM_Y;
   this.asteroids = [];
+  this.ship = new Ship({pos: Utils.randomPos(this.xDim, this.yDim)}, this);
   this.addAsteroids(NUM_ASTEROIDS);
 };
 
@@ -20,9 +22,9 @@ Game.prototype.addAsteroids = function(numAsteroids) {
 };
 
 Game.prototype.moveObjects = function(ctx) {
-  this.asteroids.forEach(asteroid => {
-    asteroid.move();
-    asteroid.draw(ctx);
+  this.allObjects().forEach(object => {
+    object.move();
+    object.draw(ctx);
   });
 };
 
@@ -39,20 +41,27 @@ Game.prototype.wrap = function(pos) {
 }
 
 Game.prototype.checkCollisions = function() {
-  let asteroidsToRemove = [];
-  for(let i = 0; i < this.asteroids.length; i++) {
-    for(let j = i+1; j < this.asteroids.length; j++) {
-      if(this.asteroids[i].isCollidedWith(this.asteroids[j])) {
-        asteroidsToRemove.push(this.asteroids[i], this.asteroids[j]);
+  let objects = this.allObjects();
+  let objectsToRemove = [];
+  for(let i = 0; i < objects.length; i++) {
+    for(let j = i+1; j < objects.length; j++) {
+      if(objects[i].isCollidedWith(objects[j])) {
+        objectsToRemove.push(objects[i].collideWith(objects[j]));
+        // objectsToRemove.push(objects[j].collideWith(objects[i]));
       }
     }
   }
-  asteroidsToRemove.forEach(asteroid => this.remove(asteroid));
+  objectsToRemove.forEach(object => this.remove(object));
 };
 
 Game.prototype.step = function(ctx) {
   this.moveObjects(ctx)
   this.checkCollisions();
+};
+
+Game.prototype.draw = function(ctx) {
+  ctx.clearRect(0, 0, this.xDim, this.yDim);
+  this.step(ctx);
 };
 
 Game.prototype.remove = function(asteroid) {
@@ -61,5 +70,9 @@ Game.prototype.remove = function(asteroid) {
     this.asteroids.splice(index, 1);
   }
 };
+
+Game.prototype.allObjects = function() {
+  return this.asteroids.concat([this.ship]);
+}
 
 module.exports = Game;
