@@ -97,6 +97,17 @@ eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src
 
 /***/ }),
 
+/***/ "./src/game.js":
+/*!*********************!*\
+  !*** ./src/game.js ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const Asteroid = __webpack_require__(/*! ./asteroid.js */ \"./src/asteroid.js\");\r\nconst Utils = __webpack_require__(/*! ./utils.js */ \"./src/utils.js\");\r\n\r\nconst DIM_X = 500;\r\nconst DIM_Y = 500;\r\nconst NUM_ASTEROIDS = 20;\r\n\r\nfunction Game(xDim, yDim) {\r\n  this.xDim = xDim;\r\n  this.yDim = yDim;\r\n  this.asteroids = [];\r\n  this.addAsteroids(NUM_ASTEROIDS);\r\n};\r\n\r\nGame.prototype.addAsteroids = function(numAsteroids) {\r\n  for(let i = 0; i < numAsteroids; i++) {\r\n    let newAsteroid = new Asteroid({ pos: Utils.randomPos(this.xDim, this.yDim)})\r\n    this.asteroids.push(newAsteroid);\r\n  }\r\n};\r\n\r\nGame.prototype.moveObjects = function(ctx) {\r\n  this.asteroids.forEach(asteroid => {\r\n    asteroid.draw(ctx);\r\n  });\r\n}\r\n\r\nGame.prototype.start = function(ctx) {\r\n  \r\n  this.moveObjects(ctx);\r\n\r\n  //this function will update the position of all the moving objects,\r\n  //clear the canvas, and redraw them\r\n  var animateCallback = function(){\r\n    this.next(ctx);\r\n    requestAnimationFrame(animateCallback);\r\n\r\n    //if we didn't know about requestAnimationFrame, we could use setTimeout\r\n    //setTimeout(animateCallback, 1000/60);\r\n  }.bind(this);\r\n\r\n  //this will cause the first render and start the endless triggering of\r\n  //the function using requestAnimationFrame\r\n  animateCallback();\r\n\r\n}\r\n\r\nGame.prototype.next = function(ctx) {\r\n  ctx.clearRect(0, 0, this.xDim, this.yDim);\r\n  this.asteroids.forEach(asteroid => {\r\n    asteroid.move();\r\n    asteroid.draw(ctx);\r\n  });\r\n}\r\n\r\nmodule.exports = Game;\n\n//# sourceURL=webpack:///./src/game.js?");
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -104,7 +115,7 @@ eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src/moving_object.js\");\r\nconst Asteroid = __webpack_require__(/*! ./asteroid.js */ \"./src/asteroid.js\");\r\nwindow.MovingObject = MovingObject;\r\nwindow.Asteroid = Asteroid;\r\n\r\nlet movingObject = new window.MovingObject({\r\n  pos: [30, 30],\r\n  vel: [10, 10],\r\n  radius: 5,\r\n  color: \"#00FF00\"\r\n});\r\n\r\nlet asteroid = new Asteroid({pos: [60, 60]});\r\n\r\ndocument.addEventListener(\"DOMContentLoaded\", function(){\r\n  const myCanvas = document.getElementById(\"game-canvas\");\r\n  const ctx = myCanvas.getContext('2d');\r\n\r\n  movingObject.draw(ctx);\r\n  asteroid.draw(ctx)\r\n\r\n  myCanvas.addEventListener(\"click\", event => {\r\n    ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);\r\n    movingObject.move();\r\n    asteroid.move();\r\n    movingObject.draw(ctx);\r\n    asteroid.draw(ctx);\r\n  });\r\n\r\n});\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src/moving_object.js\");\r\nconst Asteroid = __webpack_require__(/*! ./asteroid.js */ \"./src/asteroid.js\");\r\nconst Game = __webpack_require__(/*! ./game.js */ \"./src/game.js\");\r\n\r\nwindow.MovingObject = MovingObject;\r\nwindow.Asteroid = Asteroid;\r\nwindow.Game = Game;\r\n\r\nlet movingObject = new window.MovingObject({\r\n  pos: [30, 30],\r\n  vel: [10, 10],\r\n  radius: 5,\r\n  color: \"#00FF00\"\r\n});\r\n\r\ndocument.addEventListener(\"DOMContentLoaded\", function(){\r\n  const myCanvas = document.getElementById(\"game-canvas\");\r\n  const ctx = myCanvas.getContext('2d');\r\n\r\n  let asteroid = new Asteroid({pos: [60, 60]});\r\n  let game = new Game(myCanvas.width, myCanvas.height);\r\n\r\n  movingObject.draw(ctx);\r\n  asteroid.draw(ctx)\r\n  game.start(ctx);\r\n\r\n  myCanvas.addEventListener(\"click\", event => {\r\n    game.next(ctx);\r\n  });\r\n\r\n});\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ }),
 
@@ -126,7 +137,7 @@ eval("/**\r\n * Movign Object class.\r\n *\r\n * @constructor\r\n * @param {Obje
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("const Utils = {\r\n  /**\r\n   * Sets up the inheritance prototype chain.\r\n   * @param {Object} childClass - Child class that inherits from parentClass.\r\n   * @param {Object} parentClass - Parent class that childClass inherits from.\r\n   */\r\n  inherits(childClass, parentClass) {\r\n    let Surrogate = function(){};\r\n    Surrogate.prototype = parentClass.prototype;\r\n    childClass.prototype = new Surrogate();\r\n    childClass.prototype.constructor = childClass;\r\n  },\r\n  /**\r\n   * Gets a random 2d vector\r\n   * @param {Number} length - length/norm of the vector.\r\n   */\r\n  randomVec(length) {\r\n    const deg = 2 * Math.PI * Math.random();\r\n    return Utils.scale([Math.sin(deg), Math.cos(deg)], length);\r\n  },\r\n  /**\r\n   * Scales a 2d vector\r\n   * @param {Array} vec - 2D vector to be scaled.\r\n   * @param {Number} m - length to scale the 2d vector by.\r\n   */\r\n  scale(vec, m) {\r\n    return [vec[0] * m, vec[1] * m];\r\n  }\r\n};\r\n\r\nmodule.exports = Utils;\n\n//# sourceURL=webpack:///./src/utils.js?");
+eval("const Utils = {\r\n  /**\r\n   * Sets up the inheritance prototype chain.\r\n   * @param {Object} childClass - Child class that inherits from parentClass.\r\n   * @param {Object} parentClass - Parent class that childClass inherits from.\r\n   */\r\n  inherits(childClass, parentClass) {\r\n    let Surrogate = function(){};\r\n    Surrogate.prototype = parentClass.prototype;\r\n    childClass.prototype = new Surrogate();\r\n    childClass.prototype.constructor = childClass;\r\n  },\r\n  /**\r\n   * Gets a random 2d vector\r\n   * @param {Number} length - length/norm of the vector.\r\n   */\r\n  randomVec(length) {\r\n    const deg = 2 * Math.PI * Math.random();\r\n    return Utils.scale([Math.sin(deg), Math.cos(deg)], length);\r\n  },\r\n  /**\r\n   * Gets a random 2d position vector (integers)\r\n   * @param {Number} xLim - X dimension limit (0, xLim).\r\n   * @param {Number} yLim - Y dimension limit (0, yLim).\r\n   */\r\n  randomPos(xLim, yLim) {\r\n    return [Math.floor(Math.random() * xLim), Math.floor(Math.random() * yLim)];\r\n  },\r\n  /**\r\n   * Scales a 2d vector\r\n   * @param {Array} vec - 2D vector to be scaled.\r\n   * @param {Number} m - length to scale the 2d vector by.\r\n   */\r\n  scale(vec, m) {\r\n    return [vec[0] * m, vec[1] * m];\r\n  }\r\n};\r\n\r\nmodule.exports = Utils;\n\n//# sourceURL=webpack:///./src/utils.js?");
 
 /***/ })
 

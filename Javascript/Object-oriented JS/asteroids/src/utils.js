@@ -19,6 +19,14 @@ const Utils = {
     return Utils.scale([Math.sin(deg), Math.cos(deg)], length);
   },
   /**
+   * Gets a random 2d position vector (integers)
+   * @param {Number} xLim - X dimension limit (0, xLim).
+   * @param {Number} yLim - Y dimension limit (0, yLim).
+   */
+  randomPos(xLim, yLim) {
+    return [Math.floor(Math.random() * xLim), Math.floor(Math.random() * yLim)];
+  },
+  /**
    * Scales a 2d vector
    * @param {Array} vec - 2D vector to be scaled.
    * @param {Number} m - length to scale the 2d vector by.
