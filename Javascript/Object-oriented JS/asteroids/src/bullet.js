@@ -14,6 +14,7 @@ function Bullet(optObj, game) {
   optObj["radius"] = RADIUS;
   optObj["color"] = COLOR;
   MovingObject.call(this, optObj, game);
+  this.isWrappable = false;
 }
 
 Utils.inherits(Bullet, MovingObject);

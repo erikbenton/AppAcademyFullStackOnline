@@ -3,9 +3,9 @@ const Ship = require("./ship.js");
 const Bullet = require("./bullet.js");
 const Utils = require("./utils.js");
 
-const DIM_X = 500;
+const DIM_X = 800;
 const DIM_Y = 500;
-const NUM_ASTEROIDS = 3;
+const NUM_ASTEROIDS = 10;
 
 function Game(xDim, yDim) {
   this.xDim = DIM_X;
@@ -41,6 +41,16 @@ Game.prototype.wrap = function(pos) {
   }
   return pos;
 }
+
+Game.prototype.isOutOfBounds = function(pos) {
+  if(pos[0] < 0 || pos[0] > this.xDim) {
+    return true;
+  }
+  if(pos[1] < 0 || pos[1] > this.yDim) {
+    return true;
+  }
+  return false;
+};
 
 Game.prototype.checkCollisions = function() {
   const allObjects = this.allObjects();
