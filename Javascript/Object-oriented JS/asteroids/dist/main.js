@@ -115,7 +115,7 @@ eval("const Asteroid = __webpack_require__(/*! ./asteroid.js */ \"./src/asteroid
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const Game = __webpack_require__(/*! ./game.js */ \"./src/game.js\");\r\nconst Utils = __webpack_require__(/*! ./utils.js */ \"./src/utils.js\");\r\n\r\nfunction GameView(ctx) {\r\n  this.ctx = ctx;\r\n  this.game = new Game();\r\n};\r\n\r\nGameView.prototype.start = function() {\r\n\r\n  //this function will update the position of all the moving objects,\r\n  //clear the canvas, and redraw them\r\n  var animateCallback = function(){\r\n    this.game.draw(this.ctx);\r\n    requestAnimationFrame(animateCallback);\r\n\r\n    //if we didn't know about requestAnimationFrame, we could use setTimeout\r\n    //setTimeout(animateCallback, 1000/60);\r\n  }.bind(this);\r\n\r\n  //this will cause the first render and start the endless triggering of\r\n  //the function using requestAnimationFrame\r\n  animateCallback();\r\n};\r\n\r\nmodule.exports = GameView;\n\n//# sourceURL=webpack:///./src/game_view.js?");
+eval("const Game = __webpack_require__(/*! ./game.js */ \"./src/game.js\");\r\nconst Utils = __webpack_require__(/*! ./utils.js */ \"./src/utils.js\");\r\n\r\nconst MOVES = {\r\n  \"w\": [ 0, -1],\r\n  \"a\": [-1,  0],\r\n  \"s\": [ 0,  1],\r\n  \"d\": [ 1,  0]\r\n}\r\n\r\nfunction GameView(ctx) {\r\n  this.ctx = ctx;\r\n  this.game = new Game();\r\n};\r\n\r\nGameView.prototype.start = function() {\r\n\r\n  this.bindKeyHandlers();\r\n\r\n  //this function will update the position of all the moving objects,\r\n  //clear the canvas, and redraw them\r\n  var animateCallback = function(){\r\n    this.game.draw(this.ctx);\r\n    requestAnimationFrame(animateCallback);\r\n\r\n    //if we didn't know about requestAnimationFrame, we could use setTimeout\r\n    //setTimeout(animateCallback, 1000/60);\r\n  }.bind(this);\r\n\r\n  //this will cause the first render and start the endless triggering of\r\n  //the function using requestAnimationFrame\r\n  animateCallback();\r\n};\r\n\r\nGameView.prototype.bindKeyHandlers = function() {\r\n  let ship = this.game.ship;\r\n  Object.keys(MOVES).forEach((k) => {\r\n    key(k, () => ship.power(MOVES[k]));\r\n  });\r\n};\r\n\r\nmodule.exports = GameView;\n\n//# sourceURL=webpack:///./src/game_view.js?");
 
 /***/ }),
 
@@ -126,7 +126,7 @@ eval("const Game = __webpack_require__(/*! ./game.js */ \"./src/game.js\");\r\nc
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const GameView = __webpack_require__(/*! ./game_view.js */ \"./src/game_view.js\");\r\nwindow.GameView = GameView;\r\n\r\ndocument.addEventListener(\"DOMContentLoaded\", function(){\r\n  const myCanvas = document.getElementById(\"game-canvas\");\r\n  const ctx = myCanvas.getContext('2d');\r\n\r\n  let gameView = new GameView(ctx);\r\n\r\n  gameView.start(ctx);\r\n\r\n  // myCanvas.addEventListener(\"click\", event => {\r\n  //   gameView.next(ctx);\r\n  // });\r\n\r\n});\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("const GameView = __webpack_require__(/*! ./game_view.js */ \"./src/game_view.js\");\r\nwindow.GameView = GameView;\r\n\r\ndocument.addEventListener(\"DOMContentLoaded\", function(){\r\n  const myCanvas = document.getElementById(\"game-canvas\");\r\n  const ctx = myCanvas.getContext('2d');\r\n  let gameView = new GameView(ctx);\r\n  gameView.start(ctx);\r\n});\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ }),
 
@@ -148,7 +148,7 @@ eval("const Utils = __webpack_require__(/*! ./utils.js */ \"./src/utils.js\");\r
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src/moving_object.js\");\r\nconst Utils = __webpack_require__(/*! ./utils.js */ \"./src/utils.js\");\r\n\r\nconst COLOR = \"#0088FF\";\r\nconst RADIUS = 5;\r\n\r\nfunction Ship(optObj, game) {\r\n  optObj[\"vel\"] = [0, 0];\r\n  optObj[\"radius\"] = RADIUS;\r\n  optObj[\"color\"] = COLOR;\r\n  MovingObject.call(this, optObj, game);\r\n}\r\n\r\nUtils.inherits(Ship, MovingObject);\r\n\r\nShip.prototype.relocate = function() {\r\n  this.pos = Utils.randomPos(this.game.xDim, this.game.yDim);\r\n}\r\n\r\nShip.prototype.power = function(impulse) {\r\n  this.vel[0] += impulse;\r\n  this.vel[1] += impulse;\r\n}\r\n\r\nmodule.exports = Ship;\n\n//# sourceURL=webpack:///./src/ship.js?");
+eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src/moving_object.js\");\r\nconst Utils = __webpack_require__(/*! ./utils.js */ \"./src/utils.js\");\r\n\r\nconst COLOR = \"#0088FF\";\r\nconst RADIUS = 5;\r\n\r\nfunction Ship(optObj, game) {\r\n  optObj[\"vel\"] = [0, 0];\r\n  optObj[\"radius\"] = RADIUS;\r\n  optObj[\"color\"] = COLOR;\r\n  MovingObject.call(this, optObj, game);\r\n}\r\n\r\nUtils.inherits(Ship, MovingObject);\r\n\r\nShip.prototype.relocate = function() {\r\n  this.pos = Utils.randomPos(this.game.xDim, this.game.yDim);\r\n}\r\n\r\nShip.prototype.power = function(impulse) {\r\n  this.vel[0] += impulse[0];\r\n  this.vel[1] += impulse[1];\r\n}\r\n\r\nmodule.exports = Ship;\n\n//# sourceURL=webpack:///./src/ship.js?");
 
 /***/ }),
 
