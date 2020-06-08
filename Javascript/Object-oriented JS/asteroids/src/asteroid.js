@@ -4,7 +4,7 @@ const Bullet = require("./bullet.js");
 const Utils = require("./utils.js");
 
 const COLOR = "#555555";
-const RADIUS = 20;
+const RADIUS = 15;
 
 /**
  * Asteroid class.
@@ -24,10 +24,13 @@ Utils.inherits(Asteroid, MovingObject);
 Asteroid.prototype.collideWith = function(otherObject) {
   if(otherObject instanceof Ship) {
     otherObject.relocate();
+    return true;
   } else if(otherObject instanceof Bullet) {
-    return [this, otherObject];
+    this.remove();
+    otherObject.remove();
+    return true;
   }
-  return [];
+  return false;
 };
 
 module.exports = Asteroid;

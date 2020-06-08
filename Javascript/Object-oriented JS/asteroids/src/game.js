@@ -5,7 +5,7 @@ const Utils = require("./utils.js");
 
 const DIM_X = 500;
 const DIM_Y = 500;
-const NUM_ASTEROIDS = 20;
+const NUM_ASTEROIDS = 3;
 
 function Game(xDim, yDim) {
   this.xDim = DIM_X;
@@ -43,19 +43,23 @@ Game.prototype.wrap = function(pos) {
 }
 
 Game.prototype.checkCollisions = function() {
-  let objects = this.allObjects();
-  let objectsToRemove = [];
-  for(let i = 0; i < objects.length; i++) {
-    for(let j = i+1; j < objects.length; j++) {
-      if(objects[i].isCollidedWith(objects[j])) {
-        objects[i].collideWith(objects[j]).forEach(object => {
-          objectsToRemove.push(object);
-        });
+  const allObjects = this.allObjects();
+  for (let i = 0; i < allObjects.length; i++) {
+    for (let j = 0; j < allObjects.length; j++) {
+      const obj1 = allObjects[i];
+      const obj2 = allObjects[j];
+
+      if (obj1.isCollidedWith(obj2)) {
+        const collision = obj1.collideWith(obj2);
+        if (collision) return;
       }
     }
   }
-  objectsToRemove.forEach(object => this.remove(object));
-};
+}
+
+Game.prototype.addBullet = function(bullet) {
+  this.bullets.push(bullet);
+}
 
 Game.prototype.step = function(ctx) {
   this.moveObjects(ctx)
@@ -67,15 +71,23 @@ Game.prototype.draw = function(ctx) {
   this.step(ctx);
 };
 
-Game.prototype.remove = function(asteroid) {
-  let index = this.asteroids.indexOf(asteroid);
-  if (index > -1) {
-    this.asteroids.splice(index, 1);
+Game.prototype.remove = function(object) {
+  let index = -1;
+  if(object instanceof Asteroid) {
+    index = this.asteroids.indexOf(object);
+    if (index > -1) {
+      this.asteroids.splice(index, 1);
+    }
+  } else if(object instanceof Bullet) {
+    index = this.bullets.indexOf(object);
+    if (index > -1) {
+      this.bullets.splice(index, 1);
+    }
   }
 };
 
 Game.prototype.allObjects = function() {
-  return this.asteroids.concat([this.ship], this.bullets);
+  return [].concat(this.asteroids, this.ship, this.bullets);
 }
 
 module.exports = Game;

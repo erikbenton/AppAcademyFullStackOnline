@@ -24,8 +24,23 @@ Ship.prototype.power = function(impulse) {
 }
 
 Ship.prototype.fireBullet = function() {
-  let bullet = new Bullet({pos: this.pos, vel: Utils.scale(this.pos, 3)}, this.game);
-  this.game.bullets.push(bullet);
+  const norm = Utils.norm(this.vel);
+	
+  if (norm == 0) {
+    // Can't fire unless moving.
+    return;
+  }
+
+  const relVel = Utils.scale(
+    Utils.dir(this.vel),
+    1.1
+  );
+
+  const bulletVel = [
+    relVel[0] + this.vel[0], relVel[1] + this.vel[1]
+  ];
+  const bullet = new Bullet({pos: this.pos.slice(0), vel: bulletVel}, this.game);
+  this.game.addBullet(bullet);
 };
 
 module.exports = Ship;

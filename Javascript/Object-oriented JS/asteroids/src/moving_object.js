@@ -50,7 +50,10 @@ MovingObject.prototype.isCollidedWith = function(otherObject) {
 };
 
 MovingObject.prototype.collideWith = function(otherObject) {
-  return [];
 };
+
+MovingObject.prototype.remove = function() {
+  this.game.remove(this);
+}
 
 module.exports = MovingObject;

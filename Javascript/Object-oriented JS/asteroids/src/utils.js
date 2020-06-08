@@ -41,6 +41,13 @@ const Utils = {
    */
   distance(pos1, pos2) {
     return Math.sqrt((pos1[0] - pos2[0])**2 + (pos1[1] - pos2[1])**2);
+  },
+  norm(vec) {
+    return Utils.distance([0, 0], vec);
+  },
+  dir (vec) {
+    var norm = Utils.norm(vec);
+    return Utils.scale(vec, 1 / norm);
   }
 };
 
