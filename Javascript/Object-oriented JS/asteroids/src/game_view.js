@@ -37,6 +37,7 @@ GameView.prototype.bindKeyHandlers = function() {
   Object.keys(MOVES).forEach((k) => {
     key(k, () => ship.power(MOVES[k]));
   });
+  key("space", () => ship.fireBullet());
 };
 
 module.exports = GameView;

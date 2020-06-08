@@ -49,8 +49,8 @@ MovingObject.prototype.isCollidedWith = function(otherObject) {
   return dist < (this.radius + otherObject.radius);
 };
 
-MovingObject.collideWidth = function(otherObject) {
-  
+MovingObject.prototype.collideWith = function(otherObject) {
+  return [];
 };
 
 module.exports = MovingObject;

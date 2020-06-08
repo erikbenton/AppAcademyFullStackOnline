@@ -1,5 +1,6 @@
 const MovingObject = require("./moving_object.js");
 const Ship = require("./ship.js");
+const Bullet = require("./bullet.js");
 const Utils = require("./utils.js");
 
 const COLOR = "#555555";
@@ -23,9 +24,10 @@ Utils.inherits(Asteroid, MovingObject);
 Asteroid.prototype.collideWith = function(otherObject) {
   if(otherObject instanceof Ship) {
     otherObject.relocate();
-  } else if(otherObject instanceof Asteroid) {
-    // return otherObject;
+  } else if(otherObject instanceof Bullet) {
+    return [this, otherObject];
   }
+  return [];
 };
 
 module.exports = Asteroid;
